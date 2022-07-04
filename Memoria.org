@@ -890,32 +890,32 @@ En la tabla [[tab:syscalls]] se encuentran las diferentes syscalls que existen e
 
 #+NAME: tab:syscalls
 #+CAPTION: Syscalls de Strife
-| ID | Nombre              | Área               | Permisos necesarios | Argumentos |
-|----+---------------------+--------------------+---------------------+------------|
-|  0 | ~EXIT~              | General            | Ninguno             |          1 |
-|  1 | ~MORE_HEAP~         | General            | Ninguno             |          1 |
-|  2 | ~MMAP~              | General            | Ninguno             |          2 |
-|  3 | ~BACK_FROM_LOADER~  | Loader             | Solo loader         |          3 |
-|  4 | ~MAKE_PROCESS~      | Loader             | Solo loader         |          0 |
-|  5 | ~ASLR_GET~          | Loader             | Solo loader         |          3 |
-|  6 | ~MAP_IN~            | Loader             | Solo loader         |          3 |
-|  7 | ~FIND_PSNS~         | General            | Ninguno             |          1 |
-|  8 | ~HALT~              | General            | Ninguno             |          0 |
-|  9 | ~RPC~               | RPC                | Ninguno             |        2-6 |
-| 10 | ~ENABLE_RPC~        | RPC                | Ninguno             |          1 |
-| 11 | ~RPC_MORE_STACKS~   | RPC                | Solo kernel         |          1 |
-| 12 | ~SM_MAKE~           | Memoria compartida | Ninguno             |          0 |
-| 13 | ~SM_ALLOW~          | Memoria compartida | Ninguno             |          2 |
-| 14 | ~SM_REQUEST~        | Memoria compartida | Ninguno             |          2 |
-| 15 | ~SM_MAP~            | Memoria compartida | Ninguno             |          1 |
-| 16 | ~ALLOW_IO~          | General            | ~IO_ALLOWED~        |          0 |
-| 17 | ~ALLOW_PHYS~        | General            | ~PHYS_ALLOWED~      |          0 |
-| 18 | ~GET_PHYS~          | General            | ~PHYS_ALLOWED~      |          1 |
-| 19 | ~MAP_PHYS~          | General            | ~PHYS_ALLOWED~      |          3 |
-| 20 | ~LOAD_EXE~          | Tareas             | Ninguno             |          2 |
-| 21 | ~LAST_LOADER_ERROR~ | Tareas             | Ninguno             |          0 |
-| 22 | ~GET_KILL_REASON~   | Tareas             | Ninguno             |          1 |
-| 23 | ~GET_EXIT_VALUE~    | Tareas             | Ninguno             |          1 |
+| ID | Nombre                  | Área               | Permisos necesarios | Argumentos |
+|----+-------------------------+--------------------+---------------------+------------|
+|  0 | ~EXIT~                  | General            | Ninguno             |          1 |
+|  1 | ~MORE_HEAP~             | General            | Ninguno             |          1 |
+|  2 | ~MMAP~                  | General            | Ninguno             |          2 |
+|  3 | ~MAKE_PROCESS~          | Loader             | Solo loader         |          0 |
+|  4 | ~ASLR_GET~              | Loader             | Solo loader         |          3 |
+|  5 | ~MAP_IN~                | Loader             | Solo loader         |          3 |
+|  6 | ~BACK_FROM_LOADER~      | Loader             | Solo loader         |          3 |
+|  7 | ~FIND_PSNS~             | General            | Ninguno             |          1 |
+|  8 | ~HALT~                  | General            | Ninguno             |          0 |
+|  9 | ~RPC~                   | RPC                | Ninguno             |        2-6 |
+| 10 | ~ENABLE_RPC~            | RPC                | Ninguno             |          1 |
+| 11 | ~RPC_MORE_STACKS~       | RPC                | Solo kernel         |          1 |
+| 12 | ~SM_MAKE~               | Memoria compartida | Ninguno             |          0 |
+| 13 | ~SM_ALLOW~              | Memoria compartida | Ninguno             |          2 |
+| 14 | ~SM_REQUEST~            | Memoria compartida | Ninguno             |          2 |
+| 15 | ~SM_MAP~                | Memoria compartida | Ninguno             |          1 |
+| 16 | ~ALLOW_IO~              | General            | ~IO_ALLOWED~        |          0 |
+| 17 | ~ALLOW_PHYS~            | General            | ~PHYS_ALLOWED~      |          0 |
+| 18 | ~GET_PHYS~              | General            | ~PHYS_ALLOWED~      |          1 |
+| 19 | ~MAP_PHYS~              | General            | ~PHYS_ALLOWED~      |          3 |
+| 20 | ~EXEC~                  | Tareas             | Ninguno             |          2 |
+| 21 | ~GET_LAST_LOADER_ERROR~ | Tareas             | Ninguno             |          0 |
+| 22 | ~GET_KILL_REASON~       | Tareas             | Ninguno             |          1 |
+| 23 | ~GET_EXIT_VALUE~        | Tareas             | Ninguno             |          1 |
 \FloatBarrier
 
 Se procede a explicar las que están marcadas como área general, las otras se explicarán en sus correspondientes secciones.
@@ -1015,7 +1015,7 @@ De esta forma, el tamaño del PCB es grande, pero esto no es un problema, porque
 Si el lector se fija, este PCB no tiene información relativa al scheduler. Esto se debe a que existe otra estructura que engloba a Task, y se denomina SchedulerTask. Tiene los siguientes campos:
 - Una copia del puntero al PML4 como primer elemento, para ser accedido desde ensamblador (rutina RPC) de forma fácil cuando no es posible derrefernciar la tarea por poder usar exclusivamente memoria pública.
 - PID del proceso padre. Los servicios de bootstrapping tienen este valor a 0.
-- El código de error que devolvió el loader la última vez que se hizo ~LOAD_EXE~. Este es el valor que devuelve ~LAST_LOADER_ERROR~.
+- El código de error que devolvió el loader la última vez que se hizo ~EXEC~. Este es el valor que devuelve ~GET_LAST_LOADER_ERROR~.
 - Lista enlazada de hijos. Se trata de cuartetos ~<pid, kr, ret, waiting>~, donde:
   - ~pid~ es el PID del proceso hijo.
   - ~kr~, kill reason, es la razón por la que el kernel ha matado a este proceso. Los valores se encuentran en la tabla [[tab:kr]].
@@ -1032,9 +1032,9 @@ Las syscalls ~GET_KILL_REASON~ y ~GET_EXIT_VALUE~ iteran la lista de hijos y dev
 #+CAPTION: Razones de terminación de un proceso por el kernel
 | Código | Nombre             | Descripción                                                   |
 |--------+--------------------+---------------------------------------------------------------|
-|      0 | ~INEXSTING~        | PID no reconocido                                             |
-|      1 | ~NONE~             | El proceso terminó de forma natural                           |
-|      2 | ~SEGFAULT~         | Acceso no permitido a memoria                                 |
+|      0 | ~OK~               | El proceso terminó de manera intencionada                     |
+|      1 | ~SEGFAULT~         | Acceso no permitido a memoria                                 |
+|      2 | ~BAD_STRING~       | El proceso envió al kernel una cadena de caracteres inválida  |
 |      3 | ~LOADER_SYSCALL~   | Intentó ejecutar una syscall del loader                       |
 |      4 | ~UNKNOWN_SYSCALL~  | Efectuó una syscall inexistente                               |
 |      5 | ~RPC_BAD_PID~      | Se efectuó un RPC a un PID inválido                           |
@@ -1171,7 +1171,7 @@ Para efectuar la carga, el loader necesita comunicarse con el kernel, y esto lo 
 |     12 | ~FAILED_RELOCATION~      | No existe la función referenciada dinámicamente     |
 \FloatBarrier
 
-Una tarea puede iniciar este mecanismo mediante la syscall ~LOAD_EXE~, pasándole al kernel un puntero donde está cargado el ejecutable así como su tamaño. No se permite la comunicación directa con el loader, pues no debe requerir permisos, y el cliente podría llegar a congelar el cargador de programas (o saturar su memoria virtual) mediante el envío de páginas vacías.
+Una tarea puede iniciar este mecanismo mediante la syscall ~EXEC~, pasándole al kernel un puntero donde está cargado el ejecutable así como su tamaño. No se permite la comunicación directa con el loader, pues no debe requerir permisos, y el cliente podría llegar a congelar el cargador de programas (o saturar su memoria virtual) mediante el envío de páginas vacías.
 
 ** Registro
 *** Jerarquía
