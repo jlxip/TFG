@@ -1,0 +1,41 @@
+Notas reunión 04/07
+-------------------
+
+Nota sobre no especificación téfcnica
+Más estado del arte
+Foros y wikis, menos académico
+Tabla comparativa sistemas operativos, características
+
+Señalar mejor la aportación
+Aportación SOBRE, más que "posiblemente original"
+
+Especialmente importantes introducción y conclusiones
+Objetivos generales: poner en práctica los conocimientos blablabla
+	Específicos: dominio del problema, esttado del arte, qué es necesario, cómo las técnicas son mejores... Aportar
+	Motivación: esto para mí era un desafío, puede ser diferente a otros diseños concebidos. He ido aprendiendo cosas, proporcionar más información
+
+Conclusiones: qué me ha ayudado a los objetivos
+	«No hemos encontrado...»
+
+*EL* OBJETIVO GENERAL
+
+Asignaturas relacionadas
+Objetivos formativos: he tenido interés en investigar esto, de esta asignatura, tal, tal.
+
+Rebajate el tono con SMLFQ
+
+Objetivos: no más de un párrafo. Clarito.
+
+	Modelo de protección !!!!!!
+
+Diseño general, detallado, arquitectónico.
+
+No cuantificadores: "Claramente", "muy muy interesante", 
+Mejor: "más completo"
+Hablar en positivo
+
+-------
+
+Vídeo en vez de demostración en tiempo real. Característica fundamental, métrica
+Vídeo: algo que mostrara dos ls. Algún detalle del algoritmo? Animación del scheduler!!!!
+«Dos ls a la vez, ¿Qué ha pasado?»

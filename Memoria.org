@@ -118,11 +118,11 @@ Granada a TODO de junio de 2022.
 
 \noindent\rule[-1ex]{\textwidth}{2pt}\\[4.5ex]
 
-D. \textbf{José Luis Garrido Bullejos}, Profesor del Área de TODO del Departamento de Lenguajes y Sistemas Informáticos de la Universidad de Granada.
+D. \textbf{José Luis Garrido Bullejos}, Profesor del Área de Lenguajes y Sistemas Informáticos del Departamento homónimo de la Universidad de Granada.
 
 \vspace{0.5cm}
 
-D. \textbf{Carlos Rodríguez Domínguez}, Profesor del Área de TODO del Departamento de Lenguajes y Sistemas Informáticos de la Universidad de Granada.
+D. \textbf{Carlos Rodríguez Domínguez}, Profesor del Área de Lenguajes y Sistemas Informáticos del Departamento homónimo de la Universidad de Granada.
 
 \vspace{0.5cm}
 
@@ -144,6 +144,20 @@ Y para que conste, expiden y firman el presente informe en Granada a X de mes de
 
 \noindent \textbf{José Luis Garrido Bullejos \ \ \ \ \ Carlos Rodríguez Domínguez}
 #+end_export
+** Logo :ignore:
+#+begin_export latex
+\null\newpage
+\thispagestyle{empty}
+\null\newpage
+\thispagestyle{empty}
+#+end_export
+
+\vspace*{\fill}
+#+attr_latex: :height 400px
+[[./imgs/logo.png]]
+\FloatBarrier
+\vspace*{\fill}
+
 ** Dedicatoria :ignore:
 #+begin_export latex
 \null\newpage
@@ -180,7 +194,7 @@ Y para que conste, expiden y firman el presente informe en Granada a X de mes de
 #+end_export
 * --- Main matter --- :ignore:
 #+latex: \mainmatter
-* Introducción y objetivos
+* Introducción y Objetivos
 ** Introducción
 *** Dominio del problema
 *** Motivación
@@ -197,24 +211,24 @@ Todo esto se une a un interés desde pequeño de crear un sistema operativo, aú
 Este es el fruto de una vida de aprendizaje.
 \end{center}
 #+end_export
-*** Estructura de la memoria
-Este documento se organiza en un total de seis capítulos:
-- El capítulo [[Introducción y objetivos]] se enfoca en presentar el problema a resolver, detallar los objetivos a cumplir, y aproximar una planificación de los pasos necesarios para completar el trabajo.
-- El capítulo [[Fundamentos]] describe, de forma superficial pero autocontenida, todos los fundamentos necesarios que una persona ajena al mundo del desarrollo de sistemas operativos debe conocer para entender la magnitud del problema y la lógica detrás de las soluciones.
-- El capítulo [[Estado del arte]] analiza el estado del arte de los proyectos próximos a este, para averiguar qué soluciones se han dado a los problemas aquí descritos en el pasado.
-- El capítulo [[Propuesta de solución]], con la inspiración del anterior además de varias ideas novedosas, expresa cómo el proyecto orquestra sendos subproyectos que son capaces de resolver los problemas dados.
-- El capítulo [[Diseños detallados]] completa el anterior, comentando cómo cada subproyecto realiza la tarea de resolver el problema que tiene asignado.
-- Para terminar, el capítulo [[Experimentos, conclusiones y trabajo futuro]] se hacen varias cosas. Primero, se muestran capturas de pantalla del resultado del proyecto funcionando. No merece un capítulo propio: la enorme mayoría del trabajo es completamente invisible. Después, se hace una retrospectiva del trabajo realizado, comentando qué decisiones han dado buenos resultados y cuáles no. Por último, se menciona el trabajo futuro que puede seguir el estado del arte en este aspecto, así como el propio para continuar el proyecto después de la entrega.
-
-** Objetivos
-*TODO: El objetivo principal y otros más técnicos. Esto es un mini-índice. Estado del arte. Validar, posibles mejoras, trabajo futuro. Fallos cometidos. Metodología.*
-
 *** Terminología
 Con tal de evitar malentendidos y siglas imposibles de buscar en internet, se utilizarán términos en inglés, especialmente en aquellos que tienen una abreviación asociada. La terminología se utiliza, así, en español e inglés indistintamente. En este último caso, el género de los sustantivos se eligirá de forma arbitraria, pero se mantendrá consistente durante todo el texto.
+*** TODO
+No se pretende una versión final tal tal
+** Objetivos
+*TODO: El objetivo principal y otros más técnicos. Esto es un mini-índice. Estado del arte. Validar, posibles mejoras, trabajo futuro. Fallos cometidos. Metodología.*
 
 ** Planificación y costes
 *TODO: Se puede decir la planificación inicial y luego ya la final en otro capítulo. Gantt. Contar horas, estimación. Cuántas por ECTS.*
 
+** Estructura de la memoria
+Este documento se organiza en un total de seis capítulos:
+- El capítulo [[Introducción y Objetivos]] se enfoca en presentar el problema a resolver, detallar los objetivos a cumplir, y aproximar una planificación de los pasos necesarios para completar el trabajo.
+- El capítulo [[Fundamentos]] describe, de forma superficial pero autocontenida, todos los fundamentos necesarios que una persona ajena al mundo del desarrollo de sistemas operativos debe conocer para entender la magnitud del problema y la lógica detrás de las soluciones.
+- El capítulo [[Estado del Arte]] analiza el estado del arte de los proyectos próximos a este, para averiguar qué soluciones se han dado a los problemas aquí descritos en el pasado.
+- El capítulo [[Propuesta de Sistema Operativo]], con la inspiración del anterior además de varias ideas novedosas, expresa cómo el proyecto orquestra sendos subproyectos que son capaces de resolver los problemas dados.
+- El capítulo [[Diseños Detallados, Implementación, y Pruebas]] completa el anterior, comentando cómo cada subproyecto realiza la tarea de resolver el problema que tiene asignado.
+- Para terminar, el capítulo [[Conclusiones y Trabajo Futuro]] se hacen varias cosas. Primero, se muestran capturas de pantalla del resultado del proyecto funcionando. No merece un capítulo propio: la enorme mayoría del trabajo es completamente invisible. Después, se hace una retrospectiva del trabajo realizado, comentando qué decisiones han dado buenos resultados y cuáles no. Por último, se menciona el trabajo futuro que puede seguir el estado del arte en este aspecto, así como el propio para continuar el proyecto después de la entrega.
 * Fundamentos
 ** Definición
 Alfred Aho, autor del libro más importante sobre compiladores, /Compilers: Principles Techniques and Tools/ \cite{dragonBook}, así como un libro referente sobre algoritmos, /Data Structures and Algorithms/ \cite{aho-alg}, comenzó una conferencia en 2015 con la siguiente afirmación:
@@ -361,7 +375,7 @@ Todo archivo tiene una serie de metadatos: nombre, tipo, y tamaño. Dependiendo 
 
 Todo sistema de archivos tiene al menos un directorio: la raíz (/root/), dentro del cual se encuentran el resto de archivos. La estructuración de los directorios puede ser de nivel restringido o jerárquico. En la primera, existe una limitación de la profundidad de anidación de directorios (uno o dos); este era el caso de algunas versiones antiguas de DOS y CP/M. La falta de agrupación de los archivos llevó rápidamente a la invención de la estructuración jerárquica, en la cual no existe un límite como tal en la profundidad de los directorios (aunque sí pueden existir otros, como la longitud de ruta). En este último caso, la jerarquía se puede expresar en forma de árbol, en el cual todo archivo se encuentra únicamente en un directorio, o en forma de grafo, que permite varias referencias a un mismo archivo, encontrándose en varias rutas simultáneamente. La mayoría de sistemas de archivos, como los derivados de UNIX, tienen un árbol de directorios de este tipo.
 
-Existen sistemas de archivos de solo lectura, como ISO9660, el usado por los CDs y los archivos con extensión ~.iso~. Estos sistemas permiten una gestión óptima del espacio, puesto que la estructuración de ficheros ocurre solo una vez \cite{iso9660}. Sin embargo, la mayoría no son de este tipo, sino alterables. En estos casos, ha de tenerse especial cuidado con la organización del espacio libre para aprovecharlo lo máximo posible. Los SSAA antiguos estaban basados en la reserva de espacio secuencial, y existía el problema de la /fragmentación/, por el cual algunas regiones del disco quedaban inutilizables, y se requería un proceso de desfragmentación para reorganizar todo el almacenamiento y unir estas secciones inutilizables de forma que se consiguieran juntar todos los /huecos/ secuencialmente, maximizando el espacio de almacenamiento secuencial. Otras ramas de sistemas de archivos, como la de UNIX (con UFS) \cite{unix}, la moderna de Windows (NTFS) \cite{ntfs}, las de Linux (ext*) \cite{ext2}, y los BSDs, hacen una estructuración indexada. En el proceso de dar formato al disco por primera vez, se establece una región de memoria para almacenar bloques de datos, y estos se reservan y liberan de forma dinámica cuando es necesario crear uno nuevo. Con tal de no limitar excesivamente el tamaño de los archivos, se suele hacer una indexación multinivel.
+Existen sistemas de archivos de solo lectura, como ISO9660, el usado por los CDs y los archivos con extensión ~.iso~. Estos sistemas permiten una gestión óptima del espacio, puesto que la estructuración de ficheros ocurre solo una vez \cite{iso9660}. Sin embargo, la mayoría no son de este tipo, sino alterables. En estos casos, ha de tenerse especial cuidado con la organización del espacio libre para aprovecharlo lo máximo posible. Los SSAA antiguos estaban basados en la reserva de espacio secuencial, y existía el problema de la /fragmentación/, por el cual algunas regiones del disco quedaban inutilizables, y se requería un proceso de desfragmentación para reorganizar todo el almacenamiento y unir estas secciones inutilizables de forma que se consiguieran juntar todos los /huecos/ secuencialmente, maximizando el espacio de almacenamiento secuencial. Otras ramas de sistemas de archivos, como la de UNIX (con s5fs) \cite{unix}, la moderna de Windows (NTFS) \cite{ntfs}, las de Linux (ext*) \cite{ext2}, y los BSDs, hacen una estructuración indexada. En el proceso de dar formato al disco por primera vez, se establece una región de memoria para almacenar bloques de datos, y estos se reservan y liberan de forma dinámica cuando es necesario crear uno nuevo. Con tal de no limitar excesivamente el tamaño de los archivos, se suele hacer una indexación multinivel.
 
 Todo archivo tiene un descriptor asociado. En UNIX, este descriptor se denomina /inodo/, y contiene toda la información sobre un archivo (metadatos, tabla de índices de bloques...) salvo el nombre, que se excluye con tal de poder hacer múltiples referencias con distintos nombres al mismo archivo \cite{unix}. De igual forma que las tareas con los PIDs, en los SSAA modernos, los archivos se identifican numéricamente. En UNIX y derivados, se utiliza el número de inodo. En Windows con NTFS, existe un concepto similar, el /File ID/.
 
@@ -425,7 +439,7 @@ Si se desea acceder a archivos, es necesario una pila de almacenamiento (/storag
 
 Se profundizará en la avalancha de siglas en capítulos posteriores.
 
-** Fundamentos de x86-64
+** Arquitectura x86-64
 En la subsección [[Portabilidad]] se comentó que x86-64 es el target del sistema operativo propuesto. Así, resulta natural ofrecer una contextualización de la arquitectura tan pronto como sea posible. Esta sección cumplirá ese objetivo. Se presentará la arquitectura, su forma de arranque y sus estructuras, como los descriptores que necesita y su forma de realizar paginación. Todo de forma muy breve y superficial, sin llegar a detalles de la implementación.
 
 *** Presentación
@@ -515,18 +529,26 @@ Cuando está habilitado, en otros MSRs (STAR y LSTAR) se le hace saber a la CPU 
 
 Nótese cómo estas instrucciones no escriben nada en la pila, ni siquiera cambian RSP (puntero de pila) ni la tabla de páginas. Por esto, se realiza un cambio de contexto muy limitado, el kernel considerará posteriormente si es oportuno cambiar estos valores. Esta nueva forma de realizar llamadas al sistema supone un incremento de velocidad mucho mayor al que existía anteriormente en x86, y resulta una herramienta muy útil para el programador del sistema.
 
-* Estado del arte
+* Estado del Arte
 En este capítulo se analizarán algunos sistemas operativos existentes, más antiguos o más modernos, con tal de ofrecer al lector una visión general del abanico de elecciones posibles a la hora de diseñar un sistema operativo. En el capítulo siguiente, se referenciarán muchas de las opciones aquí presentes y se justificarán las decisiones.
 
-** UNIX: el primer mejor SO
+** UNIX
 En 1925, Western Electric crea Bell Telephone Laboratories, conocido usualmente como /Bell Labs/ \cite{belllabs}. Doce años después, se produce el primer premio Nobel del lugar por el descubrimiento de la difracción de electrones \cite{belllabs2}. Los laboratorios Bell no han sido otra cosa a lo largo de su historia que una gran fábrica de premios Nobel, y grandes descubrimientos que han hecho avanzar la humanidad, como el transistor, el láser, y la célula fotovoltaica vienen de allí. Entre todos estos logros, existe uno relativo a este trabajo: UNIX.
 
 Ken Thompson, conocido también por la invención de UTF-8, y Dennis Ritchie, conocido por la creación de C, comienzan en 1969 UNIX, un proyecto de sistema operativo para el PDP-11, poco después del fracaso de otro intento anterior, Multics. UNIX trae consigo varias novedades:
 - Los /pipes/, o tuberías, ya mencionados en [[El kernel]], un método de IPC por el cual los programas se comunican mediante flujos de bytes.
 - La filosofía UNIX, mencionada en [[Las utilidades]], en la cual cada programa se enfoca en resolver un solo problema, manteniéndose simple. Estos programas posteriormente se combinan mediante pipes por medio de la shell, como explica el propio Brian Kernighan, también eminencia de Laboratorios Bell, en \cite{elvideo}.
-- Un sistema de archivos, UFS, basado en inodos.
+- En su versión UNIX 5, un sistema de archivos, s5fs, basado en inodos.
 
 El gran pilar de UNIX es la intercomunicación. Por esto, todo es un archivo: desde un disco duro en sí hasta sus particiones, y desde el chip Ethernet hasta la configuración del kernel. Hasta las tareas, en cierto modo, son archivos (en ~/proc~).
+
+El sistema de archivos de UNIX tiene especial interés para este proyecto, así que se procede a comentar sus fundamentos. Se define el término de /inodo/, una estructura que representa a un objeto del sistema de archivos. Este objeto puede ser un archivo regular, un directorio, un enlace simbólico, o un /pipe/ como los explicados anteriormente, entre otros.
+
+La memoria secundaria se divide en bloques de 2KBs, que contienen los datos de los ficheros. Dentro del inodo, existe una representación multinivel para direccionar los inodos. Se encuentran 12 índices de bloques, para los primeros 24KBs del archivo. Después, se encuentra un índice a un bloque con otros índices a los siguientes 512 bloques, lo que sería 1MB más de datos. Esto se denomina un bloque indirecto de nivel 1. Tras esto, se encuentran dos punteros más: un bloque indirecto de nivel 2 (que está compuesto por 512 bloques indirectos de nivel 1), y un bloque indirecto de nivel 3.
+
+Este mecanismo minimiza los accesos a disco (algunos SSAA de la época utilizaban listas enlazadas), manteniendo un uso pequeño del espacio, puesto que los bloques indirectos de la representación multinivel se almacenan.
+
+Existen algunos sistemas de archivos posteriores a s5fs que aportan ciertas mejoras. De ellos cabe destacar Berkeley Fast File System, aumenta el tamaño del bloque a 8 KBs y la longitud máxima del nombre de los ficheros \cite{ffs} y ext2, que permite un tamaño de bloque asignable durante el formateo \cite{ext2}.
 
 ** AmigaOS
 UNIX tenía un kernel monolítico, pero no es el concepto de monolito que existe hoy en día. En aquella época, si bien diseñar un sistema operativo tenía una dificultad aproximable a la actual, desarrollarlo era extremadamente más simple: existían muchos menos dispositivos con los que comunicarse y los procesadores eran mucho más simples. Por todo esto, la cantidad de líneas de código que tomaban los drivers era mucho menor, y no se consideraba la idea de separarlas.
@@ -559,7 +581,7 @@ Han surgido numerosos sistemas operativos basados en microkernels derivados de e
 [[./imgs/family.jpg]]
 \FloatBarrier
 
-*** seL4: el último mejor SO
+*** seL4
 El proyecto /seL4/ arranca en 2007 a raíz de Gernot Heiser. Aparece, así, junto a un proyecto similar, EROS, la denominada /tercera generación de microkernels/. Está caracterizada por una API orientada a la seguridad con acceso a recursos controlados por /capabilities/, así como un foco en la virtualización y en enfoques modernos para el manejo de recursos del kernel.
 
 La tercera generación de microkernels también tiene un objetivo de diseño que permita los análisis formales, es decir, una demostración matemática de que la implementación del kernel es consistente con su especificación. seL4 es de los muy pocos kernels que cuentan con una verificación formal completa en términos de seguridad, y además en términos de /timeliness/ (temporización), haciéndolo apropiado para aplicaciones de hard real time \cite{sel4}.
@@ -568,7 +590,8 @@ El IPC de L4, aunque rápido, era complejo, y contaba con muchos objetivos. Entr
 
 L4 utilizaba PIDs para dirigir IPC, y con esto aparece un problema de canal encubierto. En su lugar, seL4 reemplaza este mecanismo con /endpoints/, parecidos a puertos, donde cada uno puede tener un número arbitrario de procesos que envían y reciben.
 
-* Propuesta de solución
+** GNU/Linux
+* Propuesta de Sistema Operativo
 ** Metodología
 *** Cascada
 Un sistema operativo es el mayor exponente de un proyecto con metodología en cascada. A partir de cierto punto durante el desarrollo, es posible comenzar a paralelizar el trabajo, pero cuando lo que se está construyendo es la base, definida en [[Definición]] como una alta pila de capas de abstracción, donde cada paso adelante requiere la totalidad de los anteriores, se vuelve imposible. El proceso de desarrollo ha de ser necesariamente secuencial. Por esto, la metodología de desarrollo estuvo planeado desde el primer momento, y ha terminado siendo, una metodología en cascada.
@@ -713,25 +736,83 @@ Concretando para Strife, se utilizan los valores $n_v = n_b = 3$, $n_r = 10$. Po
 *Aportación original*: si bien SMLFQ es un algoritmo de scheduling simple, y hasta /naïve/ por lo intuitivo, tomando NT y XNU soluciones muy parecidas, no había recibido un nombre hasta ahora.
 
 ** Sistema de archivos propio
-Un sistema operativo soporta uno o más sistemas de archivos. En el caso de la mayoría de SSOO, estos SSAA son grandes ideas de décadas pasadas (como UFS, el SA de UNIX), a veces alteradas con conceptos modernos de almacenamiento (familia ext*). Los SSOO gigantescos en los que trabajan miles de personas de forma diaria suelen desarrollar su propio sistema de archivos para plasmar correctamente la visión abstracta que tienen de un entorno asociado a la filosofía del sistema. Curiosamente, esto también pasa en los SSOO independientes, que son proyectos personales, puesto que su objetivo primario es aprender y experimentar. Todo el rango de sistemas operativos que hay en medio, especialmente aquellos dedicados a sistemas empotrados o que tienen una finalidad específica, utilizan ya existentes.
+*** Filosofía
+Un sistema operativo soporta uno o más sistemas de archivos. En el caso de la mayoría de SSOO, estos SSAA son grandes ideas de décadas pasadas (como s5fs, el SA de UNIX), a veces alteradas con conceptos modernos de almacenamiento (familia ext*). Los SSOO gigantescos en los que trabajan miles de personas de forma diaria suelen desarrollar su propio sistema de archivos para plasmar correctamente la visión abstracta que tienen de un entorno asociado a la filosofía del sistema. Curiosamente, esto también pasa en los SSOO independientes, que son proyectos personales, puesto que su objetivo primario es aprender y experimentar. Todo el rango de sistemas operativos que hay en medio, especialmente aquellos dedicados a sistemas empotrados o que tienen una finalidad específica, utilizan ya existentes.
 
-Strife aporta su granito de arena al mundo de los sistemas de archivos con StrifeFS (/Strife File System/), que toma ideas de UFS (en su forma de ext2), el de UNIX, pero también de NTFS, el de Windows. No soporta journaling.
+Strife aporta su granito de arena al mundo de los sistemas de archivos con StrifeFS (/Strife File System/), que toma ideas de s5fs (en su forma de ext2), el de UNIX, pero también de NTFS, el de Windows. No soporta journaling.
 
-Para empezar: los conceptos base, las capas más físicas del sistema de archivos, se las debo a UFS. La indexación multinivel de los datos, así como el concepto de inodos, son ideas que han sentado precedente, posiblemente llegando a categorizarse como /inmejorables/. Quizá se podría criticar la dispersión de los bloques en memoria secundaria (que ocurre en el resto y se puede solucionar por desfragmentación), y requerirían que el cabezal de lectura del disco trazara trayectorias innecesariamente amplias, pero con la llegada, ya bien instaurada en el mercado, de los SSD, este problema desaparece. En StrifeFS, los inodos se reservan de manera FIFO.
+Para empezar: los conceptos base, las capas más físicas del sistema de archivos, se las debo a s5fs. La indexación multinivel de los datos, así como el concepto de inodos, son ideas que han sentado precedente, posiblemente llegando a categorizarse como /inmejorables/. Quizá se podría criticar la dispersión de los bloques en memoria secundaria (que ocurre en el resto y se puede solucionar por desfragmentación), y requerirían que el cabezal de lectura del disco trazara trayectorias innecesariamente amplias, pero con la llegada, ya bien instaurada en el mercado, de los SSD, este problema desaparece. En StrifeFS, los inodos se reservan de manera FIFO.
 
-UFS tiene un problema fundamental: el control de acceso. En el sistema de archivos UNIX y derivados, existe una lista de usuarios (UIDs) y grupos (GIDs) a los que pueden pertenecer, definidas respectivamente en los archivos ~/etc/passwd~ y ~/etc/group~ \cite{unixprog}. Aquí surge un problema: los grupos están definidos de forma completamente independiente. Un usuario $U$ puede pertenecer a la vez a los grupos $G_1$ y $G_2$, aún si $G_1$ y $G_2$ estuvieran fuertemente relacionados. Este problema lo resuelve Microsoft con el directorio activo (/Active Directory/), donde los grupos pueden heredar de otros grupos, con lo cual $U$ podría pertenecer solo a $G_2$ y, en el proceso, indirectamente estar en $G_1$, con las ventajas que ello supone.
+s5fs tiene un problema fundamental: el control de acceso. En el sistema de archivos UNIX y derivados, existe una lista de usuarios (UIDs) y grupos (GIDs) a los que pueden pertenecer, definidas respectivamente en los archivos ~/etc/passwd~ y ~/etc/group~ \cite{unixprog}. Aquí surge un problema: los grupos están definidos de forma completamente independiente. Un usuario $U$ puede pertenecer a la vez a los grupos $G_1$ y $G_2$, aún si $G_1$ y $G_2$ estuvieran fuertemente relacionados. Este problema lo resuelve Microsoft con el directorio activo (/Active Directory/), donde los grupos pueden heredar de otros grupos, con lo cual $U$ podría pertenecer solo a $G_2$ y, en el proceso, indirectamente estar en $G_1$, con las ventajas que ello supone.
 
 Sin embargo, existe un problema mucho más crítico: la propiedad. En el inodo de un archivo se encuentran dos campos: el UID y el GID del propietario. Esto funciona perfectamente para entornos simples, en los que pueden haber muchos usuarios y, por ejemplo, los grupos de /alumno/ y /profesor/, que, en realidad, tendrían más sentido en los antiguos mainframes para los que fue ideado UNIX que en los sistemas actuales. En la actualidad, multiples usuarios son solo necesarios en servidores, y en workstations se usan como trucos para hacer divisiones complejas de permisos. Todo lector que haya administrado un servidor CentOS conoce el usuario ~http~ o ~nginx~, y aquellos que hayan administrado Debian/Ubuntu conocen ~www-data~.
 
-Considérse el siguiente escenario: un directorio ~notas~ tiene como propietario el grupo ~etsiit~, del que forma parte todo usuario que está en el grupo ~alumnos~ o en el grupo ~profesores~. Esta restricción de consistencia ($alumnos \rightarrow etsiit \land profesores \rightarrow etsiit$) se hace de forma independiente al sistema y recae sobre la responsabilidad del administrador. Supongamos que se busca que los ~profesores~ puedan escribir sobre ~notas~ mientras que ~alumnos~ tan solo puedan leer. Este escenario es imposible de representar en UFS de esta forma, y habría que recurrir a complicar la jerarquía de directorios.
+Considérse el siguiente escenario: un directorio ~notas~ tiene como propietario el grupo ~etsiit~, del que forma parte todo usuario que está en el grupo ~alumnos~ o en el grupo ~profesores~. Esta restricción de consistencia ($alumnos \rightarrow etsiit \land profesores \rightarrow etsiit$) se hace de forma independiente al sistema y recae sobre la responsabilidad del administrador. Supongamos que se busca que los ~profesores~ puedan escribir sobre ~notas~ mientras que ~alumnos~ tan solo puedan leer. Este escenario es imposible de representar en s5fs de esta forma, y habría que recurrir a complicar la jerarquía de directorios.
 
 La solución se denomina ACL (/Access Control Lists/), un mecanismo de permisos en la que se desmenuzan las políticas de acceso sobre un archivo, en lugar de tener un solo propietario. De esta forma sí es representable el escenario anterior. Una posible solución: sobre ~notas~ se especifica que todo usuario de ~etsiit~ puede leer, y todo usuario de ~profesores~ puede leer y escribir.
 
-Los sistemas de archivos ext*, derivados de UFS, tienen una extensión, /acl/, que implementa este mecanismo, y está disponible en Linux \cite{ext2}. Sin embargo, lo hace de forma subóptima: un ACL por archivo. Esto implicaría que, en el escenario anterior, se debería de aplicar la política de seguridad recursivamente, lo que complica el mantenimiento. Para solucionarlo, también se permiten aplicar políticas por defecto que son heredadas por todos los archivos nuevos del directorio, pero no los existentes: tan solo aplicará la política, que está contenida en cada archivo, a los nuevos que se creen. La solución quizá la haya descubierto el lector entre las líneas: ACLs por herencia. Por defecto, y a menos que se especifique lo contrario, todo archivo parte del ACL con identificador $0$, que no indica otra cosa sino /ningún cambio/ y, desde ese archivo, se recorre la jerarquía de directorios hacia arriba aplicando todos los cambios, teniendo más prioridad los más cercanos al archivo, y menos los de la raíz. Por ejemplo, ~privado~, dentro de ~notas~, puede tener un ACL que incluya una única regla: prohibida la lectura a ~alumnos~. Subiendo la jerarquía, la prohibición de ~privado~ tiene más prioridad que el permiso de ~notas~, con lo que la combinación de todos estos ACLs, hasta la raíz, sería la lista de control de acceso efectiva del archivo.
+Los sistemas de archivos ext*, derivados de s5fs, tienen una extensión, /acl/, que implementa este mecanismo, y está disponible en Linux \cite{ext2}. Sin embargo, lo hace de forma subóptima: un ACL por archivo. Esto implicaría que, en el escenario anterior, se debería de aplicar la política de seguridad recursivamente, lo que complica el mantenimiento. Para solucionarlo, también se permiten aplicar políticas por defecto que son heredadas por todos los archivos nuevos del directorio, pero no los existentes: tan solo aplicará la política, que está contenida en cada archivo, a los nuevos que se creen.
+
+*Aportación sobre ext2*: ACLs por herencia. Por defecto, y a menos que se especifique lo contrario, todo archivo parte de un ACL vacío, que no indica otra cosa sino /ningún cambio/ y, desde ese archivo, se recorre la jerarquía de directorios hacia arriba aplicando todos los cambios, teniendo más prioridad los más cercanos al archivo, y menos los de la raíz. Por ejemplo, ~privado~, dentro de ~notas~, puede tener un ACL que incluya una única regla: prohibida la lectura a ~alumnos~. Subiendo la jerarquía, la prohibición de ~privado~ tiene más prioridad que el permiso de ~notas~, con lo que la combinación de todos estos ACLs, hasta la raíz, sería la lista de control de acceso efectiva del archivo.
 
 Esta solución, aunque más lenta (pese a acelerable por cachés), simplica mucho la jerarquía de directorios de todo el sistema operativo, y evitan la necesidad de usuarios arbitrarios y sin sentido intuitivo como ~www-data~ en Debian. Como nota, NTFS, el sistema de archivos de Windows, sí implementa ACLs, pero también sufre el problema de la herencia. Por defecto, un archivo hereda la herencia del padre, pero no puede realizar cambios sobre él que se sumen a los de los niveles superiores \cite{ntfs}.
 
-*Aportación original*: mezclar las mejores decisiones de UFS y NTFS, así como una propia, resulta en StrifeFS, un sistema de archivos seguro, local, y fácilmente mantenible en entornos tanto multiusuario como workstation.
+StrifeFS está diseñado para ser el sistema de archivos más simple que puede implementar estos mecanismos, y a cambio se sacrifican características como la tolerancia a fallos de sectores. Por esto, no es un sistema de archivos que pueda competir con el resto, sino más bien una prueba de concepto. Un futuro StrifeFS2 podría tomar esta prueba de concepto y llevarla a algo más robusto.
+
+*** Estructuras
+StrifeFS divide la memoria secundaria en cinco secciones:
+- Sector de superbloque.
+- Bitmap de inodos.
+- Bitmap de bloques.
+- Región de inodos.
+- Región de bloques.
+
+Se definen cuatro estructuras: el superbloque, el inodo, la entrada de directorio, y la entrada de ACL.
+
+El superbloque es la estructura que describe el estado del sistema de archivos, así como sus atributos de formateo. Está compuesto por los siguientes campos:
+- Firma para identificar el sistema de archivos: ~StrifeFS~.
+- Número de inodos y bloques. Estos campos se establecen durante el proceso de formateo y se mantienen estáticos durante toda la vida del sistema de archivos.
+- Número de inodos y bloques libres. Tras el formateo, comienzan con el mismo valor que los campos anteriores. Cada vez que se reserva un inodo o un bloque, se decrementa el valor.
+- LBAs del bitmap de inodos y de bloques. De esta forma, se identifica dónde se sitúan en memoria secundaria para poder acceder a ellos. Son valores estáticos.
+- LBAs de primer inodo y primer bloque. Similar a los campos anteriores, el sistema de archivos identifica las regiones de esta manera. También son estáticos.
+
+Tras el superbloque se encuentran los bitmaps de inodos y bloques. Estas regiones están compuestas por sendos sectores utilizados como mapas de bits dinámicos. El primer campo del bit de inodos, que correspondería al bit más significativo del primer byte del primer sector, indica si el inodo $0$ está en uso.
+
+El inodo y el bloque con identificadores $0$ están reservados para poder ser usados por la implementación como errores. Además, el inodo $1$ está reservado para la raíz, y la implementación debe garantizar que se cumpla esta restricción.
+
+Tras los mapas de bits, se encuentra la región (o tabla) de inodos. Un inodo es una representación abstracta de una entrada virtual del sistema de archivos, como puede ser un archivo. Se definen según la siguiente estructura:
+- Tamaño del contenido en bytes.
+- Timestamps del momento de la creación, última modificación, y último acceso.
+- Número de enlaces. De igual forma que en s5fs, distintos directorios pueden contener el mismo archivo. Es necesario mantener la cuenta para poder liberar los datos cuando el contador llega a cero.
+- Número de bloques (particiones del contenido) que utiliza.
+- Tipo. Existen 4:
+  - Regular; es decir, un archivo usual.
+  - Directorio, cuyos contenidos son entradas de directorios (definidas más adelante).
+  - ACL. Se utiliza un tipo de inodo específico para el ACL, lo que simplifica mucho la implementación. Sus contenidos son entradas de ACL.
+  - Enlace, para los enlaces simbólicos. Sus contenidos son una ruta.
+- Catorce índices de bloques directos.
+- Índice de bloque indirecto de nivel 1.
+- Índice de bloque indirecto de nivel 2.
+- Índice de bloque indirecto de nivel 3.
+
+Tras la tabla de inodos, comienza la región de bloques. Un bloque se define como una región de 512 bytes. De esta forma, se mantiene una representación independiente del tamaño de sector del medio de almacenamiento masivo donde se sitúa el sistema de archivos. Si el tamaño de sector es mayor, se almacenan en él todos los bloques para los que haya espacio.
+
+La entrada de directorio es simple, y se define por tres campos:
+- Número de inodo.
+- Tamaño del nombre.
+- Nombre, de longitud variable.
+
+Por último, la entrada de ACL define una lista de control de acceso. Un inodo de tipo ACL contiene varias, y se definen por los siguientes campos:
+- Bitmap de flags, 64 bits.
+  - ~allow~, si esta entrada corresponde a un permiso dado (1) o retirado (0) sobre los heredados.
+  - ~isUser~, si corresponde a un usuario (1) o a un grupo (0).
+  - ~read~, si se dan permisos de lectura sobre el archivo.
+  - ~write~, si se dan permisos de escritura.
+  - ~execute~, si se dan permisos de ejecución.
+  - El resto de bits, los 59 hasta llegar a 64, están reservados para uso futuro.
+- Identificador. Dependiendo de si ~isUser~ está a 0 o 1 es un GID o UID respectivamente.
+
+StrifeFS no especifica una estructura para almacenar usuarios o grupos, tan solo se referencian sus identificadores, con lo que queda a elección de la implementación.
 
 ** El registro: un entorno innovador
 Habiendo resuelto el problema de la granularidad de permisos del sistema de archivos en la sección anterior, hay uno que no debe pasar desapercibido: los permisos en tiempo de ejecución. En UNIX y derivados, como Linux, por defecto, la granularidad es binaria: se permite todo (/root/) o no se permite nada (usuario convencional). Esto es matizable: el popular programa /sudo/ permite a un usuario ejecutar una orden como otro, según unas políticas definidas en el archivo de configuración (~/etc/sudoers~). En ~sudoers~, se pueden especificar reglas del estilo: /el usuario jlxip puede ejecutar la orden ~/bin/programa -s *~ como root/. Si bien esto es mejor que un todo o nada estricto, es producto de un fallo fundamental en el diseño de UNIX. Este uso de wildcards (~*~), junto a el uso de binarios ~SETUID~ (que funcionan de forma muy parecida), son la mayor fuente de fallos de seguridad que resultan en escalación de privilegios en servidores. Como comentario, el programa /doas/ de OpenBSD hace algo similar, pero no soporta el uso de wildcards en los comandos permitidos, lo que, aunque minimiza la superficie de ataques, reduce mucho la funcionalidad.
@@ -740,13 +821,11 @@ A raíz de esto nació SELinux (/Security-Enhanced Linux/), un módulo de Linux 
 
 En la sección anterior se comentó el uso en GNU/Linux de usuarios específicos para las aplicaciones, con tal de hacerles propietarios de los directorios que utilizan y que solo puedan acceder a ellos. SELinux extiende esta capacidad de restringir operaciones, haciendo que los programas concretos puedan realizar operaciones como las mencionadas anteriormente. Sin embargo, estas políticas generalmente se aplican a programas muy concretos, y el resto del sistema, por defecto, sigue funcionando como si el módulo no estuviera activo, lo que, de nuevo, por defecto, limita la granularidad. Por todo esto, por muy bueno que sea SELinux, no deja de ser un parche, una tirita sobre fallos de diseño fundamentales.
 
-Strife propone un nuevo sistema de MAC: el /registro/. Siguiendo la línea del microkernel L3 de Liedtke, gestionar dentro del kernel los permisos de IPC es subóptimo y ralentiza todo el sistema, así que, en su lugar, se delega esta responsabilidad a los servicios individuales. Strife toma esta idea y, además, aporta el registro como un mecanismo global que pueden usar los servicios, de así desearlo, para tener de forma uniforme todos sus permisos en ellos. El identificador de procedimiento que recibe un servicio en cada IPC sería, así, comprobado en el registro al llegar, y cacheado en el servicio para minimizar los cambios de contexto.
+Strife *propone un nuevo sistema de MAC*: el /registro/. Siguiendo la línea del microkernel L3 de Liedtke, gestionar dentro del kernel los permisos de IPC es subóptimo y ralentiza todo el sistema, así que, en su lugar, se delega esta responsabilidad a los servicios individuales. Strife toma esta idea y, además, aporta el registro como un mecanismo global que pueden usar los servicios, de así desearlo, para tener de forma uniforme todos sus permisos en ellos. El identificador de procedimiento que recibe un servicio en cada IPC sería, así, comprobado en el registro al llegar, y cacheado en el servicio para minimizar los cambios de contexto.
 
-Además, el registro no solo administra las capacidades de los programas, sino también de los usuarios. De esta forma, un usuario solo puede ejecutar un programa si los permisos que requiere son un subconjunto de los que posee. Este mecanismo se denomina DAC (/Discretionary Access Control/), en el sentido de que los permisos del usuario pasan a los permisos del programa. Siguiendo esta línea, si el programa ejecutara otro, también se aplicaría una máscara. De esta forma, un usuario jamás puede ejecutar un programa, directa o indirectamente, que requiera privilegios que no tiene: los privilegios solo pueden reducirse en el camino.
+Además, el registro no solo administra las capacidades de los programas, sino también de los usuarios. De esta forma, un usuario solo puede ejecutar un programa si los permisos que requiere son un subconjunto de los que posee. Este mecanismo se denomina DAC (/Discretionary Access Control/), en el sentido de que los permisos del usuario pasan a los permisos del programa. Siguiendo esta línea, si el programa ejecutara otro, también se aplicaría una máscara. De esta forma, un usuario jamás puede ejecutar un programa, directa o indirectamente, que requiera privilegios que no tiene: los privilegios solo pueden reducirse en el camino. Es diferente, sin embargo, el caso de RPC, donde se asume que el servidor implementa las protecciones apropiadas.
 
 El registro de Strife es un árbol al que pueden acceder los programas para depositar información y después obtenerla. Un punto clave fundamental es que se trata de una base de datos volátil, que únicamente se encuentra en RAM. El administrador puede configurar el registro por medio de scripts escritos por él que rellenan la /tabula rasa/ con quién tiene permitido hacer qué, y no al revés: se trata de un sistema seguro por defecto, en el que, antes de la ejecución de estos scripts, nadie (excepto el superusuario y los programas que ejecuta) puede realizar ninguna acción.
-
-Como nota adicional, el registro es una base de datos clave-valor arbitraria, no enfocada específicamente a estos servicios. Así, los programas lo utilizan también para obtener su configuración, homogeneizando el método de ajustes de los programas en una sola forma, sin distintos archivos de configuración con distintas sintaxis. Como consecuencia lógica, los valores de configuración se deben establecer por medio de scripts, y esto hace que toda la configuración del sistema sea Turing-completa, lo que permitiría al administrador del sistema reutilizar los mismos guiones en distintos computadores, y que configuren el entorno que detecten.
 
 La comunicación con el registro se encuentra encapsulada en la librería estándar, con lo que el programador accede a la configuración de su programa de forma transparente, sin necesidad de leer archivos y parsearlos.
 
@@ -816,7 +895,7 @@ En el repositorio del loader se aporta un programa, ~elf2sus.py~, que realiza la
 
 *Aportación original*: el tipo de archivo SUS es el más simple posible que contiene un cargador de programas para ser cargado como primer paso de bootstrapping de un microkernel. En realidad, se podría hacer directamente un binario plano, pero requeriría que el punto de entrada estuviera en 0, y cargar una tarea con dirección base 0 es muy mala idea, puesto que la derreferencia del puntero nulo es válida.
 
-* Diseños detallados
+* Diseños Detallados, Implementación, y Pruebas
 ** Kernel
 El kernel, siendo el proyecto más grande y complejo de todo el trabajo, toma muchas decisiones que son importantes de mencionar para entender cómo realiza las intenciones expresadas en el capítulo anterior. Se hará primero un repaso por lo más fundamental: los descriptores, tanto de segmentos como de interrupciones. Sin ellos, no existe sistema operativo. Tener una GDT válida permite la gestión de la memoria, y este será el siguiente tema a atacar. Después, comienza el userspace: syscalls, IPC, scheduler, y, para finalizar, cómo funciona el equivalente a ~main~ en el kernel.
 
@@ -884,7 +963,7 @@ El privado no es otra cosa que la llamada a las funciones de reserva o liberaci�
 El público es más de lo mismo. Se hace la llama a la reserva del PMM, y después se /mapea/ la dirección física $F$ a la dirección virtual $V=F+\text{HIGHER\_HALF}$, marcándola en el proceso como global y no-ejecutable. De igual forma que en el PMM, existe ~VMM::calloc~ para limpiar las páginas.
 
 *** Syscalls
-Antes de continuar con las explicaciones sobre el kernel, ha llegado el momento de enumerar las syscalls. Existen 19 TODO de ellas, y algunas requieren privilegios de ejecución que se comprueban en el kernel desde el registro. En realidad, es al revés: el registro envía al kernel qué usuarios y procesos pueden realizar qué acciones antes de que estas ocurran. Esto se debe al descubrimiento de seL4 que afirma que un microkernel jamás debe ejecutar una rutina del userspace, como se mencionó en [[seL4: el último mejor SO]].
+Antes de continuar con las explicaciones sobre el kernel, ha llegado el momento de enumerar las syscalls. Existen 19 TODO de ellas, y algunas requieren privilegios de ejecución que se comprueban en el kernel desde el registro. En realidad, es al revés: el registro envía al kernel qué usuarios y procesos pueden realizar qué acciones antes de que estas ocurran. Esto se debe al descubrimiento de seL4 que afirma que un microkernel jamás debe ejecutar una rutina del userspace, como se mencionó en [[seL4]].
 
 En la tabla [[tab:syscalls]] se encuentran las diferentes syscalls que existen en el microkernel de Strife con información sobre cada una.
 
@@ -1054,6 +1133,10 @@ El scheduler no tiene mucha complicación práctica. Su justificación teórica 
 
 Resulta de interés en esta sección discutir este último punto; en realidad, existen dos dispatchers: ~dispatch~ y ~dispatchSaving~, ambas funciones de la clase Task. El primero está contenido dentro del segundo por medio de /fallthrough/ de instrucciones. ~dispatch~ es el intuitivo: realiza el cambio de contexto a la tarea, restaurando los registros y cambiando la tabla de páginas y selectores en el proceso. ~dispatchSaving~, además, primero guarda el flujo de ejecución del kernel en variables globales para ser restaurado luego. Este mecanismo se usa en el proceso de bootstrapping, cuando el microkernel tiene una serie de programas que ejecutar secuencialmente. También se usa cuando se comprueban algunos permisos en el registro, pero eso se explicará en [[Registro]].
 
+Existen dos vectores en memoria que mantienen los procesos en ejecución en un instante dado: ~origRunning~ y ~runningAs~, ambos de longitud igual al número de cores de la CPU. Suponga el caso en que un proceso A se encuentra, por RPC, dentro de otro proceso B. En ese instante, el core tiene su ~origRunning~ en A, y su ~runningAs~ en B. ~runningAs~ es el usado en la mayoría de syscalls, pues es el proceso a quien debe modificarse. ~origRunning~ se usa, sobre todo, para el scheduler.
+
+Si en el escenario anterior muere B, se toma la heurística de que es imposible recuperar el funcionamiento de A, con lo cual se toma la decisión de matarlo también. Este proceso de matar al remitente se repite hasta que el valor de ~runningAs~ sea el de ~origRunning~, cuando se asegurará haber llegado al fondo de la pila de llamadas. Como todas las llamadas son locales y no se almacenan en estructuras globales dentro del kernel, se recurre a los tickets de vuelta para poder recorrer la pila de llamadas.
+
 *** Drivers necesarios
 Un microkernel, para sorpresa de nadie, tiene drivers dentro. Hay algunos que se usan tan extremadamente a menudo (en cada syscall o cada quantum) que ralentizaría excesivamente el sistema sacarlos. Hay otros, además, que son imposibles de extraer pues aportan funcionalidades básicas de un x86 moderno. Por suerte, resultan pocos todos estos casos combinados, y en Strife solo se destacan dos: ACPI y APIC.
 
@@ -1177,31 +1260,28 @@ Una tarea puede iniciar este mecanismo mediante la syscall ~EXEC~, pasándole al
 *** Jerarquía
 En la sección [[El registro: un entorno innovador]] se presentó el mecanismo de registro para la configuración de servicios. Aquí se describe su implementación y comunicación. De forma intuitiva, solo existe una forma de hacer este tipo de implementación, sobre todo teniendo en cuenta la volatilidad de los datos: un árbol de tablas hash.
 
-La representación multinivel se separa usando el caracter ~/~. La raíz se denomina como ~/~. Bajo la raíz existen tres directorios principales, que representan las configuraciones de distintos servicios. Estos son: ~self~, ~kernel~ y ~data~.
-
-El objetivo de ~self~ y ~kernel~ es guardar privilegios:
-- En el caso de ~self~, los permisos son respecto al propio registro: ¿Qué claves pueden editar?
-- En el de ~kernel~, corresponde a los permisos de syscalls protegidas.
-
-En ambos casos, las hojas del árbol representan los permisos:
-- ~self~ tiene como hojas un caracter seguido de una ruta. El caracter puede ser ~R~, si se permite su lectura, o ~W~, si además se permite su lectura. Por ejemplo, ~W/~ indica que se tiene control total del registro, y ~R/kernel~ indica que se pueden leer los permisos relativos al kernel.
-- ~kernel~ tiene dos hojas posibles: ~IO_ALLOWED~, para permitir la syscall ~ALLOW_IO~, y ~PHYS_ALLOWED~, para permitir la syscall ~ALLOW_PHYS~.
-
-Tienen a su vez tres subdirectorios: ~p~, que afecta a los programas, ~g~, a los grupos, y ~u~, a los usuarios.
-- ~p~ contiene rutas de programas, separadas por ~/~. Como ejemplo, la existencia de ~/kernel/p/'/bin/programa'/IO_ALLOWED~ permite que el ejecutable situado en ~/bin/programa~ pueda realizar la syscall ~ALLOW_IO~.
-- ~g~ contiene identificadores numéricos de grupos del sistema de archivos raíz. Si existe ~/self/g/admins/'W/'~ , entonces los usuarios que estén en el grupo ~admins~ pueden escribir en todo el registro.
+La representación multinivel se separa usando el caracter ~/~. La raíz se denomina como ~/~. Bajo la raíz existen dos directorios principales, que representan las configuraciones de distintos servicios. Estos son: ~u~ y ~g~.
+- ~g~ contiene identificadores numéricos de grupos del sistema de archivos raíz. Si existe ~/g/5/IO_ALLOWED~ , entonces los usuarios que estén en el grupo con GID $5$ pueden ejecutar programas que realicen la syscall ~ALLOW_IO~ y utilizar los puertos de entrada/salida.
 - ~u~ es exactamente lo mismo que ~g~ pero para usuarios.
-
-Los permisos se combinan de la forma $P \land (G \lor U)$. Esto es, el programa necesita tener dicho permiso, y, además, o bien el usuario, o bien uno de los grupos de los que sea parte, tiene que tenerlo también.
-
-~/data~ es especial: almacena datos arbitrarios de los programas, que pueden ser permisos si ellos así lo definen. Sus subdirectorios son sus propias rutas. El programa ~/bin/editor~ tiene permisos de lectura y escritura implícitamente sobre ~/data/'/bin/editor'~.
 
 Cuando el kernel recibe una syscall ~ALLOW_IO~ o ~ALLOW_PHYS~, se ve obligado a consultar al registro. Esto se hace por medio de ~dispatchSaving~, dejando al otro proceso en estado bloqueado hasta conocer la respuesta.
 
 *** Procedimientos del registro
-Los procedimientos públicos que ofrece el registro para su comunicación con PCI son los siguientes:
+Los procedimientos públicos que ofrece el registro para su comunicación con PCI se encuentran en la tabla [[tab:reg]].
 
-*TODO: Pendiente de definir*
+#+NAME: tab:reg
+#+CAPTION: Procedimientos públicos de registry
+| RPID | Nombre    | Argumentos |
+|------+-----------+------------|
+|    0 | ~CONNECT~ |          0 |
+|    1 | ~EXISTS~  |          0 |
+|    2 | ~CREATE~  |          0 |
+\FloatBarrier
+
+A diferencia del resto de servicios que se verán más adelante, estos procedimientos no requieren permisos, pues son gestionados internamente por el registro.
+- ~CONNECT~ es la primera ocurrencia del mecanismo comentado en [[Memoria compartida en detalle]]. Recibe un SMID y prepara la memoria compartida, devuelve ~true~ si todo ha ido bien, ~false~ en cualquier otro caso.
+- ~EXISTS~ comprueba la existencia de la ruta en memoria compartida.
+- ~CREATE~ la crea, en caso de que el programa que la realice haya sido ejecutado por un usuario que también tenga el privilegio a asignar.
 
 ** Pila de memoria secundaria
 *** PCI
@@ -1282,7 +1362,7 @@ Lo que sí es preciso comentar son los procedimientos públicos, y están en la 
 
 Sus definiciones son simples:
 - ~GET_ATAPIS~ devuelve el número de discos ATAPI conectados al HBA.
-- ~CONNECT~ es la primera ocurrencia del mecanismo comentado en [[Memoria compartida en detalle]]. Recibe un SMID y prepara la memoria compartida, devuelve ~true~ si todo ha ido bien, ~false~ en cualquier otro caso.
+- ~CONNECT~ funciona de la manera usual.
 - ~READ_ATAPI~ realiza la lectura sobre la página de la memoria compartida. Recibe un identificador de disco (desde 0, menor que el número devuelto por ~GET_ATAPIS~), una dirección lineal de inico, y el número de sectores a leer: 1 o 2.
 
 *** ramblock
@@ -1370,21 +1450,33 @@ Funcionan de la siguiente manera:
 - ~READ~ recibe el inodo y la página. Sencillamente, lee el archivo de forma paginada, devolviendo en cada paso cuántos bytes se han escrito en la página compartida.
 
 *** StrifeFS
-StrifeFS fue ampliamente explicado en [[Sistema de archivos propio]].
+Las ideas de StrifeFS fueron explicadas en [[Sistema de archivos propio]]. Aquí se definirá su implementación. Para empezar, si se está montando sobre un disco RAM, entonces se formatea el espacio. Como la implementación no pretende ser final, se fijan 4096 inodos y 4096 bloques.
 
-*TODO: Marshalling pendiente de definir, según se vea en la implementación*
-
-Su interfaz de procedimientos públicos es similar a la de ISO9660, y se encuentra en la tabla [[tab:strifefs]].
-
+Los procedimientos públicos implementados se encuentran en la tabla [[tab::strifefs]].
 #+NAME: tab:strifefs
 #+CAPTION: Procedimientos públicos de StrifeFS
-| RPID | Nombre         | Permiso       | Argumentos |
-|------+----------------+---------------+------------|
-|    0 | ~CONNECT~      | ~BLOCK_LIST~  |          1 |
-|    1 | ~LIST_DEVICES~ | ~BLOCK_LIST~  |          1 |
-|    2 | ~READ~         | ~BLOCK_READ~  |          4 |
-|    3 | ~WRITE~        | ~BLOCK_WRITE~ |          4 |
+| RPID | Nombre      | Permiso          | Argumentos |
+|------+-------------+------------------+------------|
+|    0 | ~SETUP~     | ~STRIFEFS_LIST~  |          3 |
+|    1 | ~CONNECT~   | ~STRIFEFS_READ~  |          1 |
+|    2 | ~GET_INODE~ | ~STRIFEFS_READ~  |          1 |
+|    3 | ~READ~      | ~STRIFEFS_READ~  |          3 |
+|    4 | ~WRITE~     | ~STRIFEFS_WRITE~ |          3 |
+|    5 | ~MAKE_FILE~ | ~STRIFEFS_WRITE~ |          2 |
+|    6 | ~MAKE_DIR~  | ~STRIFEFS_WRITE~ |          2 |
 \FloatBarrier
+
+- ~SETUP~ inicializa el sistema de archivos tomando un UUID para ~block~ y un booleano sobre si se debe formatear el medio.
+- ~CONNECT~ prepara la memoria compartida.
+- ~GET_INODE~ escribe el inodo sobre la memoria compartida.
+- ~READ~ realiza la lectura para un inodo, con una posición de inicio y un tamaño de hasta una página.
+- ~WRITE~, con una interfaz igual a ~READ~, realiza la escritura. Si la posición de fin es superior al tamaño del archivo, lo extiende.
+- ~MAKE_FILE~ crea un archivo regular a partir del inodo de su padre y el tamaño del nombre, que es pasado por memoria compartida.
+- ~MAKE_DIR~ funciona de igual forma.
+
+Como los ACLs son inodos, no es necesario un tratamiento especial para ellos. Se pueden consultar y modificar utilizando ~GET_INODE~ para obtener el campo ~ACL~ seguido de ~READ~ o ~WRITE~.
+
+El driver no permite actualmente el borrado de archivos.
 
 *** VFS
 El VFS es la capa de abstracción sobre todos los sistemas de archivos, quedando así en la cima de la pila de almacenamiento. Homogeneiza los sistemas de archivos, dándoles todos una representación igual a la de StrifeFS.
@@ -1400,7 +1492,24 @@ Tras esto, el VFS intenta identificar a qué punto de montaje corresponde la rut
 
 La ruta ~/cd/boot~ coincide en su primer caracter con el primer punto de montaje, y en sus cuatro primeros con el segundo. El que más caracteres coincida, terminando en ~/~, determina cuál es el punto de montaje. A partir de ese punto, se elimina la ruta de montaje de la ruta simplificada, y resulta en la ruta relativa, que es la que se envía al servicio correspondiente.
 
-*TODO: faltan los procedimientos públicos*
+ISO9660 se encapsula de forma que el ACL de todos los archivos hace que únicamente el usuario ~system~ (UID 1) pueda leer.
+
+Los procedimientos públicos se encuentran en la tabla [[tab:vfs]].
+#+NAME: tab:vfs
+#+CAPTION: Procedimientos públicos de VFS
+| RPID | Nombre      | Permiso     | Argumentos |
+|------+-------------+-------------+------------|
+|    0 | ~CONNECT~   | ~VFS_READ~  |          1 |
+|    1 | ~SELECT~    | ~VFS_READ~  |          1 |
+|    2 | ~LIST~      | ~VFS_READ~  |          1 |
+|    3 | ~READ~      | ~VFS_READ~  |          1 |
+|    4 | ~INFO~      | ~VFS_READ~  |          0 |
+|    5 | ~WRITE~     | ~VFS_WRITE~ |          2 |
+|    6 | ~MAKE_FILE~ | ~VFS_WRITE~ |          0 |
+|    7 | ~MAKE_DIR~  | ~VFS_WRITE~ |          0 |
+\FloatBarrier
+
+VFS funciona por un mecanismo de estado de selección y paginación. Para simplificar la interacción, el cliente selecciona (~SELECT~) un fichero por su ruta en memoria compartida, pasando en el proceso el tamaño de la cadena. ~INFO~ devuelve el tamaño del inodo seleccionado, así como su tipo. Tras esto, los procedimientos acceden a los datos con granularidad de páginas: ~READ~ rellena con ceros el resto de la página si concluye el archivo, y la primera página no existente devuelve false. ~WRITE~ debe evitar esto, así qeu recibe también la cantidad de bytes en la región de memoria compartida a escribir.
 
 ** Del teclado a coreutils
 *** term
@@ -1459,7 +1568,7 @@ Por esto, las tres funciones estándares mencionadas están implementadas en ens
 *** Abstracción sobre RPC
 Desde el lado del cliente, hay una fina abstracción sobre la syscall de RPC en la librería estándar. En lugar de tener una única función para hacerla, existen cinco, dependiendo del número de parámetros (de 0 a 4). Esto permite al compilador organizar mejor los registros para conseguir el mínimo movimiento posible.
 
-Desde el lado del servidor, la abstracción es mayor. Se aporta un punto de entrada RPC por defecto, que se usa cuando ~std::enableRPC~ se llama sin el puntero a la función. Esta tiene su entrada en ensamblador y organiza los RPIDs mediante una tabla hash. Se aporta una función para modificar esta tabla hash y añadir procedimientos públicos, ~std::exportProcedure~, que recibe un puntero a función casteado a ~void*~ y el número de argumentos que espera recibir. Es importante comentar que la tabla hash está implementada /lock-less/, sin exclusión mutua, para acelerar la entrada, con lo cual todas las llamadas a ~exportProcedure~ deben de realizarse antes de la llamada a ~enableRPC()~, para que no existan condiciones de carrera.
+Desde el lado del servidor, la abstracción es mayor. Se aporta un punto de entrada RPC por defecto, que se usa cuando ~std::enableRPC~ se llama sin el puntero a la función. Esta tiene su entrada en ensamblador y organiza los RPIDs mediante en un vector. Se aporta una función para modificar esta tabla hash y añadir procedimientos públicos, ~std::exportProcedure~, que recibe un puntero a función casteado a ~void*~ y el número de argumentos que espera recibir. Es importante comentar que la tabla hash está implementada /lock-less/, sin exclusión mutua, para acelerar la entrada, con lo cual todas las llamadas a ~exportProcedure~ deben realizarse antes de la llamada a ~enableRPC()~, para que no existan condiciones de carrera.
 
 Un ejemplo sería de este estilo:
 #+begin_src c++
@@ -1477,22 +1586,48 @@ Es evidente que el sistema operativo no fuerza al programador a escribir en la p
 
 Sobre esta encapsulación existe una implementación de ~printf~ funcional, que almacena todo lo que se va a imprimir en un buffer (la página compartida), y se hace la llamada a ~FLUSH~ cuando se llena o cuando ocurre un salto de línea, de igual forma que está implementada en la libC de GNU.
 
-*** Abstracción del registro
-*TODO: Pendiente de implementar*
+*** Abstracción sobre VFS
+Se aporta una serie de funciones para encapsular el funcionamiento de VFS en la cabecera ~<fs>~. Permiten la lectura y escritura de archivos de forma fácil para el programador. En concreto se tienen:
+- ~std::fs::listFiles~ toma una referencia a una estructura ~FileList~, que no es más que un ~unordered_set~ de strings, con los nombres de los archivos.
+- ~std::fs::readFile~ realiza la lectura con una granularidad menor a página. Toma una posición de inicio y un tamaño en bytes.
+- ~std::fs::readWholeFile~ realiza toda la lectura, reservando la memoria en el proceso. Para no enviar al programador un puntero normal (y posiblemente caer en memory leak), se devuelve una referencia a una estructura ~Buffer~, que funciona de forma similar a ~shared_ptr~.
 
-* Experimentos, conclusiones y trabajo futuro
-** Experimentos
-Tamaño ISO, RAM mínima, capturas de pantalla
+*** Abstracción del registro
+La librería estándar aporta dos funciones que encapsulan el registro: ~EXISTS~ y ~CREATE~. Son wrappers muy finos: tan solo posan la ruta sobre la memoria compartida, creando la conexión si no está activa, para después copiar parámetros ~std::string~ a esta ruta.
+
+*** Otras abstracciones
+Existen algunas otras abstracciones menos significativas:
+
+- Sobre la cabecera ~<shared_memory>~ se incluye una implementación oficial para los procedimientos ~CONNECT~ de los servidores: ~std::sm::connect~, que comprueba si la conexión está ya realizada, realiza el ~SM_MAP~ y guarda el puntero, y ~std::sm::get~, que obtiene el puntero de estar ya conectado. Esto reduce el tamaño del código de todos los servicios.
+- Sobre la cabecera ~<tasks>~ se incluye ~run()~, que llama a ~readWholeFile()~, mueve los contenidos a páginas independientes, y realiza la syscall ~EXEC~.
+
+** Pruebas
+*ÚNICA PARTE PENDIENTE*
+*** Algunos problemas resueltos
+SEcción, tabla, problemas encontrados que no esperábamos encontrar. "La arquitectura daba problemas con nosequé". Problema, este, anomalía o cuestión que daba lugar al problema, solución adoptada.
+
+*** Análisis del uso de recursos
+Tamaño ISO, RAM mínima
+
+*** Puesta a prueba
+capturas de pantalla
+
+* Conclusiones y Trabajo Futuro
 ** Conclusiones
 ** Trabajo futuro
-*TODO*
-** Trabajo futuro propio
+¡Todo propio!
 #+begin_export latex
 %El proyecto toma muchas decisiones prácticas subóptimas, y requiere muchos años de pulido.
 %Valores de scheduler mal, tal
 #+end_export
+** Valoración personal
+cosas que he descubierto, a cómo me he organizado, qué parte ha tenido más relevancia, qué me ha sorprendido
+
 * --- Backmatter --- :ignore:
 #+latex: \backmatter
+#+latex: \appendix
+* Cómo Compilar
+asdf
 * Referencias :ignore:
 #+begin_export latex
 \bibliographystyle{unsrt}
