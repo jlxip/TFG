@@ -1,0 +1,268 @@
+#+LaTeX_CLASS: TFG
+#+OPTIONS: date:nil toc:nil title:nil
+#+LANGUAGE: es
+
+* Título :ignore:
+\begin{titlepage}
+
+\begin{center}
+{\Large DESARROLLO DE UN SISTEMA OPERATIVO \\ CON ARQUITECTURA MICROKERNEL \\ (Portada provisional, evidentemente) \par}
+\vspace{2cm}
+{\Large José Luis Amador Moreno \par}
+\vspace{2cm}
+{\large Curso 2021-2022}
+\end{center}
+
+\vfill
+Trabajo de fin de grado en Ingeniería Informática \\
+Escuela Técnica Superior de Ingenierías Informática y de Telecomunicación \\
+Universidad de Granada
+
+\end{titlepage}
+
+* Abstract :ignore:
+\chapter*{Resumen}
+
+* TOC :ignore:
+\renewcommand{\contentsname}{Índice}
+\tableofcontents
+* Un recordatorio actualizado de Sistemas Operativos
+** Definición
+Alfred Aho, autor del libro más importante sobre compiladores, /Compilers: Principles Techniques and Tools/ \cite{dragonBook}, así como un libro referente sobre algoritmos, /Data Structures and Algorithms/ \cite{aho-alg}, comenzó una conferencia en 2015 con la siguiente afirmación:
+
+#+BEGIN_QUOTE
+Tal y como decía Knuth en /The Art of Computer Programming/, [un algoritmo] no es más que una serie finita de instrucciones que termina en un tiempo finito. [...] Yo doy clase de teoría de computadores en Columbia, y usamos dos libros de texto: uno usa esta definición; el otro, afirma que un algoritmo no tiene necesariamente que parar para todas las entradas. Así, los computólogos no pueden estar de acuerdo ni en el término más fundamental del área. --- Alfred Aho \cite{aho-conf}
+#+END_QUOTE
+
+Si /algoritmo/ es una palabra cuya extensión es difícil de delimitar, hacerlo para /sistema operativo/ resulta una tarea más complicada aún. Un sistema es todo aquel conjunto de bloques relacionados entre sí con el propósito de emerger un todo. La intuición es sencilla, se explica en primero de carrera en la Universidad de Granada: programa o conjunto de programas que controla la ejecución de aplicaciones y actúa como interfaz entre el usuario y el hardware.
+
+Genérico, desde luego. Es evidente para todo entendido que, si bien esta definición es correcta, y muy certera en el uso del concepto de abstracción, no establece límites. Existen definiciones distintas; por ejemplo, Tanenbaum aporta dos que no son mutuamente excluyentes: sistema operativo como *máquina extendida*, en el sentido de secuencia de capas de abstracción, y como *gestor de recursos* \cite{tanen}.
+
+Se trata de un debate abierto al cual el habla popular no ayuda: no es inusual escuchar a alguien ajeno al campo referirse a Linux como un sistema operativo, a pesar de ser únicamente un núcleo. Por otra parte, la posición de la /Free Software Foundation/, y especialmente la de su antiguo portavoz Richard Stallman, de ridiculizar al proyecto como una minúscula parte del sistema GNU \cite{fsf}, aún siendo un proyecto monolítico, también resulta inadecuada, en especial sabiendo que existen motivos de conflicto de interés entre ambos proyectos.
+
+En el mundo del /hobby osdev/, es decir, el de aquellos programadores que se dedican a escribir sistemas operativos como actividad recreativa, al cual yo he pertenecido durante varios años y dentro del cual he hecho grandes amigos, también existe esta disputa: es común encontrar a expertos en estos grupos que no consideran a DOS como un SO por no ofrecer un kernel con la suficiente abstracción del hardware.
+
+Como definir el término parece ser una batalla perdida, parece infructuoso dedicarse a lucharla en un trabajo de esta índole, y se tomará una postura de mente abierta, en la que se aceptarán como partes de un sistema operativo todas las capas de abstracción genéricas por debajo de una utilidad, así como aquellos programas que actúen únicamente como vista para interactuar de forma directa con una de las capas, como ~ls~ de ~coreutils~.
+
+** Historia :ignore:
+** Partes
+Habiendo establecido una definición en el capítulo [[Definición]], es posible distinguir cuatro partes fundamentales, que en muchas ocasiones se pueden encontrar mezcladas, y en otras extremas pueden faltar. En ocasiones es confuso referirse a ellas por su traducción al español, así que frecuentemente se usará su terminología en inglés. Son: el /kernel/, los /drivers/, las /librerías/, y las /utilidades/. En este capítulo se hará un repaso por su significado, se darán ejemplos, y se enunciarán sus partes de haberlas. Sin embargo, es crítico contextualizar todos estos conceptos y explicar cómo se llega a ellos en primer lugar.
+
+*** Introducción al arranque
+El mundo de la informática tuvo un punto de inflexión en 1981 con la salida del /IBM Personal Computer/ en Estados Unidos. Su procesador, el Intel 8088, lanzado al mercado 5 años antes, fue la primera pieza de hardware en usar la arquitectura x86. Debido al alto precio de este ordenador, inmediatamente después de su salida al mercado, una gran cantidad de compañías productoras de hardware y software crearon las denominadas /compatibles/, computadores cuyo hardware permitía la ejecución del software diseñado para la máquina de IBM, de las cuale cabe destacar las de Compaq.
+
+La mayoría de computadores personales de hoy día usan la arquitectura x86, sobre el ISA (/Instruction Set Architecture/, conjunto de instrucciones) de 64 bits llamado x86-64 (también conocido como x64 o AMD64). Existe un resurgimiento de la arquitectura ARM fuera de móviles por parte de los procesadores M1 de Apple publicados desde 2020, pero a día de hoy su presencia no consigue alcanzar la de los x86-64, y su existencia se ignorará a partir de este punto, pues el sistema operativo de este trabajo tiene como único y exclusivo /target/ (soporte objetivo) x86.
+
+Cuando un x86 arranca, se ejecuta un programa aportado por un chip ROM sobre la placa base. Se denomina BIOS (/Basic Input Output System/) en su versión original, aunque en la década pasada fue poco a poco reemplazado por UEFI (/Unified Extensible Firmware Interface/) hasta apoderarse del mercado. UEFI suele tener en la gran mayoría de ocasiones un modo /legacy/ para simular ser una BIOS y así mantener la retrocompatibilidad. Esta sección se referirá solo a BIOS con tal de acotar un cierto nivel de simplicidad.
+
+La BIOS realiza tareas de preparación del hardware, como inicializar el controlador de la memoria DRAM y puertos PCI, aunque su forma de hacerlo varía entre fabricantes y modelos. Cuando el hardware esencial ha sido inicializado, se prepara una interfaz de bajo nivel que puede usar el programador del sistema: se trata de las llamadas de interrupción BIOS, ampliamente usadas en las épocas de MS-DOS, cuando no existía un kernel lo suficientemente amplio como para abstraerse del hardware.
+
+Tras montar este sistema de interrupciones, selecciona un disco de arranque, proceso que ha presenciado todo entusiasta de la informática a la hora de instalar un sistema operativo. De este disco, sea magnético, en estado sólido, unidad CD, o USB, BIOS lee el MBR (/Master Boot Record/), su primer /sector/ (conjunto pequeño de bytes, usualmente 512 en discos duros y 2048 en CDs). El MBR es copiado a una región de memoria que comienza en ~0x7C00~, por convenio de IBM, y BIOS hace el salto a esta dirección. A partir de este punto, el programador está en control.
+
+Cuando la BIOS salta al punto de entrada, el procesador se encuentra en un estado conocido como /real mode/, o modo real. Este modo es plenamente compatible con un procesador 80186 de Intel, y su ISA es x86-16, es decir, tiene un tamaño de palabra de 16 bits. Para desbloquear el verdadero potencial de la CPU, el procesador debe de cambiar al /protected mode/ (modo protegido), capacidad que apareció por primera vez en el Intel 80386 (también llamado i386), que usa el conjunto de instrucciones IA32, con una longitud de palabra de 32 bits. Eventualmente, también tendrá que pasar al /long mode/ (modo largo), con el ISA x86-64, que corresponde a lo usado hoy en día.
+
+Todo este proceso de cambio de modos es realizado por una pieza de software: el /bootloader/, o cargador de arranque. GRUB es el que posee el nombre más conocido, pero existen multitud. Por ejemplo, las versiones modernas de Windows usan BOOTMGR. El bootloader utiliza las interrupciones BIOS para reconocer los discos conectados y poder acceder a ellos posteriormente. Tras hacer el cambio de modos, reconoce los esquemas de particiones, así como las particiones en sí, y carga los archivos necesarios del kernel, para después darle el control, ofreciéndole en el proceso información vital para la posterior preparación del sistema.
+
+*** El kernel
+El kernel de un sistema operativo, traducido como /núcleo/, es el soporte sobre el cual reposa todo el sistema. Es el primer software que se ejecuta fuera del bootloader, y se pueden destacar varios objetivos:
+
+- Manejar los distintos recursos de bajo nivel.
+- Hacer emerger el concepto de tareas.
+- Interconectar tareas y drivers.
+
+Es importante profundizar sobre cada uno de estos aspectos. Para empezar, el hardware proporciona una serie de recursos esenciales para todo programa: memoria, canales de interconexión, periféricos... De todos ellos, la memoria es el único esencial para tener un sistema (discutiblemente aburrido, pero completo). Los procedimientos de reserva y liberación de memoria son manejados por el kernel. Se profundizará en este tema en la sección [[Memoria]].
+
+En todo sistema operativo moderno (especialmente aquellos que pertenecen a la familia de los multiprogramados) existe el concepto de /tarea/: una unidad de código y datos que se comunica con diversas partes del sistema. El kernel es el encargado de montarla en memoria, y, usualmente, intercambiarla con otras en cortos periodos de tiempo para dar la impresión de que se están ejecutando simultáneamente, cuando no necesariamente tiene que ser así. De este concepto surge la mayor parte de teoría escrita sobre sistemas operativos, y se suele considerar la parte más importante. Se profundizará mucho en este apartado durante todo el trabajo, pero en la sección [[Tareas]] se encontrarán las primeras pinceladas.
+
+Por último, un kernel conecta tareas entre sí y con los drivers presentes. Las tareas se comunican mediante un concepto llamado IPC (/Inter Process Communication/), de las cuales existen varios tipos no necesariamente excluyentes:
+- FIFOs. Son flujos de bits que funcionan como tuberías (/pipe/, en inglés). Es lo que usa UNIX y derivados.
+- RPC, /Remote Procedure Call/. En este tipo de IPC, una tarea llama a una función de otra (que puede encontrarse en un otro computador) como si se tratara de una suya propia. Es lo que usa el sistema operativo de este proyecto, así como partes internas de NT bajo el nombre de LPM (/Local Procedure Call/).
+- Memoria compartida. Presente en la gran mayoría de sistemas operativos modernos, el concepto de compartir memoria física es esencial para ocasiones en las que hay que transmitir una gran cantidad de datos entre tareas con mínima latencia.
+
+Un kernel (o, al menos, parte de él) siempre se ejecuta en lo que se conoce de forma genérica como modo supervisor, siendo su contraparte el modo usuario. Las arquitecturas modernas tienen un concepto para representar esto: los anillos de protección (en inglés, /protection rings/). En x86-64 existen 4 anillos, comenzándose en el /ring 0/, y dando libertad al kernel de elegir si los demás están en modo supervisor, usuario, o incluso una mezcla de ambos. Los modos de protección en esta arquitectura están separados por un mecanismo denominado segmentación, en el que se delimitan amplias regiones de memoria y sus permisos.
+
+Gran parte del trabajo del kernel es recibir peticiones. Algunas de ellas son generadas por el hardware, y se denominan interrupciones. De estas hay dos tipos: enmascarables, relativas al hardware no esencial, y no enmascarables, de las cuales el mayor exponente son las excepciones (la más simple: la división por cero). Otras son causadas por el software, y se las conoce como llamadas al sistema (en inglés, /system calls/, o /syscalls/ para abreviar).
+
+Existen dos tipos de kernels fundamentales: monolíticos y microkernels.
+
+Los monolíticos se caracterizan por tener todos los drivers dentro. Esto hace que la comunicación entre ellos sea rápida durante la ejecución, aunque, de haber un cambio en uno de ellos, será necesario enlazar de nuevo todo el kernel. Salvo muy finas protecciones que los kernels monolíticos suelen crear al arranque, un fallo de programación, por poco grave que sea, puede promocionar a un fallo irrecuperable del kernel (concepto conocido como /kernel panic/). Además, un driver malicioso podría tomar control del kernel y, por tanto, de todo el sistema, haciéndose a sí mismo invisible en el proceso; este tipo de malware se conoce como /rootkit/.
+
+Los microkernels se caracterizan por lo opuesto: intentan separar los drivers en tareas independientes siempre que sea posible. La comunicación entre ellos es considerablemente más lenta, pues una petición a un driver requiere cambiar de una tarea a otra, en un proceso llamado cambio de contexto, muy costoso en recursos. A cambio, un fallo en uno de los drivers no tiene por qué resultar terminal, y la tarea correspondiente puede reiniciarse con la esperanza de que siga funcionando sin que vuelva a ocurrir ese comportamiento anómalo. Esto les aporta más robustez, así como seguridad: un driver nunca se ejecutará en modo supervisor, aunque sí puede tener acceso al hardware y causar problemas por ese camino. Los microkernels son conceptualmente más simples, pues mantienen el software separado en proyecto sencillos sin crear un delicioso plato de código spaguetti en el que un driver llama a otro localmente y sin posible detección, registro, y control de privilegios: todos están al mismo nivel. A cambio, son mucho más complejos de escribir, pues parten de un entorno en el que no hay funcionalidad, y han montar todo un sistema en base a eso. Este proceso de hacer emerger un sistema de la nada se denomina /bootstrapping/.
+
+Con el objetivo de hacer el plato italiano menos apetitoso y alcanzar un equilibrio entre separación de drivers y velocidad, surgen los kernels híbridos. La mayoría de kernels comerciales los utilizan, entre ellos NT (Windows), Linux, y XNU/Darwin (macOS). Los drivers separados del kernel se denominan módulos, y se cargan en tiempo de ejecución desde el sistema de archivos: o bien como una tarea como los microkernels, o bien introduciéndolos en el contexto del kernel. Por esto mismo, solo los drivers que no resultan esenciales para el funcionamiento del sistema pueden cargarse modularmente. Nótese que esta decisión se centra en aliviar el tamaño del código fuente, así como del binario final, del kernel, y no está guiada por la seguridad.
+
+*** Los drivers
+Un driver (en español, /controlador/) es un programa que implementa una capa de abstracción sobre un dispositivo o concepto de bajo nivel. En un kernel monolítico no es más que una colección de funciones y estructuras. En un microkernel, se ejecuta en una tarea independiente.
+
+Existe un driver por dispositivo físico al que se quiere conectar, así como otros que agrupan otros drivers y crean abstracciones virtuales. Por ejemplo, un driver de IDE, correspondiente a los distintos dispositivos SATA conectados a la placa base (discos duros clásicos), puede ser accedido mediante otro driver que agrupe los dispositivos físicos y les dé nombres virtuales, como ~sda1~ en el caso de Linux.
+
+Sin drivers difícilmente puede haber un sistema operativo. Se suele considerar que el driver de vídeo, encargado de mostrar texto o imágenes por la pantalla, es esencial para un sistema operativo útil. Dependiendo del enfoque y el objetivo del proyecto, puede contar con unos y no otros. Si el SSOO está principalmente enfocado para servidores, puede no contar con un driver de teclado, y en su lugar tener una pila de red (/network stack/) amplia que permita a otros dispositivos comunicarse con el sistema. Si está enfocado a ser usado por usuarios ajenos al área, un driver de vídeo que pueda mostrar gráficos es imprescindible.
+
+A la hora de escribir un driver, se recurre a la especificación del hardware. En ocasiones, esta especificación no es pública y se mantiene como secreto corporativo. En estos casos, es el fabricante el que se encarga de escribir el controlador para un sistema operativo concreto, generalmente Windows. A veces, el fabricante no publica la especificación, pero sí el código fuente del driver, y generalmente el código resulta ilegible, pues su propósito no es ser comprendido. Como gran exponente de esto último cabría destacar el archivo ~intel_display.c~ de Linux, escrito, naturalmente, por Intel, y que implementa la conexión con un controlador DRM en un solo archivo de más de 10,000 líneas \cite{badlinux}.
+
+Por esto último, hay grupos de dispositivos cuyo soporte resulta inalcanzable para un desarrollador de sistemas operativos independiente sin llegar a métodos como la ingeniería inversa. Ejemplos de esto son /Wifi/ y la aceleración gráfica 3D.
+
+*** Las librerías
+Una librería (/library/ en inglés, en ocasiones también traducido como /biblioteca/) es una API que proporciona una abstracción sobre un concepto; por ejemplo, permite a un programa la comunicación con otra parte del sistema de forma sencilla. Pueden estar enfocadas en envolver el funcionamiento de un driver, creando funciones que se comunican con él para hacer el proceso más transparente al programador. También pueden estar escritas con un propósito de más alto nivel, como realizar operaciones matemáticas sobre enteros de múltiple precisión.
+
+Cuando un sistema operativo planea soportar los ejecutables producidos por un lenguaje, construye para él una librería de comunicación con el kernel y el resto del sistema: se denomina la librería estándar (/stdlib/). El ejemplo más claro es C, para el que GNU aporta la ~GNU libC~, y Windows la API del sistema.
+
+Las librerías se juntan con los archivos objeto en el proceso de enlazado. Este proceso se puede realizar de dos maneras: enlazado estático y dinámico.
+- En el estático, las librerías se adjuntan en el ejecutable. Esto hace que el binario (ejecutable) resulte independiente del entorno, pues lleva con él todo lo que necesita.
+- En el dinámico, las librerías se referencian por su nombre y uso, y es el cargador de programas, en ejecución, quien se encarga de resolver las direcciones mediante un proceso denominado /relocation/. Esto reduce el tamaño del binario, y permite una actualización global de una librería sin reenlazar todos los programas.
+
+*** Las utilidades
+Una herramienta (/tool/) o utilidad (/utility/) es todo programa con una función simple que se relaciona con el kernel. Permiten una vista sobre algún aspecto del sistema, y generalmente lo hacen de forma legible para humanos (/human-readable/). Son programas a los que en la mayoría de ocasiones se accede mediante la /shell/ (concha), cuyo nombre, originario de UNIX, referencia a cómo oculta en su interior una perla (el kernel). Las utilidades también se pueden combinar con otras en /scripts/, creando complejos procesos encadenados. UNIX inventó el concepto de /pipes/, mediante los cuales la salida de un programa es conectada a la entrada de otro, permitiendo así una armonía de interconexión entre utilidades.
+
+Con los años, especialmente en la comunidad Linux, este concepto ha ido en decadencia, y son pocas las utilidades que permiten este tipo de interconexión sin hacer ningún retoque.
+
+Además, aquí aparece la filosofía UNIX: /hacer solo una cosa, y hacerla bien/, refiriéndose a que las utilidades deben mantenerse simples, y en lugar de tener una herramienta para varios propósitos, tener muchas herramientas para cada acción. En el entorno Linux, y especialmente en las utilidades GNU, este concepto nunca ha existido. El código fuente de ~ls~ es un archivo de cinco mil líneas \cite{ls}.
+
+Nótese que existen /comandos/ que se comportan como utilidades a pesar de no serlo. En su lugar, son órdenes a la shell que se gestionan internamente sin pasar por ejecutar un programa. Ejemplos son ~cd~ o ~echo~.
+
+** Memoria
+Desde la aparición del i386 con su nuevo modo protegido, existen dos formas distintas de ver la memoria: el espacio de direccionamiento físico, y el virtual, también llamado lineal.
+
+El físico se refiere a la dirección que es emitida por el bus de direcciones del procesador (y, breves nanosegundos después, placa base). Nótese que una dirección física no tiene por qué corresponder a una región en DRAM, también puede usarse para realizar MMIO (/Memory Mapped Input Output/) con tal de comunicarse con dispositivos como GPUs.
+
+La memoria virtual es un nuevo espacio de direcciones simbólico, en el cual una región de memoria (de distintos tamaños posibles fijados por la arquitectura), denominada /página/, corresponde a otra región del mismo tamaño en memoria física. Esto permite hacer una reestructuración completa del espacio de direcciones, y da la libertad al kernel de manejarla con los rangos que él considere.
+
+Con la aparición de IA32, y consecuentemente direcciones de 32 bits, se tienen 4 GBs de memoria virtual para repartir, que se distribuye generalmente en páginas de 4 KBs (también se crean las páginas /huge/ de 4MB). Como hacer un array en memoria de cada página virtual con su física equivalente resulta inasequible, nace la paginación multinivel. Se crea el concepto de tabla de páginas, una página con un array de 1024 entradas, cada una de la cual corresponde a una página virtual, y en cada una se encuentra su correspondiente memoria física. Sobre esto, se crea el directorio de páginas, otra página con un array de 1024 tablas de páginas. En la figura [[fig:paging2]] se encuentra una representación. La dirección de esta última página se la conoce usualmente como el /puntero a la tabla de páginas/, aunque realmente apunte al directorio. Los procesadores x86 tienen el registro ~cr3~ donde se sitúa este puntero.
+
+Cabe destacar la tecnología PAE (/Physical Address Extension/), presente en todo procesador moderno de 32 bits, mediante la cual se permite un acceso a una memoria física de más de 4GB, y la memoria virtual introduce y elimina páginas para acceder al resto de la física.
+
+#+NAME: fig:paging2
+#+CAPTION: Paginación para direcciones de 32 bits \cite{paging2}
+#+attr_latex: :height 150px
+[[./imgs/paging2.jpg]]
+
+Con x86-64, el espacio de direccionamiento se vuelve de 64 bits, y se tiene una cantidad de direcciones cuatro mil millones de veces mayor. Por esto, son necesarios más niveles. Los procesadores generalmente no soportan direcciones de 64 bits, sino de 48; el resto de bits se producen por expansión de signo, y las direcciones de este tipo se denominan direcciones canónicas. Las direcciones de 48 bits se representan por paginación a 4 niveles. Ahora, una tabla de páginas tiene 512 entradas, y un directorio de páginas 512 punteros. Aparecen sobre los directorios de páginas los PDPs (/Page Descriptor Pointer/), y sobre estos últimos los PML4 (/Page Map Level 4/). En la figura [[fig:paging4]] se encuentra una representación. Algunos procesadores permiten paginación a 5 niveles para acceder a más memoria virtual aún, y estos usan los PML5. Suponiendo ahora una paginación a 4 niveles, el registro ~cr3~ apunta a la página que contiene el PML4.
+
+#+NAME: fig:paging4
+#+CAPTION: Paginación para direcciones de 48 bits \cite{paging4}
+#+attr_latex: :height 150px
+[[./imgs/paging4.jpg]]
+
+Cada tarea tiene su propia vista de la memoria del sistema, su propia tabla de páginas, y esta forma la mayor parte de lo que se conoce como su /contexto/. Además, hoy en día, la enorme mayoría de kernels se cargan en la región /higher half/, es decir, aquella que está en la mitad superior de la memoria virtual. De esta manera, sus estructuras de páginas pueden ser marcadas como globales, y así compartidas entre todos los contextos. Esto evita la necesidad de una tabla de páginas propia para el kernel y su consecuente cambio (muy costoso) a la hora de realizar una syscall.
+
+El procesador describe las estructuras de paginación mencionadas, y un chip aparte (originalmente, hoy en día todo se hace dentro de la CPU), la MMU (/Memory Management Unit/), se encarga de realizar la traducción cuando la dirección se posa sobre el bus de direcciones. La MMU posee una caché para almacenar las páginas más concurridas, se trata del TLB (/Translation Lookaside Buffer/). La operación de cambio de contexto es costosa sobre todo por el cambio de tabla de páginas, y el cambio de tabla de páginas es costoso porque requiere un /TLB flush/, es decir, eliminar todas las traducciones cacheadas, excepto aquellas que están marcadas como globales.
+
+** Tareas
+En la sección [[El kernel]] se explicó superficialmente el concepto de tarea, y este capítulo trata de profundizar en él. Lo más fundamental: /tarea/ es el nombre teórico del concepto. Generalmente, se utiliza el término /proceso/ para referirse a un binario cuando está cargado en memoria. En sistemas MT (/Multi-threading/), la terminología es /thread/ (traducido como /hilo/ o /hebra/), de las cuales pueden estar ejecutándose varias que comparten gran parte del contexto concurrentemente.
+
+La forma de representación interna de una tarea en el kernel es el PCB (/Process Control Block/), una estructura que contiene todo lo necesario para su funcionamiento, incluyendo un puntero a su tabla de páginas, su estado (valores de los registros y flags), así como sus regiones de memoria estáticas (cargadas del binario) o las dinámicas como la pila y el /heap/.
+
+Las tareas son referenciadas por su PID (/Process IDentifier/), un entero sin signo generalmente de 16, 32, o 64 bits.
+
+Toda tarea se crea y se ejecuta, la gran mayoría terminan, no se ejecutan indefinidamente, y en los sistemas operativos modernos, además se pausan y se reanudan. El proceso de reanudar una tarea o ejecutarla por primera vez se lleva a cabo por una rutina llamada el /dispatcher/. Esta se encarga de encarga de realizar el cambio de contexto, es decir, recuperar el estado del procesador (registros y flags, generalmente) en el que se encontraba la tarea (o el inicial de ser arrancada), así como su tabla de páginas. Después, realiza un cambio a modo usuario y salta al punto donde se pausó la tarea, de haber sido pausada, o el punto de entrada (/entry point/) de ser iniciada.
+
+En UNIX, la primera tarea que se ejecuta es /init/, con PID=1. En Linux, concretamente, existen varios programas a elegir, siendo el más usado /systemd/, y en menor medida otros como /OpenRC/, /runit/, o /SysV init/. Esta tarea inicia todas las otras, y desde entonces toda tarea tiene un padre, lo cual genera un grafo de hijos trazable. El proceso de creación de una tarea en UNIX se realiza mediante un procedimiento de ~fork~, por el cual la tarea hace mitosis y forma dos partes completamente independientes (no threads), seguida de ~exec~, por el cual sustituyen todas sus estructuras del PCB por las del binario cargado como parámetro. En Windows, este procedimiento es más directo, y se realiza mediante una llamada a la API a la función ~CreateProcess~.
+
+Todas las tareas del sistema son organizadas por el scheduler, cuyos fundamentos son explicados en el capítulo [[Scheduler]].
+
+** Scheduler
+En un estado usual del sistema hay decenas o cientos de tareas pendientes de ejecutarse. Debe haber, así, una autoridad que decida quién se ejecuta, dónde, y durante cuánto tiempo. De esto se encarga el /scheduler/ (traducido como /planificador/): es la rutina del kernel encargada de manejar las tareas en tiempo de ejecución.
+
+En la literatura clásica se definen tres tipos:
+- Scheduler a largo plazo (/long-term/). Es el encargado de decidir qué procesos se admiten en memoria principal, esto es, cuando se ejecutan por primera vez.
+- Scheduler a medio plazo (/medium-term/). Decide cuándo los procesos entran y salen de memoria principal para situarse en memoria secundaria (disco duro).
+- Scheduler a corto plazo (/short-term/). Decide qué tarea es la siguiente que ha de recibir tiempo de CPU, en base a ciertos criterios.
+
+Con el tiempo, los dos primeros tipos han quedado, o bien en desuso, o bien son muy raramente utilizados. El primer tipo, en la práctica, es raramente referenciado así. Generalmente, gracias a la creación de los procesadores multinúcleo, el kernel carga una tarea de forma inmediata, aunque no necesariamente se ejecute en ese instante.
+
+Cuando la cantidad de memoria RAM estaba en el orden de los MBs o pocos GBs, tenía sentido el scheduler a medio plazo. Existían particiones /swap/ (de intercambio), sobre las cuales los procesos entraban y salían por no caber en memoria principal. Cualquier estudiante de ingeniería informática que haya ejecutado un algoritmo pesado y ha estado viendo a la vez la salida de ~htop~ es consciente de que si se empieza a usar la memoria de intercambio es porque hay un /memory leak/ en su código, y no por la pesadez del algoritmo. En otras palabras, si el proceso ha llegado a usar swap, la va a llenar pronto y el kernel lo va a terminar: ¿Para qué usar swap siquiera entonces?
+
+En algunos casos de cómputos extremos para aplicaciones de, por ejemplo, astronomía, es posible que se llegue a usar swap, pero generalmente, por ser tan lenta, suele merecer la pena instalar más memoria principal. Los supercomputadores no son famosos por la cantidad de espacio de almacenamiento que tienen, sino por la velocidad de sus procesadores, GFLOPs, y la amplia RAM. Las particiones swap siguen existiendo, los instaladores de Linux las crean por defecto a día de hoy, pero los sitemas operativos soportan esta función muy principalmente porque /ya estaba ahí/, y tendría poco sentido eliminarla siendo algo que siempre va a estar inactivo, y cuyo /overhead/ dentro del kernel es inexistente.
+
+Por todo esto, cuando hoy en día se habla de /scheduler/, siempre se hace referencia a dos tipos: al scheduler a corto plazo, y a un nuevo tipo que ha surgido con la llegada de los multinúcleo, el MQMS (/Multi-Queue Multiprocessor Scheduler/).
+
+El MQMS es el más amplio, y por lo tanto el que debe explicarse primero. Toda CPU moderna tiene, en mayor o menor medida, caché. La caché L1 es la que está individualizada a los núcleos. Así, tendría sentido repartir las tareas entre los /cores/ de tal forma que se maximize el uso de caché, e idealmente quepan todos los programas que han de ejecutarse ahí, lo que conllevaría una velocidad mucho mayor en la ejecución de tareas, pues la copia de bits de RAM a caché es mucho más lenta que de caché a CPU (sus registros). Varios sistemas operativos, especialmente los indicados para servidores (como Linux) tienen este tipo de scheduler, pero no todos: también se puede mantener una /pool/ global de procesos de la que cada core saca uno cuando le toque (SQMS). Implementar un MQMS es complicado, y de hacerse mal puede ser contraproducente: alcanzar un equilibrio siempre es difícil.
+
+El scheduler a corto plazo, a partir de ahora, simplemente, scheduler, decide qué se ejecuta y en qué orden. Se pueden clasificar según muchos criterios:
+- Con o sin reentrancia (/preemption/). En los schedulers reentrantes, el kernel pausa la ejecución de un proceso tras el paso de cierto tiempo, denominado /quantum/, generalmente en el orden de los pocos milisegundos. Esto evita tener que esperar a que la tarea termine o quede bloqueada por la espera de algún recurso (lectura del disco duro, llegada de paquetes de red...), y permite realizar el intercambio de tareas más a menudo, lo que da una sensación de tareas concurrentes al usuario, a pesar de que exista solo un núcleo en el procesador. En estos últimos casos, si se desea tener una interfaz gráfica moderna, resulta imprescindible.
+- Con soporte o no para prioridades. Tareas distintas tienen prioridad sobre otras, y esta prioridad se puede especificar numéricamente en los schedulers con soporte para prioridades. En los schedulers más simples con prioridad surge el riesgo de /inanición/, por el cual procesos de baja prioridad pueden potencialmente estar sin ejecutarse más tiempo del esperado: incluso infinito de haber algún problema con los más prioritarios.
+- Según su nivel de tiempo real. Existen kernels muy específicos para tareas de /Safety-Critical Systems/, es decir, aquellos que pueden resultar responsables de pérdidas humanas, que poseen schedulers de tiempo real, en los cuales cada tarea lleva asociada una restricción de tiempo antes de la cual debe concluir. De aquí se diferencian dos tipos: /hard real time/, en el cual es inadmisible que la tarea no concluya en el plazo dado, y /soft real time/, en el cual se toma una política de /best-effort/. Para este último caso, generalmente sirven sistemas operativos de propósito general: Linux y Windows, por ejemplificar, tienen varios schedulers, y uno de ellos es de tiempo real suave.
+
+Se procede a hacer un muy breve repaso de los schedulers predecesores al que usará el kernel incluido en el sistema operativo de este trabajo.
+*** Sistema monotarea
+En DOS (y esto incluye a MS-DOS), no existía el concepto de tareas en sí, pues solo podía haber una en ejecución en un momento dado. Cuando la tarea concluía, se volvía al prompt o se continuaba ejecutando el /batch/ de tareas especificado en un archivo ~.bat~.
+*** Llamadas de bloqueo
+En las primeras versiones de Windows, anteriores a Windows 95, el scheduler no tenía reentrancia, y las tareas eran responsables de liberar la CPU cuando consideraran oportuno mediante una syscall /yield/.
+*** Round-Robin
+Ligado al anterior, Round-Robin es un algoritmo genérico que representa una cola cíclica. Corresponde a cualquier tipo de scheduler con reentrancia o yield, cuyo orden de procesamiento sea cíclico: 1, 2, 3, 1, 2, 3, 1, 2...
+*** Round-Robin multinivel
+Extensión del anterior, pero ahora existen distintas colas para aportar soporte de prioridades. Se intenta tomar un proceso de la cola de máxima prioridad y, de no existir, se prueba la siguiente.
+*** MLFQ
+/MultiLevel Feedback Queue/, o cola multinivel con retroalimentación. Construido sobre el anterior, con la diferencia de que las prioridades de los procesos cambian dinámicamente dependiendo de si usan todo el quantum o se bloquean antes. Surgen varios parámetros a tener en cuenta:
+- ¿Cuántas veces debe agotarse el quantum para bajar su prioridad?
+- ¿Es posible promocionar una tarea? Algunos schedulers MLFQ /suben/ la tarea de cola en caso de que haya estado varios turnos sin concluir su quantum. En cuyo caso, ¿Cuántos turnos?
+- ¿Se permite fijar la prioridad de una tarea?
+
+NT, de Windows, y XNU, de macOS, usan variantes de este algoritmo. Por defecto, tiene el posible problema de que tareas de alta prioridad pueden sufrir inanición, y por esto no se suele implementar como tal.
+*** Mención honorífica: CFS
+Linux, desde su versión 2.6.23, utiliza por defecto CFS (/Completely Fair Scheduler/). Se trata de un /Red-Black tree/, una estructura de datos en forma de árbol similar a un AVL, es decir, un árbol binario de búsqueda autobalanceado. En esta estructura, las tareas pendientes se mantienen ordenadas según la cantidad de nanosegundos que se hayan ejecutado. Además, el quantum es dinámico, varía según la carga del sistema. Resulta subóptimo para microkernels, pues la implementación de un árbol rojo-negro es compleja y termina siendo una estructura que se usa exclusivamente en el scheduler.
+
+* Fundamentos de jotaOS
+** El por qué
+** El cómo
+Explicar tema GitHub y tal.
+** Decisiones fundamentales
+*** Ideas
+*** Arquitectura objetivo
+*** Bootloader
+*** Microkernel
+
+* Diseño del kernel
+** Protocolo de arranque
+** Funciones fundamentales
+Explicar cómo es necesario implementar ~printf~ y esas cosas. También todo el tema de kernel panic.
+** Descriptores de la CPU
+** Manejadores de memoria
+*** PMM
+*** VMM
+*** Allocators
+** Los drivers fundamentales
+*** APCI
+*** APIC
+** Scheduler
+** IPC
+*** RPC
+*** Memoria compartida
+** Bootstrapping
+** Syscalls
+* Diseño del userspace
+** La librería estándar
+*** La STL
+** Cargador de programas
+** term
+** Drivers y servicios de bootstrapping
+*** PCI
+*** AHCI
+*** storage
+*** ISO9660
+*** RAMFS
+*** VFS
+** Inicialización
+*** init
+*** splash
+*** keyboard
+*** Shell
+*** Utilidades básicas
+** Pila de red
+*** RTL8139
+*** NIC
+*** ARP
+*** IP
+*** ICMP
+*** UDP
+*** DHCP
+*** DNS
+*** TPC
+* Referencias :ignore:
+#+begin_export latex
+\bibliographystyle{unsrt}
+\bibliography{Memoria}
+#+end_export
+
+* TODO
+** TODO Segmentación

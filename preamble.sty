@@ -1,0 +1,32 @@
+\usepackage[spanish,es-tabla]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{url} % Para las referencias con URLs
+\usepackage{placeins}
+\usepackage[a4paper, margin=30mm]{geometry}
+\usepackage[acronyms,toc,nonumberlist]{glossaries} % Glosarios
+\usepackage{tocbibind}
+\usepackage[pdf]{graphviz} % Grafos
+\usepackage[ruled,spanish,onelanguage]{algorithm2e} % Algoritmos
+\usepackage{pgf-umlsd} % UML
+\usepackage{titlesec}
+
+% Hyperref funciona mejor cuando es de los últimos paquetes cargados
+\usepackage{hyperref}
+\usepackage{attachfile}
+
+\newcommand{\sectionbreak}{\clearpage}
+
+\setcounter{secnumdepth}{3}
+
+%\setlength{\parindent}{4em}
+\setlength{\parskip}{1em}
+
+\hypersetup {
+    colorlinks=true,
+    allcolors=black,
+    urlcolor=blue,
+    pdftitle={Desarrollo de un sistema operativo con arquitectura microkernel},
+    pdfpagemode=FullScreen,
+}

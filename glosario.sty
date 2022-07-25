@@ -1,0 +1,245 @@
+\makeglossaries
+
+\usepackage{xparse}
+
+\DeclareDocumentCommand{\newdualentry}{ m m m } {
+  \newglossaryentry{igls-#1}{
+    name={#2},
+    description={#3}
+  }
+  \newacronym{iacr-#1}{#1}{#2}
+}
+
+\DeclareDocumentCommand{\defineme}{ m m } {
+  \newglossaryentry{igls-#1}{
+    name={#1},
+    description={#2}
+  }
+}
+
+% Algunos SSOO
+\defineme{Darwin}{Versión libre de XNU}
+\defineme{XNU}{Kernel usado por macOS}
+
+% --- FUNDAMENTOS ---
+\newacronym{iacr-so}{SO}{Sistema operativo}
+
+\newdualentry{ISA}{Instruction Set Architecture}{Conjunto de instrucciones de una arquitectura}
+
+\defineme{x86}{Arquitectura CISC diseñada por Intel, usada en la mayoría de ordenadores personales}
+\defineme{x86-16}{ISA original de x86 desde el 8086}
+\defineme{IA-32}{ISA de x86 de 32 bits desde el i386, sucesor de x86-16}
+\defineme{x86-64}{ISA de x86 de 64 bits que usan la mayoría de computadores, sucesor de IA-32}
+\defineme{amd64}{Otra forma de llamar a x86-64}
+
+\defineme{ARM}{Arquitectura RISC usada mayoritariamente en dispositivos empotrados}
+\defineme{ARM64}{ISA de ARM de 64 bits}
+
+% Partes comunes
+\defineme{Kernel}{Núcleo de un sistema operativo}
+\defineme{Driver}{Programa abstracción sobre hardware}
+\defineme{Librería}{Conjunto de símbolos externos al programa}
+\defineme{Utilidad}{Programa para el usuario final que abstrae el sistema operativo}
+
+\defineme{Tarea}{Unidad de código y datos}
+\newdualentry{IPC}{Inter-Process Communication}{Abanico de métodos para comunicar procesos}
+\defineme{Unix FIFO}{IPC, flujo de bits}
+\defineme{Paso de mensajes}{IPC, pequeñas secuencias de bits con formato}
+\newdualentry{RPC}{Remote Procedure Call}{IPC, llamada de un proceso a una función de otro}
+\defineme{Memoria compartida}{IPC, páginas físicas compartidas entre varias tareas}
+\defineme{Modo supervisor}{Modo de la CPU con acceso a todas las instrucciones}
+\defineme{Modo usuario}{Modo de la CPU con acceso restringido a instrucciones}
+\defineme{Interrupción}{Concepto genérico para agrupar las interrupciones hardware y las syscalls}
+\defineme{Interrupción hardware}{Mensaje enviado por el hardware a la CPU}
+\defineme{Interrupción enmascarable}{Interrupción de naturaleza no crítica, deshabilitable}
+\defineme{Excepción}{Interrupción de naturaleza crítica emitida por la CPU en caso de fallo}
+\defineme{Interrupción no enmascarable}{Excepción}
+\defineme{Syscall}{Interrupción software generada por una tarea para comunicarse con el kernel}
+\defineme{Llamada al sistema}{Syscall}
+
+\defineme{Kernel monolitíco}{Kernel que contiene todos los drivers}
+\defineme{Microkernel}{Kernel con muy pocos drivers}
+\defineme{Kernel panic}{Fallo irrecuperable del kernel}
+
+\newdualentry{IDE}{Integrated Drive Electronics}{Estándar de interfaces para la conexión de dispositivos de almacenamiento}
+\newdualentry{ATA}{Advanced Technology Attachment}{Protocolo de comandos y transporte para discos duros}
+\newdualentry{ATAPI}{ATA Packet Interface}{Protocolo de comandos y transporte para unidades CD}
+\newacronym{iacr-pata}{PATA}{ATAPI}
+\defineme{Pila de almacenamiento}{Pila de drivers en cuya cima se encuentra VFS}
+\defineme{Pila de red}{Pila de drivers para dar soporte a red (Ethernet, IP, TPC...)}
+\newdualentry{VFS}{Virtual File System}{Sistema de archivos abstracto, que encapsula al resto}
+
+\newdualentry{stdlib}{Librería estándar}{Librería con estructuras de datos básicas, usada para comunicación con el kernel}
+\defineme{Enlazado}{Unión de los objetos con las librerías}
+\defineme{Enlazado estático}{Modo de enlazado en el cual las librerías se incluyen dentro del binario}
+\defineme{Enlazado dinámico}{Modo de enlazado en el cual las referencias a librerías se resuelven en tiempo de ejecución}
+
+\defineme{Herramienta}{Utilidad}
+\defineme{Shell}{Interfaz básica de órdenes con la que el usuario se comunica con el sistema}
+\defineme{Pipe}{Unix FIFO}
+\defineme{Filosofía UNIX}{\textit{Hacer solo una cosa, y hacerla bien}}
+
+% Teoría de un sistema operativo
+\defineme{Proceso}{Binario cargado en memoria, denominación práctica de tarea}
+\newdualentry{MT}{Multi-Threading}{Soporte de una CPU para ejecutar varios threads en paralelo}
+\newdualentry{PCB}{Process Control Block}{Estructura de datos que representa a un proceso}
+\newdualentry{TCB}{Thread Control Block}{Sinónimo de PCB en sistemas multi-threading}
+\defineme{Pila (tarea)}{Región de memoria reservada para un programa para variables locales y direcciones de retorno}
+\defineme{Heap (tarea)}{Región de memoria reservada para un programa para variables dinámicas}
+\newdualentry{PID}{Process Identifier}{Identificador numérico de un proceso}
+\defineme{Dispatcher}{Rutina encargada de pasar del kernel a un proceso}
+\defineme{Punto de entrada}{Dirección de un programa en la cual comienza la ejecución}
+\defineme{Entry point}{Punto de entrada}
+\defineme{Init}{Tarea que se encarga de inicializar el sistema ejecutar el resto de tareas básicas}
+
+\defineme{Scheduler}{Rutina encargada de seleccionar la siguiente tarea a ejecutarse}
+\defineme{Scheduler a largo plazo}{Rutina encargada de seleccionar la siguiente tarea a cargarse en memoria, no ejecutarse}
+\defineme{Scheduler a medio plazo}{Rutina encargada de manejar la entrada y salida de páginas de memoria secundaria}
+\defineme{Scheduler a corto plazo}{Definición anterior de scheduler}
+\defineme{Partición swap}{Partición encargada a guardar páginas de procesos cuando no caben en memoria principal}
+\newdualentry{MQMS}{Multi-Queue Multiprocessor Scheduler}{Rutina encargada de organizar las tareas entre los distintos cores}
+\defineme{Caché (CPU)}{Memoria de rápido acceso entre la CPU y la memoria principal}
+\newdualentry{SQMS}{Single-Queue Multiprocessor Scheduler}{Sistema multiprocesador sin MQMS}
+\defineme{Reentrancia}{Toma del poder del kernel tras un quantum}
+\defineme{Quantum}{Tiempo máximo consecutivo permitido para la ejecución de una tarea}
+\defineme{Real time}{Concepto utilizado cuando la ejecución de una tarea tiene un plazo}
+\defineme{Tiempo real}{Real time}
+\newdualentry{RTOS}{Real-Time Operating System}{Sistema operativo de tiempo real}
+\defineme{Soft real time}{Sistema en tiempo real en el que los plazos no son inamovibles}
+\defineme{Hard real time}{Sistema en tiempo real en el que los plazos son inamovibles}
+\defineme{Yield}{Syscall utilizada en sistemas antiguos sin reentrancia para devolver el control al kernel}
+\newdualentry{RR}{Round-Robin}{Algoritmo genérico que representa una cola cíclica}
+\newdualentry{MLRR}{Multi-Level Round-Robin}{Scheduler Round-Robin con distintas colas de prioridad}
+\newdualentry{MLFQ}{Multi-Level Feedback Queue}{MLRR en el que las tareas cambian de prioridad dinámicamente}
+\newdualentry{CFS}{Completely Fair Scheduler}{Scheduler usado por Linux basado en un árbol Rojo-Negro}
+
+% Práctica de un sistema operativo
+\defineme{Memoria física}{Espacio de direccionamiento cuyas direcciones son emitidas por el bus de datos}
+\defineme{Memoria virtual}{Espacio de direccionamiento virtual, sus direcciones son traducidas a físicas}
+\defineme{Página}{Particiones de la memoria, física o virtual}
+\newdualentry{MMIO}{Memory-Mapped Input/Output}{Mecanismo de comunicación con el hardware por medio de memoria física}
+\defineme{Tabla de páginas (formal)}{Estructura del procesador usada para la traducción de direcciones virtuales a físicas}
+\newdualentry{MMU}{Memory Management Unit}{Chip dedicado a traducir direcciones virtuales a físicas}
+\newdualentry{TLB}{Translation Lookaside Buffer}{Caché de la MMU}
+\defineme{TLB flush}{Proceso por el cual se borran las direcciones de la TLB}
+\defineme{Higher half}{Concepto usado para hacer referencia a la mitad superior de la memoria virtual}
+\defineme{Paginación}{Mecanismo presente en muchas arquitecturas para división de la memoria}
+\defineme{Paginación multinivel}{Esquema de paginación con varias estructuras en forma de árbol}
+\newdualentry{PF}{Page Fault}{Excepción por acceso indebido a una dirección virtual}
+\newdualentry{GP}{General Protection Fault}{Excepción de x86 de múltiples causas originadas por sistemas de protección}
+\newacronym{iacr-GPF}{GPF}{GP}
+\newdualentry{IRQ}{Interrupt Request}{Petición de interrupción hardware}
+\newdualentry{ISR}{Interrupt Service Routine}{Rutina del kernel encargada de resolver una interrupción concreta}
+\newdualentry{DF}{Double Fault}{Excepción causada en un ISR}
+\defineme{Triple Fault}{Excepción causada en el ISR de \#DF, irrecuperable por software}
+\defineme{Halt}{Estado de la CPU en el que no se ejecutan instrucciones, solo se reciben interrupciones}
+\defineme{Allocator}{Función de reserva de memoria con granularidad de pocos bytes}
+
+\newdualentry{PIO (hardware)}{Port-mapped I/O}{Mecanismo de comunicación con el hardware por medio de instrucciones específicas}
+\newdualentry{PIO (disco)}{Programmed I/O}{Mecanismo de transferencia de bytes de dispositivos de almacenamiento en el que interviene la CPU}
+\newdualentry{PCIe}{PCI Express}{Versión moderna, y retrocompatible, de PCI}
+
+\newdualentry{AHCI}{Advanced Host Controller Interface}{Estándar de comunicación con dispositivos SATA}
+\newdualentry{SATA}{Serial ATA}{Versión moderna de ATA, retrocompatible}
+\defineme{M.2}{Conector para tarjetas de expansión basado en PCI Express 3.0}
+\newdualentry{NVMe}{NVM Express}{Interfaz de comunicación con dispositivos de almacenamiento por PCI Express, alternativa a SATA}
+\newdualentry{xHCI}{eXtensible Host Controller Interface}{Interfaz de comunicación con dispositivos USB 1.x, 2.0 y 3.x}
+\newdualentry{EHCI}{Enhanced Host Controller Interface}{Interfaz de comunicación con dispositivos USB 2.0}
+\newdualentry{UHCI}{Universal Host Controller Interface}{Interfaz de comunicación con dispositivos USB 1.x}
+\newdualentry{OHCI}{Open Host Controller Interface}{Interfaz de comunicación con algunos dispositivos USB}
+\defineme{Esquema de particiones}{Forma de organizar particiones sobre un medio de almacenamiento}
+
+% Fundamentos de x86
+\newdualentry{BIOS}{Basic Input/Output System}{Firmware dedicado a inicializar el hardware básico del x86}
+\newdualentry{UEFI}{Unified Extensible Firmware Interface}{Sucesor a BIOS}
+\newdualentry{PCI}{Peripheral Component Interconnect}{Bus estándar de computadores para conectar periféricos a la placa base}
+\newdualentry{MBR}{Master Boot Record}{Primer sector de un dispositivo de almacenamiento, usado por BIOS}
+\defineme{Sector}{Partición física del espacio de almacenamiento de un dispositivo}
+\defineme{Partición}{División del espacio de almacenamiento secundario}
+\defineme{Real mode}{Modo de retrocompatibilidad de un x86 con x86-16}
+\defineme{Protected mode}{Modo de un x86 para IA-32}
+\defineme{Long mode}{Modo de un x86 para x86-64}
+\defineme{Bootloader}{Programa encargado de preparar la CPU y pasar el control al kernel}
+
+\defineme{Segmento}{Divisón de memoria por medio de segmentación}
+\defineme{Selector}{Identificador de segmento que contiene su índice además de ciertas flags}
+\defineme{Segmentación}{Mecanismo de IA-32 para división de la memoria, obsoleto}
+\newdualentry{GDT}{Global Descriptor Table}{Estructura de IA-32 usada para definir los segmentos a nivel global de la CPU}
+\newdualentry{LDT}{Local Descriptor Table}{Estructura de IA-32 usada para definir segmentos a nivel de tarea}
+\defineme{Userspace}{Término práctico de modo usuario}
+\newdualentry{PAE}{Physical Address Extension}{Mecanismo de x86 desde IA-32 para paginar a tres niveles}
+\defineme{Dirección canónica}{En x86-64, expansión de signo para completar los 64 bits de direccionamiento cuando la arquitectura soporta menos (48 o 57)}
+
+\newdualentry{PIC (hardware)}{Programmable Interrupt Controller}{Chip encargado de manejar las interrupciones en un IBM compatible}
+\newdualentry{PIT}{Programmable Interval Timer}{Chip de intel para generar interrupciones cada cierto intervalo de tiempo}
+\newdualentry{IDT}{Interrupt Descriptor Table}{Estructura de IA-32 y x86-64 usada para manejar las interrupciones}
+\newdualentry{IST}{Interrupt Stack Table}{Estructura de IA-32 y x86-64 con pilas libres en caso de interrupción}
+\newdualentry{TSS}{Task State Segment}{Estructura de IA-32 usada en cambios de contexto hardware}
+\newdualentry{APIC}{Advanced PIC}{Chip encargado de manejar las interrupciones en un x86 multiprocesador}
+\newdualentry{SMP}{Symmetric Multiprocessing}{Método de multiprocesador en el cual todos los cores acceden a toda la memoria}
+\newdualentry{LAPIC}{Local APIC}{Chip adjunto a un core que aporta funcionalidad APIC}
+\newdualentry{IOAPIC}{Input/Output APIC}{Chip compartido por todos los cores que redirige interrupciones}
+\defineme{Anillo de protección}{Sistema de x86 por el cual existen 4 niveles de privilegios en el procesador}
+\defineme{Ring 0}{x86 en modo supervisor, en referencia al anillo de protección con identificador 0}
+\defineme{Ring 3}{x86 en modo usuario, en referencia al anillo de protección con identificador 3}
+\newdualentry{MSR}{Model Specific Register}{Registro de x86 accesible por instrucciones específicas}
+\newdualentry{EFER}{Extended Feature Enable Register}{MSR para habilitar funcionalidades modernas de x86}
+\newdualentry{SCE}{System Call Extensions}{Bit dentro del EFER que habilita las instrucciones syscall y sysret}
+
+% --- ESTADO DEL ARTE ---
+\defineme{Long IPC}{Paso de mensajes grandes, de más de una página}
+
+% --- PROPUESTA DE SOLUCIÓN ---
+\newdualentry{ASLR}{Address Space Layout Randomization}{Mecanismo por el cual un programa es cargado en distintas partes aleatorias de memoria virtual para fortalecer la seguridad}
+\newdualentry{ELF}{Executable and Linkable Format}{Formato de ejecutable usado por UNIX desde su versión 4}
+\newdualentry{KPTI}{Kernel page-table isolation}{Mecanismo del kernel para tener su propio tabla de páginas independiente a los procesos, nunca mapeada en userspace}
+\newdualentry{SMEP}{Supervisor Memory Execute Protection}{Mecanismo hardware para prohibir la ejecución de páginas de usuario desde ring 0}
+\newdualentry{SMAP}{Supervisor Memory Access Protection}{Mecanismo hardware para prohibir el acceso a memoria de usuario desde ring 0 a menos que se indique lo contrario}
+\defineme{Ejecutable}{Archivo con formato estándar (por ejemplo, ELF) que contiene el programa resultante del proceso de enlazado}
+\defineme{Binario}{Ejecutable}
+\newacronym{iacr-nx}{NX}{No Execute}
+\newdualentry{RELRO}{Relocation Read-Only}{Medida de seguridad por la cual se resuelven las referencias en la GOT de un proceso antes de tiempo para marcarla como solo lectura}
+\newdualentry{GOT}{Global Offset Table}{Sección del ejecutable}
+\newdualentry{ROP}{Returned-Oriented Programming}{Técnica de explotación de binarios que permite ejecutar código arbitrario mediante la escritura de direcciones de salto}
+\newdualentry{VBE}{VESA BIOS Extensions}{Interrupción BIOS para manejar los modos de vídeo}
+\newdualentry{POSIX}{Portable Operating System Interface}{Estándar IEEE que define una interfaz y entorno de SO}
+\newdualentry{UID}{User Identifier}{Representación numérica de un usuario del sistema}
+\newdualentry{SMLFQ}{Sandwich MLFQ}{Scheduler de autoría propia en este trabajo}
+\newdualentry{VSRT}{Very Soft Real Time}{Procesos con prioridad máxima, permitiendo la inanición de otros, pero sin deadlines}
+\newacronym{iacr-sa}{SA}{Sistema de Archivos}
+\newdualentry{ACL}{Access Control List}{Semántica de permisos en la que se desmenuzan las políticas de acceso sobre un archivo, en lugar de tener un solo propietario}
+\newdualentry{MAC}{Mandatory Access Control}{Control de acceso genérico en el que se restringen las acciones que puede realizar un programa o usuario}
+\newdualentry{PSNS}{Public Service Namespace}{Mecanismo de resolución de PIDs por nombre público de Strife}
+\newdualentry{UUID}{Universally Unique Identifier}{Número de 128 bits que intenta identificar un objeto cualquiera de forma única}
+\defineme{stivale2}{Protocolo de arranque simple y libre, implementado en varios bootloaders independientes}
+\defineme{Limine}{Bootloader independiente que implementa, entre otros, el protocolo de arranque stivale2}
+\newdualentry{RPID}{Remote Procedure Identifier}{En Strife, identificador para una procedimiento remoto, relativo al servidor}
+\newdualentry{SMID}{Shared Memory Identifier}{En Strife, identificador para una página compartida, relativo al cliente}
+
+% --- Diseños detallados ---
+\newdualentry{IPI}{Inter-processor Interrupt}{Mecanismo de la APIC para sincronizar cores por medio de interrupciones}
+\newdualentry{ACPI}{Advanced Configuration and Power Interface}{Estándar que aporta tablas con información de la BIOS}
+\newdualentry{BSP}{Bootstrap Processor}{Primer core de un sistema SMP iniciado por la BIOS}
+\newdualentry{RSDP}{Root System Description Pointer}{Tabla ACPI con puntero a RSDT o XSDT}
+\newdualentry{AP}{Application Processor}{Cualquier core distinto al BSP}
+\newdualentry{SIPI}{Startup IPI}{IPI que arranca los APs en modo real con un punto de entrada concreto}
+\defineme{Spinlock}{Cerrojo de espera ocupada usado en los kernels, que puede ser implementado con distintos algoritmos}
+\defineme{Polling}{Mecanismo de espera reiterada hasta que un suceso ocurre}
+\newdualentry{PHDR}{Program Header}{Estructura de un ELF que define regiones de memoria}
+\newdualentry{PIC (ejecutable)}{Position-independent code}{Código compilado para utilizar exclusivamente referencias relativas al contador de programa, nunca absolutas}
+\newdualentry{CoW}{Copy on Write}{Trampa de page fault para copiar páginas solo cuando se intenta escribir sobre ellas}
+
+\newdualentry{MSI}{Message Signaled Interrupts}{Modo de configurar las interrupciones en dispositivos PCI}
+\defineme{MSI-X}{Similar a MSI, pero permite hasta 2048 interrupciones}
+\newdualentry{HBA}{Host Bus Adapter}{Controlador AHCI}
+\newdualentry{ABAR}{AHCI Base Memory Register}{Base en memoria de un HBA}
+\newdualentry{FIS}{Frame Information Structure}{Estructura de AHCI para el envío de órdenes de copia al HBA}
+\newdualentry{SCSI}{Small Computer System Interface}{Interfaz genérica de comunicación para transferencia de datos}
+\newdualentry{LBA}{Logical Block Addressing}{Forma de identificar una dirección en memoria secundaria mediante su número de sector}
+\defineme{ISO9660}{Sistema de archivos usado por los CDs}
+\newdualentry{PVD}{Primary Volume Descriptor}{Superbloque de ISO9660}
+\defineme{Marshalling}{Cambio de estructuración de un conjunto de datos}
+\newdualentry{STL}{Standard Template Library}{Parte de la librería estándar que implementa estructuras de datos abstractas}
+\newdualentry{ERMSB}{Enhanced rep movsb}{Mecanismo para realizar copias de memoria aceleradas}
+
+\glsaddall

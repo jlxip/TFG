@@ -1,0 +1,56 @@
+Notas reunión 04/07
+-------------------
+
+Nota sobre no especificación téfcnica
+Títulos más formales
+Más estado del arte
+Foros y wikis, menos académico
+Tabla comparativa sistemas operativos, características
+ÚLtima vez accedido
+Señalar mejor la aportación
+Aportación SOBRE, más que "posiblemente original"
+
+Especialmente importantes introducción y conclusiones
+Objetivos generales: poner en práctica los conocimientos blablabla
+	Específicos: dominio del problema, esttado del arte, qué es necesario, cómo las técnicas son mejores... Aportar
+	Motivación: esto para mí era un desafío, puede ser diferente a otros diseños concebidos. He ido aprendiendo cosas, proporcionar más información
+	
+		Conclusiones: qué me ha ayudado a los objetivos
+	«No hemos encontrado...»
+
+*EL* OBJETIVO GENERAL
+
+Asignaturas relacionadas
+Objetivos formativos: he tenido interés en investigar esto, de esta asignatura, tal, tal.
+
+Rebajate el tono con SMLFQ
+
+Área = Departamento, el departamento solo tiene un área
+
+Objetivos: no más de un párrafo. Clarito.
+
+Estructura de la memoria 1.4
+
+Fundamentos de x86-64 -> Arquitectura x86-64
+
+Propuesta de solución -> Propuesta de sistema operativo
+	Modelo de protección !!!!!!
+
+Diseños detallados -> e implementación -> y pruebas
+
+Análisis de uso de recursos
+
+Trabajo futuro, todo propio!!!
+Valoración personal: cosas que he descubierto, a cómo me he organizado, qué parte ha tenido más relevancia, qué me ha sorprendido. Diseño general, detallado, arquitectónico.
+
+No cuantificadores: "Claramente", "muy muy interesante", 
+Mejor: "más completo"
+Hablar en positivo
+
+SEcción, tabla, problemas encontrados que no esperábamos encontrar. "La arquitectura daba problemas con nosequé". Problema, este, anomalía o cuestión que daba lugar al problema, solución adoptada.
+
+Manual de compilar y eso en la entrega <--- Apéndice!!!
+
+Vídeo en vez de demostración en tiempo real. Característica fundamental, métrica
+Vídeo: algo que mostrara dos ls. Algún detalle del algoritmo? Animación del scheduler!!!!
+«Dos ls a la vez, ¿Qué ha pasado?»
