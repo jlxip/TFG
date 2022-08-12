@@ -21,6 +21,9 @@
 \defineme{Darwin}{Versión libre de XNU}
 \defineme{XNU}{Kernel usado por macOS}
 
+% Introducción
+\newdualentry{EDSAC}{Electronic Delay Storage Automatic Calculator}{Computadora construida por el equipo de Maurice Wilkes en la Universidad de Cambridge en 1949}
+
 % --- FUNDAMENTOS ---
 \newacronym{iacr-so}{SO}{Sistema operativo}
 
@@ -190,7 +193,7 @@
 \defineme{Long IPC}{Paso de mensajes grandes, de más de una página}
 
 % --- PROPUESTA DE SOLUCIÓN ---
-\newdualentry{ASLR}{Address Space Layout Randomization}{Mecanismo por el cual un programa es cargado en distintas partes aleatorias de memoria virtual para fortalecer la seguridad}
+\newdualentry{ASLR}{Address Space Layout Randomization}{Mecanismo por el cual un programa se carga en distintas partes aleatorias de memoria virtual para mitigar ataques de explotación de binarios}
 \newdualentry{ELF}{Executable and Linkable Format}{Formato de ejecutable usado por UNIX desde su versión 4}
 \newdualentry{KPTI}{Kernel page-table isolation}{Mecanismo del kernel para tener su propio tabla de páginas independiente a los procesos, nunca mapeada en userspace}
 \newdualentry{SMEP}{Supervisor Memory Execute Protection}{Mecanismo hardware para prohibir la ejecución de páginas de usuario desde ring 0}

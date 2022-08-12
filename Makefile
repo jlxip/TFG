@@ -30,4 +30,5 @@ clean:
 	rm -f Memoria.tex
 	rm -f Memoria.{bbl,blg,aux,log,toc,out,alg,ist}
 	rm -f Memoria.{gls,glo,glg,acr,acn}
+	rm -f Memoria.{lof,lot}
 	rm -f colab.pdf colab.dot

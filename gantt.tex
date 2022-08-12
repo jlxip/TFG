@@ -1,0 +1,123 @@
+\begin{figure}[h!]
+  \centering
+
+  \begin{tikzpicture}
+    \begin{pgfinterruptboundingbox}
+      \begin{ganttchart}[
+          vgrid,
+          hgrid,
+          canvas/.append style={alias=frame}
+        ]{1}{10}
+        \gantttitle{2020}{10} \\
+        \gantttitle{abr}{2}
+        \gantttitle{may}{2}
+        \gantttitle{jun}{2}
+        \gantttitle{jul}{2}
+        \gantttitle{...}{2} \\
+        \ganttbar{Biblioteca estándar (STL)}{1}{8}
+      \end{ganttchart}
+    \end{pgfinterruptboundingbox}
+    \useasboundingbox (frame.south west) rectangle (frame.north east);
+  \end{tikzpicture}
+
+  \caption{Distribución del trabajo realizado, 1/3: 2020}
+  \label{gantt2020}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+
+  \begin{tikzpicture}
+    \begin{pgfinterruptboundingbox}
+      \begin{ganttchart}[
+          vgrid,
+          hgrid,
+          vrule/.append style={red, thin},
+          canvas/.append style={alias=frame}
+        ]{1}{24}
+        \gantttitle{2021}{24} \\
+        \gantttitle{ene}{2}
+        \gantttitle{feb}{2}
+        \gantttitle{mar}{2}
+        \gantttitle{abr}{2}
+        \gantttitle{may}{2}
+        \gantttitle{jun}{2}
+        \gantttitle{jul}{2}
+        \gantttitle{ago}{2}
+        \gantttitle{sep}{2}
+        \gantttitle{oct}{2}
+        \gantttitle{nov}{2}
+        \gantttitle{dic}{2} \\
+
+        \ganttbar{Kernel}{3}{6} % Kernel febrero y marzo
+        \ganttbar{}{13}{14} % Kernel junio
+        \\
+
+        \ganttbar{Contrib. Bootloader}{3}{6}
+        \\
+
+        \ganttbar{Miscelánea}{3}{4}
+        \ganttbar{}{20}{20} % oct2
+
+        \ganttvrule{Comienzo del proyecto}{2}
+      \end{ganttchart}
+    \end{pgfinterruptboundingbox}
+    \useasboundingbox (frame.south west) rectangle (frame.north east);
+  \end{tikzpicture}
+
+  \vspace{2ex}
+  \caption{Distribución del trabajo realizado, 2/3: 2021}
+  \label{gantt2021}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+
+  \begin{tikzpicture}
+    \begin{pgfinterruptboundingbox}
+      \begin{ganttchart}[
+          vgrid,
+          hgrid,
+          vrule/.append style={red, thin},
+          canvas/.append style={alias=frame}
+        ]{1}{24}
+        \gantttitle{2022}{24} \\
+        \gantttitle{ene}{2}
+        \gantttitle{feb}{2}
+        \gantttitle{mar}{2}
+        \gantttitle{abr}{2}
+        \gantttitle{may}{2}
+        \gantttitle{jun}{2}
+        \gantttitle{jul}{2}
+        \gantttitle{ago}{2}
+        \gantttitle{sep}{2}
+        \gantttitle{oct}{2}
+        \gantttitle{nov}{2}
+        \gantttitle{dic}{2} \\
+
+        \ganttbar{Kernel}{3}{14} % Kernel febrero-julio
+        \\
+        \ganttbar{Loader}{5}{8} % Loader marzo-abril
+        \\
+        \ganttbar{Biblioteca estándar}{5}{14} % stdlib marzo-julio
+        \\
+        \ganttbar{Almacenamiento}{11}{14} % ss junio-julio
+        \\
+        \ganttbar{Interacción}{14}{14} % shell y coreutils julio2
+        \\
+        \ganttbar{Miscelánea}{10}{14} % mayo2-julio
+        \\
+        \ganttbar{Memoria}{11}{16}
+
+        \ganttvrule{SO entregable}{14}
+
+        % Miscelánea
+      \end{ganttchart}
+    \end{pgfinterruptboundingbox}
+    \useasboundingbox (frame.south west) rectangle (frame.north east);
+  \end{tikzpicture}
+
+  \vspace{2ex}
+  \caption{Distribución del trabajo realizado, 3/3: 2022}
+  \label{gantt2022}
+\end{figure}
