@@ -105,9 +105,9 @@ Operating systems are the invisible foundations of the information age, and its 
 
 A preemptable microkernel has been developed with the ability to orchestrate tasks and assign them the resources they need, having RPC as the inter-process communication method, for which the dual execution mechanism is introduced, that is able to keep services out of the scheduler and frees them from the responsability of managing threads for message reception, avoiding priority mismatch issues in the process.
 
-A wide userspace is provided with a program loader outside of the kernel, a storage stack with PCI and AHCI drivers, and implementations for the ISO9660 file system and one of its own, StrifeFS, with a novel permission management via hierarchical ACLs, as well as a virtual file system which abstracts the functionality of the rest.
+A wide userspace is provided with a program loader outside of the kernel, a storage stack with PCI and AHCI drivers, and implementations for the ISO9660 file system as well as one of its own, StrifeFS, with a novel permission management via hierarchical ACLs. In order to abstract the functionality of these, a virtual file system has been developed.
 
-A standard library is given which encapsulates the low-level aspects of both communication with the kernel as well as with the system services; it contains its own STL that implements abstract data structures such as AVL trees and Robin Hood hash tables. A user management service and a keyboard driver have been built on top of it, that open the way to a functional shell, for which 13 different programs are given that allow the user to manage the system in an interactive way.
+A standard library is given which encapsulates the low-level aspects of both communication with the kernel as well as with the system services; it contains its own STL that implements abstract data structures such as AVL trees and Robin Hood hash tables. A user management service and a keyboard driver have been built on top of it; these open the way to a functional shell, for which 13 different programs are given that allow the user to manage the system in an interactive way.
 
 All these subsystems are subject to a protection model that limits their actions, the registry, which can be used by the services to manage their clients' permissions independently with no granularity limit. This makes the proposed operating system follow a secure-by-default principle.
 
@@ -248,7 +248,7 @@ El EDSAC (/Electronic Delay Storage Automatic Calculator/), de Maurice Wilkes en
 
 /Initial Orders/ fue un proyecto que hoy podría considerarse un ensamblador, aunque en tiempo de ejecución. Poco tiempo después, Wheeler escribió un programa por el que sería ampliamente celebrado: /Initial Orders 2/. Permitía, por primera vez, el concepto de /relocation/: utilizar instrucciones con direccionamiento relativo a la base. De esta forma, era posible cambiar el punto de entrada sin ser necesario modificar manualmente todas las direcciones referenciadas.
 
-Tras el desarrollo de la teoría computacional de Turing y von Neumann, con el ejemplo dado se puede apreciar que desde el principio de la práctica, han existido mecanismos de /abstracción/. /Abstracción/ ha resultado ser la palabra que mejor define al software: todo programa se sitúa sobre un entorno que permite su ejecución.
+Tras el desarrollo de la teoría computacional de Turing y von Neumann, con el ejemplo dado se puede apreciar que desde el principio de la práctica, han existido mecanismos de abstracción. /Abstracción/ ha resultado ser la palabra que mejor define al software: todo programa se sitúa sobre un entorno que permite su ejecución.
 
 Con las décadas se ha construido, así, un modelo de trabajo basado en capas de abstracción. Una sobre la otra, ofrecen la libertad de ignorar aspectos del hardware y mecanismos de orquestación de trabajos. Desde la década de los sesenta, la gran mayoría de estas capas se encuentra dentro del sistema operativo. Esto presenta un amplio campo de estudio de especial interés por los problemas que propone: cómo llevarlo a cabo, cómo hacerlo seguro, y cómo hacerlo rápido.
 
@@ -286,7 +286,7 @@ Los puntos de interés son:
 *** Motivación e historia
 Mi primer programa lo escribí a los siete años. Fue un script en Batch, el lenguaje que usan los archivos con extensión ~.bat~ en Windows (herencia de MS-DOS). Con el paso de los años, aprendí muchos otros lenguajes: Visual Basic, Java, PHP, Javascript, Python... Más adelante, con más experiencia, otros como C y C++. Debido a la vaga idea que tenía sobre el funcionamiento interno de un computador, resultaron incontables los intentos fallidos de aprender ensamblador de x86 por mi cuenta. En el primer cuatrimestre del primer curso de la carrera, allá por octubre de 2018, con la experiencia de todos estos años, conseguí al fin entender el funcionamiento básico de un x86 y, con esto, escribir un /hola mundo/ que podía comprender.
 
-El uso de ensamblador, siendo no más que un conjunto de macros y mnemónicos, está muy acotado en la actualidad. Se puede usar para optimizar secciones importantes de código que han de ejecutarse rápido, pero a cambio se pierde portabilidad entre arquitecturas y, dependiendo de cómo de concreta sea la operación a optimizar, también entre generaciones de procesadores. Además, solo es aplicable a lenguajes compilados, y en un mundo en el cual los programas siguen una trayectoria clara de volverse independientes de la máquina (primero con Java, últimamente con otros como Electron), son muy pocas las situaciones en las que resulta útil.
+El uso de ensamblador, siendo no más que un conjunto de macros y mnemónicos, está muy acotado en la actualidad. Se puede usar para optimizar secciones importantes de código que han de ejecutarse rápido, pero a cambio se pierde portabilidad entre arquitecturas y, dependiendo de cómo de concreta sea la operación a optimizar, también entre generaciones de procesadores. Además, solo es aplicable a lenguajes compilados, y en un mundo en el cual los programas siguen una tendencia clara de volverse independientes de la máquina (primero con Java \cite{java}, últimamente con otros como Electron \cite{electron}), son muy pocas las situaciones en las que resulta útil.
 
 Sin embargo, existe un proyecto, necesario aún hoy en día, que únicamente puede ser escrito en ensamblador. Se trata del /stage 1/ de un /bootloader/: las primeras instrucciones controlables por software que ejecuta un procesador después de completar la inicialización más básica del hardware. Con tal de aliviar el esfuerzo necesario para escribir este lenguaje, los bootloaders intentan preparar el entorno más simple posible que permita pasar a C o C++, y de aquí nace el /stage 2/. Los núcleos de los sistemas operativos necesitan también secciones de ensamblador para realizar operaciones de bajo nivel, como las rutinas de interrupción o los cambios de contexto.
 
@@ -294,7 +294,7 @@ Todo esto se une a un interés desde pequeño de crear un sistema operativo, aú
 
 De esta manera, en el verano de 2019 me adentré en el mundo del desarrollo de sistemas operativos. Proyectos personales de tal magnitud no se comienzan de forma intencionada, sino que, con el tiempo, y cientos de horas de lectura y pruebas, uno se da cuenta de que ya dispone de todos los conocimientos necesarios para intentar aproximar el problema de forma seria y con asertividad. Un sistema operativo de prueba, y con el objetivo de aprender, comenzó dicho verano: jotadOS (posteriormente renombrado a jotaOS). Se trataba de un SO con IA-32 como target, con un kernel monolítico, escrito en C (posteriormente, C++), con su propio bootloader escrito en ensamblador ([[https://github.com/the-strife-project/JBoot][JBoot]] \cite{jboot}), y sin mucho razonamiento e intenciones detrás más que las de /hacer cosas/.
 
-Este proyecto llegó a tener una complejidad elevada: implementaba una pila de almacenamiento y tenía una shell megalítica (dentro del kernel, para demostrar la funcionalidad). Desde junio de 2020, cuando mis conocimientos ya habían alcanzado cierto umbral, aparecieron dudas sobre las decisiones más fundamentales, y caí en la cuenta de que el proyecto no era lo que quería que fuera. Ahora que conocía los conceptos y los había puesto en práctica, sabía lo que quería:
+Este proyecto llegó a tener una complejidad elevada: implementaba una pila de almacenamiento y tenía una shell megalítica (dentro del kernel, para demostrar la funcionalidad). En junio de 2020, cuando mis conocimientos ya habían pasado cierto umbral, aparecieron dudas sobre las decisiones más fundamentales, y caí en la cuenta de que el proyecto no era lo que quería que fuera. Ahora que conocía los conceptos y los había puesto en práctica, sabía lo que quería:
 - Un SO con arquitectura microkernel, puesto que estaba dispuesto a /sacrificar velocidad por belleza/.
 - Cambiar el target a x86-64, puesto que aporta soluciones mucho más elegantes, modernas, y rápidas que IA-32. Además, el espacio de direccionamiento de 64 bits permitía un ASLR funcional.
 - Abandonar el bootloader propio. Un bootloader es difícil de mantener, pues requiere gran parte de los drivers que hay en un SO convencional, con lo cual hay que escribir el mismo código dos veces. Además, JBoot, escrito en ensamblador, era especialmente difícil de manejar. En retrospectiva, agradezco haberlo hecho en su momento, pues ahora conozco a la perfección la secuencia de arranque de x86, pero llegó el momento de cambiar.
@@ -304,21 +304,21 @@ No se abrume con los conceptos referenciados: serán explicados más adelante. E
 
 Teniendo el 1 de febrero un repositorio vacío, comenzó el desarrollo. Primero, un ~printf~, luego una klibc simple (/Kernel Standard Library/, con estructuras de datos básicas), y poco a poco se fueron construyendo capas sobre capas de abstracción. Pocos meses después, en mayo de 2021, tras debatirme durante unas semanas, decidí que quería que este proyecto fuera mi trabajo de fin de grado, en lugar de dejarlo para más tarde (tesis doctoral, si la terminara haciendo), principalmente porque, aunque este trabajo tiene sus pinceladas de investigación, casa más con un proyecto de ingeniería.
 
-En el plazo desde febrero a mayo no me dió tiempo de hacer mucho, tenía una funcionalidad muy básica del kernel, que no llegaba ni de cerca a tener la capacidad de cargar programas ni IPC. Muchas decisiones no estaban siquiera aún tomadas.
+En el plazo desde febrero a mayo no me dió tiempo de hacer mucho, tenía una funcionalidad muy básica del kernel, que no llegaba ni de cerca a tener la capacidad de cargar programas. Muchas decisiones no estaban siquiera aún tomadas.
 
 El trabajo aquí expuesto es el fruto de una vida de aprendizaje.
 
 *** Terminología
 Con tal de evitar malentendidos y siglas imposibles de encontrar en internet, se utilizarán términos en inglés, especialmente en aquellos que tienen una abreviación asociada. La terminología se utiliza, así, en español e inglés indistintamente. En este último caso, el género de los sustantivos se eligirá de forma arbitraria, pero se mantendrá consistente durante todo el texto.
 
-En la primera parte de este documento se han incluido un listado de términos y otro de acrónimos, que exponen de forma breve los conceptos referenciados.
+En la primera parte de este documento se han incluido un listado de términos y otro de abreviaciones, que exponen de forma breve los conceptos referenciados.
 
 ** Objetivos
 Un sistema operativo se comienza y se abandona, jamás se termina. Conforme pasan los años, los modelos de hardware y periféricos necesarios para el funciomiento más básico aumentan en cantidad y se vuelven más complejos, con lo que la tarea de desarrollar un sistema operativo desde cero se vuelve más y más compleja.
-- UNIX v1, de 1970, con el bootloader, el kernel, y la shell, contaba tan solo con 4768 líneas de ensamblador \cite{v1lines} (que corresponderían a muchas menos en C).
+- UNIX v1, de 1970, con el bootloader, el kernel, y la shell, contaba tan solo con 4768 líneas de ensamblador \cite{v1lines}, que corresponderían a muchas menos en C.
 - La primera versión pública de Linux (0.01), de 1991, estaba formada por 8413 líneas de C y 1464 de ensamblador \cite{linux001}.
 
-Hoy en día, ambas resultan insuficientes para tener siquiera un bootloader versátil. La diferencia de tiempo también es considerable: hoy, tener un sistema operativo potente y estable podría llevar unos cinco años a un gran grupo de personas. Por todo esto, es crítico tener en cuenta que no se pretende tener un producto final ni estable.
+Hoy en día, ambas resultan insuficientes para tener siquiera un bootloader versátil. La diferencia de tiempo también es considerable: hoy, tener un sistema operativo potente y estable podría llevar unos cinco años a un gran grupo de personas. Por todo esto, es crítico tener en cuenta desde el primer momento que no se pretende tener un producto final ni estable.
 
 *** Objetivos primarios
 Teniendo como objetivo general de este proyecto consolidar, aprender, y poner en práctica los conocimientos más importantes relacionados con los principios y mecanismos de abstracción que proporciona un sistema software sobre el hardware de un computador, mediante la propuesta y desarrollo de sistema operativo, se plantean los siguientes objetivos primarios específicos:
@@ -336,6 +336,7 @@ Se referenciarán en este capítulo como ~OPx~, donde ~x~ es el índice expuesto
 A partir de los objetivos primarios se puede tener el funcionamiento base del sistema operativo a desarrollar. Se consideran dos objetivos secundarios como complementarios de los anteriores:
 1. <<OS1>>Desarrollar un driver de *teclado* y una *shell*.
 2. <<OS2>>Desarrollar una serie de *herramientas*, usables desde la shell, para interactuar con el sistema.
+3. <<OS3>>Implementar un conjunto de tests unitarios.
 
 Se referenciarán en este capítulo como ~OSx~.
 
@@ -354,7 +355,7 @@ Con la intención de detallar los aspectos de funcionalidad interactuable del si
    4. Descripción; esto es, listado de los permisos.
    5. Cambio de usuario.
 4. Es necesaria una utilidad para mostrar la memoria usada por el sistema.
-5. Se debe contar con un programa que efectúe los tests unitarios.
+5. Se debe contar con un programa que efectúe tests unitarios.
 
 *** Requisitos no funcionales
 Durante el proceso de realización de los objetivos con tal de alcanzar los requisitos funcionales, se deberán tener presentes en todo momento los siguientes requisitos no funcionales en forma de principios:
@@ -383,7 +384,7 @@ Grosso modo, el proyecto llevado a cabo se puede dividir en ocho grandes compone
 4. Biblioteca estándar. Después del kernel, el siguiente mayor subproyecto, con un 31% de las líneas. Es especialmente relevante pues contiene la STL, con implementaciones de estructuras de datos abstractas que han conllevado muchas horas de depuración. Además, una parte considerable de la STL se conserva desde el SO antiguo (ver Sección [[Motivación e historia]]), con lo que es necesario tenerlo en cuenta para ilustrar la distribución a lo largo del tiempo más adelante. Corresponde al objetivo [[[OP5][OP5]]].
 5. Pila de almacenamiento. Esto incluye desde los drivers más fundamentales para la comunicación con interfaces de almacenamiento y lectura de sectores hasta la abstracción sobre puntos de montaje. Corresponde al objetivo [[[OP7][OP7]]].
 6. Interacción. Subsistemas como el driver de teclado, la shell, y todas los programas interactivos (utilidades, como ~ls~) se incluyen aquí. Corresponde a los objetivos [[[OS1][OS1]]] y [[[OS2][OS2]]].
-7. Miscelánea. Incluye el trabajo que no tiene cabida en los otros componentes, como el driver de terminal, los servicios del entorno de ejecución (como el registro), los tests unitarios, y los metaprogramas (helper, CI/CD...). Corresponde al objetivo [[[OP6][OP6]]].
+7. Miscelánea. Incluye el trabajo que no tiene cabida en los otros componentes, como el driver de terminal, los servicios del entorno de ejecución (como el registro), los tests unitarios, y los metaprogramas (helper, CI/CD...). Corresponde a los objetivos [[[OP6][OP6]]] y [[[OS3][OS3]]].
 8. Memoria. La escritura de este mismo documento se incluye en la planificación.
 
 Se ha realizado una estimación de las horas dedicadas a cada subproyecto, a partir de sus partes, que se encuentra en la Tabla \ref{horas}. Nótesen tres puntos:
@@ -395,46 +396,46 @@ Se ha realizado una estimación de las horas dedicadas a cada subproyecto, a par
 
 #+LATEX: \input{horas.tex}
 
-Para finalizar la sección, se incluyen tres diagramas de Gantt que representan cómo se ha repartido el esfuerzo a lo largo de los años de trabajo. Se ha separado en tres: la Figura \ref{gantt2020}, para 2020, la Figura \ref{gantt2021}, para 2021, y la Figura \ref{gantt2022}, para 2022. Para poder ilustrar el diagrama en la página, la unidad mínima de trabajo representado es de medio mes.
+Para finalizar la sección, se incluyen tres diagramas de Gantt que representan cómo se ha repartido el esfuerzo a lo largo de los años de trabajo: la Figura \ref{gantt2020}, para 2020, la Figura \ref{gantt2021}, para 2021, y la Figura \ref{gantt2022}, para 2022. Para poder ilustrar el diagrama en la página, la unidad mínima de trabajo representado es de medio mes.
 
 #+LATEX: \input{gantt.tex}
 
 *** Costes
-Llevar a cabo el sistema operativo no tiene coste monetario. La gran mayoría de especificaciones necesarias para llevar a cabo la implementación son de libre acceso, y los artículos para comprender el estado del arte lo son también en su mayoría. Aquellos que no, son accesibles por las licencias de la universidad.
+Llevar a cabo el sistema operativo no tiene coste monetario. La gran mayoría de especificaciones necesarias para llevar a cabo la implementación son de libre acceso, y los artículos para comprender el estado del arte lo son también. Aquellos que no, son accesibles por las licencias de la universidad.
 
-Los costes, sin embargo, sí aparecerían de querer aumentar la garantía del funcionamiento en distintas máquinas. Para empezar, hipervisores: herramientas que permiten instalar y ejecutar sistemas operativos como máquinas virtuales en otros sistemas operativos anfitrión. Son de especial utilidad en el proyecto puesto que suponen una forma rápida de arrancar el sistema y comprobar su funcionamiento. Se destacan tres:
+Los costes, sin embargo, sí aparecerían de querer aumentar la garantía del funcionamiento en distintas máquinas. Para empezar, hipervisores: herramientas que permiten instalar y ejecutar sistemas operativos como máquinas virtuales en otros sistemas operativos anfitrión. Son de especial utilidad en el proyecto puesto que aportan una forma rápida de arrancar el sistema y comprobar su funcionamiento. Se destacan tres:
 - VirtualBox \cite{virtualbox}, que es gratuita, con lo que se puede ignorar en el aspecto de costes.
 - Lo mismo ocurre con qemu, un emulador \cite{qemu}, y KVM, el hipervisor incluido en el kernel Linux \cite{kvm}.
 - Es diferente el caso de VMWare. En el caso de su versión Workstation 16 Pro, el precio es de $199 \cite{vmware}.
 
 Los costes se elevan considerablemente cuando se tiene en cuenta el hardware real. En este caso, para tener una garantía completa, sería necesario probar todos los procesadores x86, tanto de Intel como de AMD, desde la mínima generación soportada (Intel Core 2) hasta la actual. A su vez, esto requeriría distintas placas base para acomodar los chips.
 
-Sin embargo, conociendo que en x86 la retrocompatibilidad tiene la máxima prioridad, sería suficiente probar el procesador de generación mínima que soporta cada una de las funcionalidades utilizadas por el sistema operativo, centrándose solo en Intel. En la Sección [[Generación mínima]] se expone cuáles son y por qué, pero he aquí un adelanto:
+Sin embargo, conociendo que en x86 la retrocompatibilidad tiene la máxima prioridad, sería suficiente con probar el procesador de generación mínima que soporta cada una de las funcionalidades utilizadas por el sistema operativo, centrándose solo en Intel. En la Sección [[Generación mínima]] se expone cuáles son y por qué, pero he aquí un adelanto:
 - Intel Core 2, microarquitectura /Core/.
 - Intel Core de 3ª generación, microarquitectura /Ivy Bridge/.
 - Intel Core de 5ª generación, microarquitectura /Broadwell/.
 
-Naturalmente, estos productos están descatalogados, con lo que se presentan dos opciones:
+Estos productos están descatalogados, con lo que se presentan dos opciones:
 - Buscar usuarios en la comunidad que posean máquinas de estas generaciones y estén dispuestos a probarlas.
-- Comprarlas de segunda mano. Accediendo y consultando en /ebay/, se pueden obtener portátiles de cada generación especificada por aproximadamente 100€.
+- Comprarlas de segunda mano. Accediendo y consultando en /ebay/, se pueden obtener portátiles de cada generación especificada por aproximadamente 100€ \cite{pc1} \cite{pc2} \cite{pc3}.
 
 Se acota, de esta manera, el coste máximo a 199€ + 3 $\cdot$ 100€ = 499€. En el caso concreto de este proyecto, se cuenta con un /Ivy Bridge/ presente, con lo que los costes de verificación bajarían a 399€.
 
-Teniendo todo esto, falta el coste del personal. Es difícil estimar el salario por hora de un trabajo de este tipo, pues se trata de proyectos que a penas se llevan a cabo, y no existe ninguna posición de diseño o desarrollo de sistemas operativos actualmente en el mercado, tampoco acotando a desarrollo de núcleos. La mejor estimación es la siguiente: considerando tal como ha ocurrido durante el desarrollo del proyecto, la contratación de un ingeniero informático con amplia experiencia técnica pero con falta de experiencia profesional, y la dificultad de la tarea a realizar, el salario bruto podría corresponder a 35€/hora. De esta manera, si se han trabajado 1186 horas como se expone al final de la Tabla \ref{horas}, el coste salarial ascendería a 41.510€.
+Teniendo todo esto, falta el coste del personal. Es difícil estimar el salario por hora de un trabajo de este tipo, pues se trata de un proyecto que a penas se lleva a cabo, y no existe ninguna posición de diseño o desarrollo de sistemas operativos actualmente en el mercado, tampoco acotando a desarrollo de núcleos. La mejor estimación es la siguiente: considerando tal como ha ocurrido durante el desarrollo del proyecto, la contratación de un ingeniero informático con amplia experiencia técnica pero con falta de experiencia profesional, y la dificultad de la tarea a realizar, el salario bruto podría corresponder a 35€/hora. De esta manera, si se han trabajado 1136 horas como se expone al final de la Tabla \ref{horas}, el coste salarial ascendería a 39.760€.
 
-Sumando los costes de verificación, los costes totales aproximados en un escenario real serían de 41.909€.
+Sumando los costes de verificación, los costes totales aproximados en un escenario real serían de 40.159€.
 
 ** Estructura de la memoria
 Este documento se organiza en un total de seis capítulos:
-- El Capítulo [[Introducción y Objetivos]], *Introducción y Objetivos*, se ha enfocado en presentar el problema a resolver, detallar los objetivos a cumplir, y mostrar la planificación en bases a las fases generales y tareas necesarias.
+- El Capítulo [[Introducción y Objetivos]], *Introducción y Objetivos*, se ha enfocado en presentar el problema a resolver, detallar los objetivos a cumplir, y mostrar la planificación en bases a las fases generales y tareas necesarias, así como los costes de llevarlas a cabo.
 - El Capítulo [[Fundamentos]], *Fundamentos*, describe los fundamentos necesarios para comprender los diferentes aspectos relacionados con el desarrollo de sistemas operativos, proporcionando una aproximación sobre la magnitud y complejidad del problema y lógica detrás de las soluciones.
 - El Capítulo [[Estado del Arte]], *Estado del Arte*, analiza el estado del arte de los proyectos próximos a este, para averiguar qué soluciones se han dado a los problemas aquí descritos en el pasado.
-- El Capítulo [[Propuesta de Sistema Operativo]], *Propuesta de Sistema Operativo*, con el estudio e investigación llevados a cabo, se describe la solución para resolver el problema a abordar, incluyendo la definición de las ideas originales.
+- El Capítulo [[Propuesta de Sistema Operativo]], *Propuesta de Sistema Operativo*, con el estudio e investigación llevados a cabo, describe la solución para resolver el problema a abordar, incluyendo la definición de las ideas originales.
 - El Capítulo [[Diseño Detallado, Implementación, y Pruebas]], *Diseño Detallado, Implementación, y Pruebas*, describe, a partir de la propuesta presentada en el capítulo anterior, los detalles relacionados con el desarrollo del sistema operativo. Contiene capturas del uso del funcionamiento y operación del proyecto.
-- Para terminar, en el Capítulo [[Conclusiones y Trabajo Futuro]], *Conclusiones y Trabajo Futuro*, se hace una retrospectiva del trabajo realizado, comentando qué decisiones han dado buenos resultados y cuáles no, y se menciona el trabajo futuro que podría dar continuidad al trabajo realizado en este proyecto.
+- Para terminar, en el Capítulo [[Conclusiones y Trabajo Futuro]], *Conclusiones y Trabajo Futuro*, se hace una retrospectiva del trabajo realizado, y se menciona el trabajo futuro que podría dar continuidad al realizado en este proyecto.
 
-Este documento incluye adicionalmente dos apéndices al final que se describen brevemente a continuación:
-- El Apéndice [[Margen de Mejora]], *Margen de Mejora*, contiene una lista con aquellos detalles que han quedado en el tintero por disponer tan solo de una cantidad finita de tiempo. Sus entradas son ampliamente referenciadas a lo largo de los capítulos [[Propuesta de Sistema Operativo]] y [[Diseño Detallado, Implementación, y Pruebas]].
+Este documento incluye adicionalmente dos apéndices que se describen brevemente a continuación:
+- El Apéndice [[Margen de Mejora]], *Margen de Mejora*, contiene una lista con aquellos detalles que han quedado en el tintero por disponer /tan solo/ de una cantidad finita de tiempo. Sus entradas son ampliamente referenciadas a lo largo de los capítulos [[Propuesta de Sistema Operativo]] y [[Diseño Detallado, Implementación, y Pruebas]].
 - El Apéndice [[Cómo Compilar]], *Cómo Compilar*, explica cómo llevar a cabo el proceso de generación de un ISO a partir del código fuente.
 
 * Fundamentos
@@ -459,7 +460,7 @@ Como definir el término parece ser una batalla perdida, es infructuoso dedicars
 Al contrario de lo que puede parecer, un sistema operativo está escrito con el objetivo de soportar una arquitectura o un conjunto de ellas. De forma general, se intenta escribir el código más portable posible, pero partes críticas como ciertas rutinas del kernel, así como la totalidad del bootloader, son, por pura definición, no portables, y son necesarias versiones distintas para cada arquitectura a soportar (denominadas /target architectures/, o /targets/ para abreviar). Existe el ejemplo extremo de NetBSD, cuyo objetivo es soportar la mayor cantidad de arquitecturas posibles (en el momento de redactar esto, 8 primarias y 49 secundarias \cite{netbsd}). En el otro extremo, se encuentra Windows 11, con soporte completo para únicamente x86-64 y ARM64. Los sistemas operativos hechos por un grupo reducido de personas, así como los hechos con un propósito muy concreto, suelen intentar soportar solo una. En este caso, se trata de x86-64, con lo que los fundamentos prácticos explicados en este documento se enfocarán en dicha arquitectura.
 
 ** Componentes
-Habiendo establecido una definición, es posible distinguir cuatro partes fundamentales, que en muchas ocasiones se pueden encontrar mezcladas, y en otras extremas pueden faltar. Son: el /kernel/, los /drivers/, las /librerias/, y las /utilidades/. En esta sección se hará un repaso por su significado, se darán ejemplos, y se enunciarán sus partes de haberlas.
+Habiendo establecido una definición, es posible distinguir cuatro partes fundamentales, que en muchas ocasiones se pueden encontrar mezcladas, y en otras extremas pueden faltar. Son: /kernel/, /drivers/, /bibliotecas/, y /utilidades/. En esta sección se hará un repaso por su significado, se darán ejemplos, y se enunciarán sus partes de haberlas.
 
 *** Kernel
 El kernel de un sistema operativo, traducido como /núcleo/, es el soporte sobre el cual reposa todo el sistema. Es el primer software que se ejecuta fuera del bootloader, y se pueden destacar varios objetivos:
@@ -475,20 +476,50 @@ En todo sistema operativo moderno (especialmente aquellos que pertenecen a la fa
 Por último, un kernel conecta tareas entre sí y con los drivers presentes. Las tareas se comunican mediante un concepto llamado IPC (/Inter-Process Communication/), de las cuales existen varios tipos no necesariamente excluyentes:
 - FIFOs. Son flujos de bits que funcionan como tuberías (/pipe/, en inglés). Usados por primera vez en UNIX, y mantenidos en sus sucesores.
 - Paso de mensajes. Consiste en hacer envíos de estructuras a ciertos puntos de recepción de la tarea que actúa como servidor. Su uso para mensajes largos ha quedado en desuso, pues se conoce que la copia de grandes mensajes ralentiza mucho el sistema.
-- RPC, /Remote Procedure Call/. En este tipo de IPC, una tarea llama a una función de otra (que puede encontrarse en un otro computador) como si se tratara de una suya propia. Es lo que usa el sistema operativo de este proyecto, así como partes internas de NT bajo el nombre de LPC (/Local Procedure Call/). A diferencia del resto, este es un procedimiento síncrono: la tarea A /entra/ dentro de B, con lo cual la ejecución de A no continúa hasta que la rutina de B haya terminado.
+- RPC, /Remote Procedure Call/. En este tipo de IPC, una tarea llama a una función de otra (que puede encontrarse en un otro computador) como si se tratara de una suya propia. Es usado por el sistema operativo de este proyecto, así como partes internas de NT bajo el nombre de LPC (/Local Procedure Call/). A diferencia del resto, este es un procedimiento síncrono: la tarea A /entra/ dentro de B, con lo cual la ejecución de A no continúa hasta que la rutina de B haya terminado.
 - Memoria compartida. Presente en la gran mayoría de sistemas operativos modernos, el concepto de compartir memoria física es esencial para ocasiones en las que hay que transmitir una gran cantidad de datos entre tareas con mínima latencia.
 
 Un kernel (o, al menos, parte de él) siempre se ejecuta en lo que se conoce de forma genérica como modo supervisor, siendo su contraparte el modo usuario. El supervisor tiene acceso a la totalidad de la CPU: todos los registros, todas las instrucciones, y toda la memoria. En el modo usuario, se restrigen (muchas veces granularmente) estas capacidades.
 
-Gran parte del trabajo del kernel es recibir peticiones. Algunas de ellas son generadas por el hardware, y se denominan interrupciones hardware. De estas hay dos tipos: enmascarables, relativas al hardware no esencial, y no enmascarables, de las cuales el mayor exponente son las excepciones (la más simple: la división por cero). Otras peticiones son causadas por el software, y se las conoce como llamadas al sistema (en inglés, /system calls/, o /syscalls/ para abreviar).
+Gran parte del trabajo del kernel es recibir peticiones. Algunas de ellas son generadas por chips ajenos a la CPU, y se denominan interrupciones hardware. De estas hay dos tipos: enmascarables, relativas al hardware no esencial, y no enmascarables. Otras peticiones son causadas por el software, y generalmente se distinguen dos tipos: excepciones (la más simple: la división por cero), que ocurren cuando, tras el error, no se puede tener un estado válido del sistema, y las llamadas al sistema (en inglés, /system calls/, o /syscalls/ para abreviar), que hacen peticiones explícitas al kernel, muchas de ellas relativas a la adquisición de recursos. Si bien toda excepción es una petición de tipo /interrupción/, una llamada al sistema puede implementarse de otra manera, con instrucciones específicas. En la Figura \ref{fig:peticiones} se encuentra una representación de estos conceptos.
+
+#+begin_export latex
+\begin{figure}[h!]
+  \centering
+
+  \includesvg[
+    inkscapelatex=false,
+    width=125mm
+  ]{./imgs/peticiones}
+
+  \caption{Peticiones que maneja un kernel}
+  \label{fig:peticiones}
+\end{figure}
+#+end_export
 
 Existen dos tipos de kernels fundamentales: monolíticos y microkernels.
 
 Los monolíticos se caracterizan por tener todos los drivers dentro. Esto hace que la comunicación entre ellos sea rápida durante la ejecución, aunque, de haber un cambio en uno de ellos, será necesario enlazar de nuevo todo el kernel. Salvo finas protecciones que los kernel monolíticos suelen crear al arranque, un fallo de programación, por poco grave que sea, puede promocionar a un fallo irrecuperable del kernel (concepto conocido como /kernel panic/) \cite{monolitico}. Además, un driver malicioso podría tomar control del kernel y, por tanto, de todo el sistema, haciéndose a sí mismo invisible en el proceso; este tipo de malware se conoce como /rootkit/.
 
-Los microkernels se caracterizan por lo opuesto: separan los drivers en tareas independientes siempre que sea posible. La comunicación entre ellos es más lenta, pues una petición a un driver requiere cambiar de una tarea a otra, en un proceso llamado cambio de contexto, muy costoso en recursos. A cambio, un fallo en uno de los drivers no tiene por qué resultar terminal, y la tarea correspondiente puede reiniciarse con la esperanza de que siga funcionando sin que vuelva a ocurrir ese comportamiento anómalo. Esto les aporta más robustez, así como seguridad: un driver nunca se ejecutará en modo supervisor, aunque sí puede tener acceso al hardware y causar problemas por ese camino. Los microkernels son conceptualmente más simples, pues mantienen el software separado en proyecto sencillos sin crear un delicioso plato de código spaguetti en el que un driver llama a otro localmente y sin posible detección, registro, y control de privilegios: todos están al mismo nivel. A cambio, son más complejos de escribir, pues parten de un entorno en el que no hay funcionalidad, y han montar todo un sistema en base a eso (/¿Cómo cargar el programa que carga los programas?/) \cite{ukernel}. Este proceso de hacer emerger un sistema de la nada se denomina /bootstrapping/.
+Los microkernels se caracterizan por lo opuesto: separan los drivers en tareas independientes siempre que sea posible, en espacio de usuario (/userspace/, en inglés). La comunicación entre ellos es más lenta, pues una petición a un driver requiere cambiar de una tarea a otra, en un proceso llamado cambio de contexto, muy costoso en recursos. A cambio, un fallo en uno de los drivers no tiene por qué resultar terminal, y la tarea correspondiente puede reiniciarse con la esperanza de que siga funcionando sin que vuelva a ocurrir ese comportamiento anómalo. Esto les aporta más robustez, así como seguridad: un driver nunca se ejecutará en modo supervisor, aunque sí puede tener acceso al hardware y causar problemas por ese camino. Los microkernels son conceptualmente más simples, pues mantienen el software separado en proyecto sencillos sin crear un delicioso plato de código spaguetti en el que un driver llama a otro localmente y sin posible detección, registro, o control de privilegios: todos están al mismo nivel. A cambio, son más complejos de escribir, pues parten de un entorno en el que no hay funcionalidad, y han montar todo un sistema en base a eso (/¿Cómo cargar el programa que carga los programas?/) \cite{ukernel}. Este proceso de hacer emerger un sistema de la nada se denomina /bootstrapping/.
 
 Con el objetivo de hacer el plato italiano menos apetitoso y alcanzar un equilibrio entre separación de drivers y velocidad, surgen los kernels híbridos. La mayoría de kernels comerciales los utilizan, entre ellos NT (Windows), Linux, y XNU/Darwin (macOS). Los drivers separados del kernel se denominan módulos, y se cargan en tiempo de ejecución desde el sistema de archivos: o bien como una tarea como los microkernels, o bien introduciéndolos en el contexto del kernel. Por esto mismo, solo los drivers que no resultan esenciales para el funcionamiento del sistema pueden cargarse modularmente. Nótese que esta decisión se centra en aliviar el tamaño del código fuente, así como del binario final, del kernel, y ofrecer carga y descarga de módulos después del arranque, pero no está guiada por la seguridad.
+
+En la Figura \ref{fig:tiposkernel} se encuentran tres diagramas arquitectónicos, simplificados, de cada tipo de kernel.
+
+#+begin_export latex
+\begin{figure}[h!]
+  \centering
+
+  \includesvg[
+    inkscapelatex=false,
+    width=150mm
+  ]{./imgs/tiposkernel}
+
+  \caption{Tipos de kernels}
+  \label{fig:tiposkernel}
+\end{figure}
+#+end_export
 
 *** Drivers
 Un driver (en español, /controlador/ o /manejador de dispositivo/) es un programa que implementa una capa de abstracción sobre un dispositivo o concepto de bajo nivel \cite{driver}. En un kernel monolítico, no es más que una colección de funciones y estructuras. En un microkernel, se ejecuta como una tarea independiente.
@@ -497,7 +528,7 @@ Existe un driver por dispositivo físico al que se quiere conectar, así como ot
 
 Sin drivers difícilmente puede haber un sistema operativo. Se suele considerar que el driver de vídeo, encargado de mostrar texto o imágenes por la pantalla, es esencial para un SO útil. Dependiendo del enfoque y el objetivo del proyecto, puede contar con unos y no otros. Si el SO está principalmente enfocado para servidores, puede no contar con un driver de teclado, y en su lugar tener una pila de red (/network stack/) amplia que permita a otros dispositivos comunicarse con el sistema. Si está enfocado a ser usado por usuarios inexpertos, un driver de vídeo que pueda mostrar gráficos es, hoy en día, imprescindible.
 
-A la hora de escribir un driver, se recurre a la especificación del hardware. En ocasiones, esta especificación no es pública y se mantiene como secreto corporativo. En estos casos, es el fabricante el que se encarga de escribir el controlador para un sistema operativo concreto, generalmente Windows. A veces, el fabricante no publica la especificación, pero sí el código fuente del driver, y generalmente el código resulta ilegible, pues su propósito no es ser comprendido. Como gran exponente de esto último cabría destacar el archivo ~intel_display.c~ de Linux, escrito, naturalmente, por Intel, y que implementa parte del driver en un solo archivo de más de 10,000 líneas \cite{badlinux}.
+A la hora de escribir un driver, se recurre a la especificación del hardware. En ocasiones, esta especificación no es pública y se mantiene como secreto corporativo. En estos casos, es el fabricante el que se encarga de escribir el controlador para un sistema operativo concreto, generalmente Windows. A veces, el fabricante no publica la especificación, pero sí el código fuente del driver, y el código resulta ilegible, pues su propósito no es ser comprendido. Como gran exponente de esto último cabría destacar el archivo ~intel_display.c~ de Linux, escrito, naturalmente, por Intel, y que implementa parte del driver en un solo archivo de más de 10,000 líneas \cite{badlinux}.
 
 Por esto último, hay grupos de dispositivos cuyo soporte resulta inalcanzable para un desarrollador de sistemas operativos independiente sin llegar a métodos como la ingeniería inversa. Ejemplos de esto son /Wifi/ y la aceleración gráfica en 3D.
 
@@ -508,14 +539,14 @@ Cuando un sistema operativo planea soportar los ejecutables producidos por un le
 
 Las bibliotecas se juntan con los archivos objeto en el proceso de enlazado. Este proceso se puede realizar de dos maneras: estático y dinámico.
 - En el estático, las bibliotecas se adjuntan en el ejecutable. Esto hace que el binario (ejecutable) resulte independiente del entorno, pues lleva con él todo lo que necesita.
-- En el dinámico, las bibliotecas se referencian por su nombre y uso, y es el cargador de programas, en ejecución, quien se encarga de resolver las direcciones mediante un proceso denominado /relocation/. Esto reduce el tamaño del binario, y permite una actualización global de una biblioteca sin reenlazar todos los programas.
+- En el dinámico, las bibliotecas se referencian por su nombre y uso, y es el cargador de programas, en ejecución, quien se encarga de resolver las direcciones mediante un proceso denominado /relocation/. Esto reduce el tamaño del binario, y permite una actualización global de una biblioteca sin volver a enlazar todos los programas.
 
 *** Utilidades
 Una herramienta (/tool/) o utilidad (/utility/) es todo programa con una función simple que se relaciona con el kernel. Permiten una vista sobre algún aspecto del sistema, y generalmente lo hacen de forma legible para humanos (/human-readable/). Son programas a los que en la mayoría de ocasiones se accede mediante la /shell/ (concha), cuyo nombre, originario de UNIX, referencia a cómo oculta en su interior una perla (el kernel). Las utilidades también se pueden combinar con otras en /scripts/, creando complejos procesos encadenados. UNIX inventó el concepto de /pipes/, mediante los cuales la salida de un programa es conectada a la entrada de otro, permitiendo así una armonía de interconexión entre utilidades \cite{unix}.
 
 Con los años, especialmente en la comunidad Linux, este concepto ha ido en decadencia, y son pocas las utilidades que permiten este tipo de interconexión sin hacer ningún retoque.
 
-Aquí aparece la filosofía UNIX: /hacer solo una cosa, y hacerla bien/, refiriéndose a que las utilidades deben mantenerse simples, y en lugar de tener una herramienta para varios propósitos, tener muchas herramientas para cada acción. En el entorno Linux, y especialmente en las utilidades GNU, este concepto nunca ha existido. El código fuente de ~ls~ es un archivo de cinco mil líneas \cite{ls}.
+Aquí aparece la filosofía UNIX: /hacer solo una cosa, y hacerla bien/, refiriéndose a que las utilidades deben mantenerse simples, y en lugar de tener una herramienta para varios propósitos, tener una herramienta para cada acción. En el entorno Linux, y especialmente en las utilidades GNU, este concepto nunca ha existido. El código fuente de ~ls~ es un archivo de cinco mil líneas \cite{ls}.
 
 Nótese que existen /builtins/ (también llamadas /comandos/) que se comportan como utilidades a pesar de no serlo. En su lugar, son órdenes a la shell que se gestionan internamente sin pasar por ejecutar un programa. Ejemplos conocidos son ~cd~, ~echo~, o ~clear~.
 
@@ -523,15 +554,43 @@ Nótese que existen /builtins/ (también llamadas /comandos/) que se comportan c
 Conociendo las partes más esenciales de un sistema operativo, existen ciertas áreas que resultan de interés teórico. Generalmente, son las relativas a las tareas, y son los conceptos que en la Universidad de Granada se impartieron en la asignatura /Sistemas Operativos/. En esta sección se hará un breve repaso de todas estas áreas, con tal de contextualizar el resto del trabajo: las tareas, el scheduler, y el sistema de archivos.
 
 *** Tareas
-En la Sección [[Kernel]] se explicó superficialmente el concepto de tarea, y este capítulo trata de profundizar en él. Lo más fundamental: /tarea/ es el nombre teórico del concepto. Generalmente, se utiliza el término /proceso/ para referirse a un binario cuando está cargado en memoria. En sistemas MT (/Multi-threading/), la terminología es /thread/ (traducido como /hilo/ o /hebra/), de las cuales pueden estar ejecutándose varias que comparten gran parte del contexto concurrentemente.
+En la Sección [[Kernel]] se explicó superficialmente el concepto de tarea, y este capítulo trata de profundizar en él. Lo más fundamental: /tarea/ es el nombre teórico del concepto. Se utiliza el término /proceso/ para referirse a un binario cuando está cargado en memoria. En sistemas MT (/Multi-threading/), la terminología es /thread/ (traducido como /hilo/ o /hebra/), de las cuales pueden estar ejecutándose varias que comparten gran parte del contexto concurrentemente.
 
-La forma de representación interna de una tarea en el kernel es el PCB (/Process Control Block/), también llamado TCB (/Thread Control Block/) en sistemas multithreading, una estructura que contiene todo lo necesario para su funcionamiento, incluyendo su contexto y sus regiones de memoria estáticas (cargadas del binario) o las dinámicas como la pila y el /heap/. Las tareas son referenciadas por su PID (/Process Identifier/), un entero sin signo generalmente de 16, 32, o 64 bits \cite{pcb}.
+La forma de representación interna de una tarea en el kernel es el PCB (/Process Control Block/), también llamado TCB (/Thread Control Block/) en sistemas multithreading, una estructura que contiene todo lo necesario para su funcionamiento, incluyendo su contexto y sus regiones de memoria estáticas (cargadas del binario) o las dinámicas como la pila y el /heap/. Las tareas son referenciadas por su PID (/Process Identifier/), un entero sin signo de 16, 32, o 64 bits \cite{pcb}.
 
-Toda tarea se crea y se ejecuta. La gran mayoría terminan, no se ejecutan indefinidamente y, en los sistemas operativos modernos, además se pausan y reanudan. El proceso de reanudar una tarea o ejecutarla por primera vez se lleva a cabo por una rutina llamada el /dispatcher/. Esta se encarga de realizar el cambio de contexto, es decir, recuperar el estado del procesador (registros y flags, generalmente) en el que se encontraba la tarea (o el inicial de ser arrancada), así como su tabla de páginas (vista propia de la memoria). Después, realiza un cambio a modo usuario y salta al punto donde se pausó la tarea, de haber sido pausada, o el punto de entrada (/entry point/) de ser iniciada.
+Toda tarea se crea y se ejecuta. La gran mayoría terminan, no se ejecutan indefinidamente y, en los sistemas operativos modernos, además se pausan y reanudan. El proceso de reanudar una tarea o ejecutarla por primera vez se lleva a cabo por una rutina llamada el /dispatcher/. Esta se encarga de realizar el cambio de contexto, es decir, recuperar el estado del procesador (registros y flags) en el que se encontraba la tarea (o el inicial de ser arrancada), así como su tabla de páginas (vista propia de la memoria). Después, realiza un cambio a modo usuario y salta al punto donde se pausó la tarea, de haber sido pausada, o el punto de entrada (/entry point/) de ser iniciada.
 
 En UNIX, la primera tarea que se ejecuta es /init/, con PID 1 \cite{unix}. En Linux, concretamente, existen varios programas a elegir, siendo el más usado /systemd/ \cite{systemd}, y en menor medida otros como /OpenRC/ \cite{openrc}, /runit/ \cite{runit}, o /SysV init/ \cite{sysvinit}. Esta tarea inicia todas las otras, y desde entonces toda tarea tiene un padre, lo cual genera un árbol de hijos trazable. El proceso de creación de una tarea en UNIX se realiza mediante un procedimiento de ~fork~, por el cual la tarea hace mitosis y forma dos partes completamente independientes, seguida de ~exec~, por el cual sustituyen todas sus estructuras del PCB por las del binario cargado como parámetro \cite{unix}. En Windows, este procedimiento es atómico, y se realiza mediante una llamada a la API a la función ~CreateProcess~ \cite{createprocess}.
 
-Una tarea generalmente se encuentra en uno de tres estados: preparada para ser ejecutada, bloqueada esperando algún recurso, o ejecutándose. Además, necesariamente todo programa en ejecución cuenta con cuatro secciones: datos, código, pila (/stack/), y /heap/.
+Una tarea generalmente se encuentra en uno de tres estados: preparada para ser ejecutada, bloqueada esperando algún recurso, o ejecutándose. Cuando un programa se está ejecutando, se dice que está consumiendo tiempo de CPU. En la Figura \ref{fig:progstate} se encuentran los estados más comunes en los que se puede encontrar una tarea. Además, necesariamente todo programa en ejecución cuenta con cuatro secciones como mínimo: datos, código, pila (/stack/), y /heap/. En la Figura \ref{fig:progmem} se puede apreciar, de forma simplificada, cómo se distribuye una tarea cargada en memoria.
+
+#+begin_export latex
+\begin{figure}[h!]
+  \centering
+
+  \includesvg[
+    inkscapelatex=false,
+    width=100mm
+  ]{./imgs/progstate}
+
+  \caption{Autómata de una tarea}
+  \label{fig:progstate}
+\end{figure}
+#+end_export
+
+#+begin_export latex
+\begin{figure}[h!]
+  \centering
+
+  \includesvg[
+    inkscapelatex=false,
+    height=75mm
+  ]{./imgs/progmem}
+
+  \caption{Simplificación de una tarea cargada en memoria}
+  \label{fig:progmem}
+\end{figure}
+#+end_export
 
 *** Scheduler
 En un estado usual del sistema hay cientos de tareas pendientes de ejecutarse. Debe haber, así, una autoridad que decida quién se ejecuta, dónde, y durante cuánto tiempo. De esto se encarga el /scheduler/ (traducido como /planificador/): es la rutina del kernel encargada de manejar las tareas en tiempo de ejecución.
@@ -545,16 +604,30 @@ Con el tiempo, los dos primeros tipos han quedado, o bien en desuso, o bien son 
 
 Cuando la cantidad de memoria RAM estaba en el orden de los MBs o pocos GBs, tenía sentido el scheduler a medio plazo. Existían particiones /swap/ (de intercambio), sobre las cuales los procesos entraban y salían por no caber en memoria principal. Cualquier estudiante de ingeniería informática que haya ejecutado un algoritmo pesado y haya estado viendo a la vez la salida de ~htop~ es consciente de que si se empieza a usar la memoria de intercambio es porque hay un /memory leak/ en su código, y no por la pesadez del algoritmo. En otras palabras, si el proceso ha llegado a usar swap, la va a llenar pronto y el kernel lo va a terminar: ¿Para qué usar swap siquiera entonces?
 
-En algunos casos de cómputos extremos para aplicaciones de, por ejemplo, astronomía, es posible que se llegue a usar swap, pero generalmente, por ser tan lenta, suele merecer la pena instalar más memoria principal. Los supercomputadores no son famosos por la cantidad de espacio de almacenamiento que tienen, sino por la velocidad de sus procesadores, GFLOPs, y la amplia RAM. Las particiones swap siguen existiendo, los instaladores de Linux las crean por defecto a día de hoy, pero los sitemas operativos soportan esta función muy principalmente porque /ya estaba ahí/, y tendría poco sentido eliminarla siendo algo que siempre va a estar inactivo, y cuyo /overhead/ dentro del kernel es inexistente.
+En algunos casos de cómputos extremos para aplicaciones de, por ejemplo, astronomía, es posible que se llegue a usar swap, pero, por ser tan lenta, suele merecer la pena instalar más memoria principal. Los supercomputadores no son famosos por la cantidad de espacio de almacenamiento que tienen, sino por la velocidad de sus procesadores, GFLOPs, y la amplia RAM. Las particiones swap siguen existiendo, los instaladores de Linux las crean por defecto a día de hoy, pero los sitemas operativos soportan esta función muy principalmente porque /ya estaba ahí/, y tendría poco sentido eliminarla siendo algo que siempre va a estar inactivo, y cuyo /overhead/ dentro del kernel es inexistente.
 
 Por todo esto, cuando hoy en día se habla de scheduler, siempre se hace referencia a dos tipos: al scheduler a corto plazo, y a un nuevo tipo que ha surgido con la llegada de los multinúcleo, el MQMS (/Multi-Queue Multiprocessor Scheduler/).
 
-El MQMS es el más amplio, y por lo tanto el que debe explicarse primero. Toda CPU moderna tiene, en mayor o menor medida, caché. La caché L1 es la que está individualizada a los núcleos. Así, tendría sentido repartir las tareas entre los /cores/ de tal forma que se maximize el uso de caché, e idealmente quepan todos los threads que han de ejecutarse ahí, lo que conllevaría una velocidad mucho mayor en la ejecución de tareas, pues la copia de bits de RAM a caché es mucho más lenta que de caché a registros. Varios sistemas operativos, especialmente los indicados para servidores (como Linux) tienen este tipo de scheduler, pero no todos: también se puede mantener una /pool/ global de procesos de la que cada core saca uno cuando le toque (SQMS). Implementar un MQMS es complicado, y de hacerse mal puede ser contraproducente: alcanzar un equilibrio siempre es difícil.
+El MQMS es el más amplio, y por lo tanto el que debe explicarse primero. Toda CPU moderna tiene, en mayor o menor medida, caché. La caché L1 es la que está individualizada a los núcleos. Así, tendría sentido repartir las tareas entre los /cores/ de tal forma que se maximize el uso de caché, e idealmente quepan todos los threads que han de ejecutarse ahí, lo que conllevaría una velocidad mucho mayor en la ejecución de tareas, pues la copia de bits de RAM a caché es mucho más lenta que de caché a registros. Varios sistemas operativos, especialmente los indicados para servidores (como Linux) tienen este tipo de scheduler, pero no todos: también se puede mantener una /pool/ global de procesos de la que cada core saca uno cuando le toque (SQMS). Implementar un MQMS es complicado, y de hacerse mal puede ser contraproducente: alcanzar un equilibrio siempre es difícil. En la Figura \ref{fig:qms} se encuentra una representación de estos conceptos.
+
+#+begin_export latex
+\begin{figure}[h!]
+  \centering
+
+  \includesvg[
+    inkscapelatex=false,
+    width=100mm
+  ]{./imgs/qms}
+
+  \caption{MQMS vs SQMS}
+  \label{fig:qms}
+\end{figure}
+#+end_export
 
 El scheduler a corto plazo (a partir de ahora, simplemente /scheduler/), decide qué se ejecuta y en qué orden. Se pueden clasificar según muchos criterios:
-- Con o sin reentrancia (/preemption/). En los schedulers reentrantes, el kernel pausa la ejecución de un proceso tras el paso de cierto tiempo, denominado /quantum/, generalmente en el orden de los pocos milisegundos. Esto evita tener que esperar a que la tarea termine o quede bloqueada por la espera de algún recurso (lectura del disco duro, llegada de paquetes de red...), y permite realizar el intercambio de tareas más a menudo, lo que da una sensación de concurrencia al usuario, a pesar de que exista solo un núcleo en el procesador. En estos últimos casos, si se desea tener una interfaz gráfica moderna, resulta imprescindible.
+- Con o sin reentrancia (/preemption/). En los schedulers reentrantes, el kernel pausa la ejecución de un proceso tras el paso de cierto tiempo, denominado /quantum/, normalmente en el orden de los pocos milisegundos. Esto evita tener que esperar a que la tarea termine o quede bloqueada por la espera de algún recurso (lectura del disco duro, llegada de paquetes de red...), y permite realizar el intercambio de tareas más a menudo, lo que da una sensación de concurrencia al usuario, a pesar de que exista solo un núcleo en el procesador. En estos últimos casos, si se desea tener una interfaz gráfica moderna, resulta imprescindible.
 - Con soporte o no para prioridades. Tareas distintas tienen prioridad sobre otras, y esta prioridad se puede especificar numéricamente en los schedulers con soporte para prioridades. En los schedulers más simples con prioridad surge el riesgo de /inanición/, por el cual procesos de baja prioridad pueden potencialmente estar sin ejecutarse más tiempo del esperado: incluso infinito de haber algún problema con los más prioritarios.
-- Según su nivel de tiempo real. Existen kernels muy específicos para tareas de /Safety-Critical Systems/, es decir, aquellos que pueden resultar responsables de pérdidas humanas, que poseen schedulers de tiempo real, en los cuales cada tarea lleva asociada una restricción de tiempo antes de la cual debe concluir. Estos sistemas operativos se clasifican como RTOS (/Real-Time Operating System/). De aquí se diferencian dos tipos: /hard real time/, en el cual es inadmisible que la tarea no concluya en el plazo dado (/deadline/), y /soft real time/, en el cual se toma una política de /best-effort/. Para este último caso, generalmente sirven sistemas operativos de propósito general: por ejemplificar, Linux y NT tienen varios schedulers, y uno de ellos es de tiempo real suave.
+- Según su nivel de tiempo real. Existen kernels muy específicos para tareas de /Safety-Critical Systems/, es decir, aquellos que pueden resultar responsables de pérdidas humanas, que poseen schedulers de tiempo real, en los cuales cada tarea lleva asociada una restricción de tiempo antes de la cual debe concluir. Estos sistemas operativos se clasifican como RTOS (/Real-Time Operating System/). De aquí se diferencian dos tipos: /hard real time/, en el cual es inadmisible que la tarea no concluya en el plazo dado (/deadline/), y /soft real time/, en el cual se toma una política de /best-effort/. Para este último caso, suelen servir sistemas operativos de propósito general: por ejemplificar, Linux y NT tienen varios schedulers, y uno de ellos es de tiempo real suave.
 
 Se procede a hacer un muy breve repaso de los schedulers predecesores al que usará el kernel incluido en el sistema operativo de este trabajo.
 **** Sistema monotarea.
@@ -562,7 +635,7 @@ En DOS (y esto incluye a MS-DOS), no existía el concepto de tareas en sí, pues
 **** Llamadas de bloqueo.
 En las primeras versiones de Windows, anteriores a Windows 95, el scheduler no tenía reentrancia, y las tareas eran responsables de liberar la CPU cuando consideraran oportuno mediante una syscall /yield/.
 **** Round-Robin.
-Ligado al anterior, Round-Robin es un algoritmo genérico que representa una cola cíclica. Corresponde a cualquier tipo de scheduler con reentrancia o yield, cuyo orden de procesamiento sea cíclico: 1, 2, 3, 1, 2, 3, 1, 2...
+Ligado al anterior, se trata de un algoritmo genérico que representa una cola cíclica. Corresponde a cualquier tipo de scheduler con reentrancia o yield, cuyo orden de procesamiento sea cíclico: 1, 2, 3, 1, 2, 3, 1, 2...
 **** Round-Robin multinivel.
 Extensión del anterior, pero ahora existen distintas colas para aportar soporte de prioridades. Se intenta tomar un proceso de la cola de máxima prioridad y, de no existir, se prueba la siguiente.
 **** MLFQ.
@@ -574,7 +647,7 @@ Extensión del anterior, pero ahora existen distintas colas para aportar soporte
 
 NT, de Windows, y muchos derivados de BSD, incluyendo XNU, de macOS, usan variantes de este algoritmo \cite{mlfqnt} \cite{mlfqbsd}. Por defecto, tiene el problema de que tareas de baja prioridad pueden sufrir inanición, y por esto no se suele implementar como tal.
 **** Mención honorífica: CFS.
-Linux, desde su versión 2.6.23, utiliza por defecto CFS (/Completely Fair Scheduler/). Se trata de un /Red-Black tree/, una estructura de datos en forma de árbol similar a un AVL, es decir, un árbol binario de búsqueda autobalanceado. En esta estructura, las tareas pendientes se mantienen ordenadas según la cantidad de nanosegundos que se hayan ejecutado (/virtual runtime/). Además, el quantum es dinámico, varía según la carga del sistema. Resulta subóptimo para microkernels, pues la implementación de un árbol rojo-negro es compleja y termina siendo una estructura que se usa exclusivamente en el scheduler \cite{cfs}.
+Linux, desde su versión 2.6.23, utiliza por defecto CFS (/Completely Fair Scheduler/). Se trata de un /Red-Black tree/, una estructura de datos en forma de árbol similar a un AVL, es decir, un árbol binario de búsqueda autobalanceado. En esta estructura, las tareas pendientes se mantienen ordenadas según la cantidad de nanosegundos que se hayan ejecutado (/virtual runtime/). Además, el quantum es dinámico, varía según la carga del sistema \cite{cfs}. Resulta subóptimo para microkernels, pues la implementación de un árbol rojo-negro es compleja.
 
 *** Sistema de archivos
 Un sistema de archivos es una organización de la memoria secundaria que permite asignar regiones del espacio disponible a distintos datos, creando así el concepto de /archivo/. Un archivo puede ser de varios tipos, los más fundamentales son los regulares, secuencias de bits de estructura interna arbitraria (como los archivos de texto o las imágenes), y los directorios, agrupaciones de referencias a otros archivos.
@@ -595,14 +668,28 @@ Salvo ocasiones concretas, los dispositivos de almacenamiento se encuentran divi
 ** Práctica de un sistema operativo
 En la Sección [[Teoría de un sistema operativo]] se han visto los aspectos más teóricamente relevantes del campo. Sin embargo, a la hora de comenzar un proyecto de esta magnitud, el programador no tarda en darse cuenta de que las áreas mencionadas son una parte muy pequeña del código necesario para conseguir escribir el código del sistema operativo más básico.
 
-Esta sección incluirá explicaciones independientes de la arquitectura sobre estos conceptos que han faltado por explicar: la gestión de memoria, las interrupciones, y los drivers necesarios.
+Esta sección incluirá explicaciones independientes de la arquitectura sobre estos conceptos que han faltado por profundizar: la gestión de memoria, las interrupciones, y los drivers necesarios.
 
 *** Memoria
-Tras la preparación inicial del procesador, al inicio de la ejecución del bootloader, la memoria es un espacio contiguo de palabras, se denomina /memoria física/, pues la dirección se emite por el bus de direcciones. Para tener un mejor manejo sobre ella, se crea el concepto de /memoria virtual/ (también llamada /lineal/). Esta aparece con el concepto de paginación, un mecanismo que ofrecen la mayoría de arquitecturas: la memoria se divide en páginas, de tamaño dependiente del ISA (siempre potencia de dos bytes), y cada página virtual corresponde a una física del mismo tamaño, aunque pueden existir varias virtuales que apunten a la misma física. Este mecanismo permite al kernel crear una estructuración propia de la memoria principal y manejarla con los rangos que él considere \cite{virtualmem}.
+Tras la preparación inicial del procesador, al inicio de la ejecución del bootloader, la memoria es un espacio contiguo de palabras, se denomina /memoria física/, pues la dirección se emite por el bus de direcciones. Para tener un mejor manejo sobre ella, se crea el concepto de /memoria virtual/ (también llamada /lineal/). Esta aparece con el concepto de paginación, un mecanismo que ofrecen la mayoría de arquitecturas: la memoria se divide en páginas, de tamaño dependiente del ISA (siempre potencia de dos bytes), y cada página virtual corresponde a una física del mismo tamaño, aunque pueden existir varias virtuales que apunten a la misma física. Este mecanismo permite al kernel crear una estructuración propia de la memoria principal y manejarla con los rangos que él considere \cite{virtualmem}. En la Figura \ref{fig:virtmem} se encuentra una representación de este concepto.
+
+#+begin_export latex
+\begin{figure}[h!]
+  \centering
+
+  \includesvg[
+    inkscapelatex=false,
+    width=100mm
+  ]{./imgs/virtmem}
+
+  \caption{Memorias física y virtual}
+  \label{fig:virtmem}
+\end{figure}
+#+end_export
 
 Es importante notar que una dirección física no tiene por qué corresponder a una región en RAM, sino que puede usarse para realizar MMIO (/Memory Mapped Input/Output/) con tal de comunicarse con otros chips conectados.
 
-El /mapping/ de virtual a física se realiza mediante una estructura denominada genéricamente como /tabla de páginas/. Toda arquitectura tiene, además, un registro protegido (acceso únicamente permitido al modo supervisor) que apunta a esta estructura. Es muy usual que, debido a la gran cantidad de memoria física disponible, esta tabla de páginas se organice de forma multinivel. Cada tarea tiene una tabla de páginas propia que forma parte de su contexto \cite{virtualmem}.
+El /mapping/ de virtual a física se realiza mediante una estructura denominada genéricamente como /tabla de páginas/. Toda arquitectura tiene, además, un registro protegido (acceso únicamente permitido al modo supervisor) que apunta a esta estructura. Es muy usual que, debido a la gran cantidad de memoria física disponible, esta tabla de páginas se organice de forma multinivel; este mecanismo se ejemplificará en x86 en la Sección [[La memoria en un x86]]. Cada tarea tiene una tabla de páginas propia que forma parte de su contexto \cite{virtualmem}.
 
 Las entradas de la tabla de páginas no solo tienen la dirección física a la que apunta la virtual, sino varias /flags/ que actúan como atributos. La mayoría de estas flags tienen propósitos de protección, y en caso de incumplirse generan una excepción. Son imprescindibles la de solo lectura y la que indica si es accesible en modo usuario. En ocasiones, también pueden aparecer flags más concretas, como puede ser la de no-ejecución o la de no-caché (que evita que se almacene en L1-L3).
 
@@ -611,11 +698,11 @@ En el momento en que se habilita la memoria virtual, todas las direcciones que s
 La mayoría de kernels modernos se cargan a sí mismos en la mitad superior de la memoria virtual, región conocida como /higher half/. Esto permite que las estructuras multinivel más amplias sean marcadas como globales, pues se mantienen constantes entre contextos.
 
 *** Interrupciones y excepciones
-Todo procesador de cualquier arquitectura recibe interrupciones. En la Sección [[Kernel]] se mencionó que existen dos tipos: enmascarables, y no enmascarables. El proceso de enmascarar se refiere a la capacidad de desactivar una de ellas.
+La mayoría de procesadores reciben interrupciones. En la Sección [[Kernel]] se mencionó que existen dos tipos: enmascarables, y no enmascarables. El proceso de enmascarar se refiere a la capacidad de desactivar una de ellas.
 
 Antes de nada, un breve comentario sobre la notación: las interrupciones hardware se suelen denominar por sus siglas terminadas en ~#~, y las excepciones por sus siglas comenzando con ~#~. Así, un error de protección general, que es excepción, se denomina #GP (o #GPF), mientras que la interrupción legacy ~A~ de PCI se denomina INTA#.
 
-Las interrupciones no enmascarables (en otras palabras, no evitables) se denominan excepciones: fallos captados por la CPU durante la ejecución de una instrucción. Se mencionó con anterioridad la división por cero, pero la más significativa es el fallo de página (/page fault/, #PF), que ocurre cuando una de las protecciones de una página virtual no se ha cumplido. Un fallo de página no es necesariamente malo, pueden usarse como herramienta para detectar situaciones en las que el kernel debe realizar una acción sobre el proceso como, por ejemplo, ampliar el tamaño de la pila reservado a la tarea, lo que permite reservar una sola página de stack al iniciar el programa, y solo si lo necesita aportarle más.
+Las excepciones son interrupciones no enmascarables (en otras palabras, no evitables). Son fallos captados por la CPU durante la ejecución de una instrucción. Se mencionó con anterioridad la división por cero, pero la más significativa es el fallo de página (/page fault/, #PF), que ocurre cuando una de las protecciones de una página virtual no se ha cumplido. Un fallo de página no es necesariamente malo, pueden usarse como herramienta para detectar situaciones en las que el kernel debe realizar una acción sobre el proceso como, por ejemplo, ampliar el tamaño de la pila reservado a la tarea, lo que permite reservar una sola página de stack al iniciar el programa, y solo si lo necesita aportarle más.
 
 Las interrupciones enmascarables (evitables) pueden ser de dos tipos:
 - Causadas por el usuario. En algunas arquitecturas donde el ISA no contiene una instrucción de llamada al sistema (como IA-32), se utilizan interrupciones en su lugar.
@@ -623,24 +710,22 @@ Las interrupciones enmascarables (evitables) pueden ser de dos tipos:
 
 Toda interrupción debe asociarse a una rutina de interrupción (ISR, /Interrupt Service Routine/), que contiene el código que se ejecuta al recibirla. Es usual que este código se ejecute en modo supervisor, y en ese caso el procesador cambia de modo si procede, carga una stack del kernel para dicha interrupción en concreto, y hace el salto.
 
-Las arquitecturas cuentan con un controlador (/controller/, no confundir con /driver/) de interrupciones programable, y todo kernel debe contener un driver para soportarlo, para enmascarar y desenmascarar interrupciones y hacerle saber al chip cuál es la dirección del ISR y el puntero de pila a usar. De haber un problema en el ISR, o directamente no existir, las arquitecturas suelen producir una excepción concreta denominada /double fault/ (#DF), que se espera que tenga un ISR asociado y funcional. De volver a encontrarse un fallo procesando un #DF, se produce un /triple fault/, que es la única interrupción de una arquitectura a la que no se puede asociar un ISR. Dependiendo del procesador, la acción a tomar es congelar la CPU (/halt/), o reiniciar el sistema.
+Las arquitecturas cuentan con un controlador (/controller/, no confundir con /driver/) de interrupciones programable, y todo kernel debe contener un driver para soportarlo, para enmascarar y desenmascarar interrupciones y hacerle saber al chip cuál es la dirección del ISR y el puntero de pila a usar. Se explicará el caso concreto de x86 en la Sección [[Interrupciones y syscalls]]. De haber un problema en el ISR, o directamente no existir, las arquitecturas suelen producir una excepción concreta denominada /double fault/ (#DF o #LOCKUP), que se espera que tenga un ISR asociado y funcional. De volver a encontrarse un fallo procesando un #DF, se produce un /triple fault/, que es la única interrupción de una arquitectura a la que no se puede asociar un ISR. Dependiendo del procesador, la acción a tomar es congelar la CPU (/halt/), o reiniciar el sistema.
 
 *** Comunicación con el hardware
-Se mencionó en la Sección [[Memoria]] que algunas comunicaciones con el hardware pueden producirse por MMIO. En estos casos, el controlador correspondiente redirige las direcciones al posarse sobre el bus de direcciones de la placa base al chip que tenga asociado (/hardwired/). Por esto mismo, esas porciones de la memoria física están garantizadas que no corresponden a una porción de RAM usable, aunque pueden ser movidas en tiempo de ejecución mediante cambio de bancos (/bank switching/). Estas regiones de memoria física son desconocidas para el programador, y cambian de ordenador en ordenador, con lo cual las arquitecturas aportan un método de descubrir la distribución de las regiones mediante una estructura conocida como /mapa de memoria/ (/memory map/). Este mapa de memoria suele ser leído y reestructurado por el bootloader con tal de pasarle al kernel una versión más manejera.
+Se mencionó en la Sección [[Memoria]] que algunas comunicaciones con el hardware pueden producirse por MMIO. En estos casos, el controlador correspondiente redirige las direcciones al posarse sobre el bus de direcciones de la placa base al chip que tenga asociado (/hardwired/). Por esto mismo, esas porciones de la memoria física están garantizadas que no corresponden a una porción de RAM usable, aunque pueden ser movidas en tiempo de ejecución mediante cambio de bancos (/bank switching/). Estas regiones de memoria física son desconocidas para el programador, y cambian de ordenador en ordenador, con lo cual las arquitecturas aportan un método de descubrir la distribución de las regiones mediante una estructura conocida como /mapa de memoria/ (/memory map/). La parte de memoria física de la Figura \ref{fig:virtmem} asemeja uno. Este mapa de memoria suele ser leído y reestructurado por el bootloader con tal de pasarle al kernel una versión más manejera.
 
 MMIO no es el único método de comunicación con hardware. En algunas arquitecturas, existe PIO (/Port-mapped IO/), una clase especial de instrucciones dadas por el ISA con este único propósito. No son necesarias más de dos, y sus mnemónicos suelen ser ~IN~ y ~OUT~, aunque con distintos sufijos para indicar el tamaño de palabra a transferir, nunca más del tamaño del registro. Cada controlador de entrada/salida establece un conjunto de direcciones PIO por chip al que está conectado. Suelen ser direcciones pequeñas de 16 bytes.
-
-Para asentar los conocimientos dados, el controlador más famoso, aunque no el único que existe en un ordenador de sobremesa convencional, es el de PCI Express.
 
 *** Drivers necesarios
 Para terminar la sección, se procede a comentar qué drivers resultan imprescindibles en un sistema operativo moderno, para conseguir orientar al lector un poco en el trabajo requerido para realizar un proyecto de esta índole.
 
-Independientemente del propósito, es necesario el driver del controlador de interrupciones, que varía según la arquitectura. Se debe configurar y desenmascarar las interrupciones nescesarias, así como proveer las direcciones de los ISRs y reservar los marcos de pila de cada una, por cada núcleo.
+Independientemente del propósito, es necesario el driver del controlador de interrupciones, que varía según la arquitectura. Se debe configurar y desenmascarar las interrupciones nescesarias, así como proveer las direcciones de los ISRs y reservar los marcos de pila para cada núcleo.
 
-Si se desea acceder a archivos, es necesario una pila de almacenamiento (/storage stack/), es decir, los módulos que juntos ofrecen las abstracciones necesarias para acceder a archivos.
+Si se desea acceder a archivos, es necesaria una pila de almacenamiento (/storage stack/), es decir, los módulos que juntos ofrecen las abstracciones necesarias para ello.
 - En la parte más baja de esta pila de drivers, se encuentra el driver del bus al que está conectado el dispositivo de almacenamiento a acceder. En sistemas modernos suele ser PCI Express.
-- Sobre ello, el driver en sí del controlador al que está conectado el dispositivo de almacenamiento masivo. Este último puede ser un disco duro (en sus múltiples formas), un CD, un pendrive... Dependiendo del dispositivo de almacenamiento en concreto, el controlador al que está conectado es de un tipo u otro. Por ejemplificar, un disco duro SATA puede estar conectado a un controlador AHCI, un ATA a un IDE, un M.2 a un NVMe, o un pendrive a xHCI. Muchos de estos controladores son retrocompatibles, con lo que AHCI puede emular IDE, y xHCI a EHCI (y este a su vez a OHCI o UHCI).
-- No es inusual encontrar sobre el driver del controlador una abstracción que nombre los dispositivos de almacenamiento, como se mencionó en la Sección [[Drivers]].
+- Sobre ello, el driver en sí del controlador al que está conectado el dispositivo de almacenamiento masivo. Este último puede ser un disco duro (en sus múltiples formas), un CD, un pendrive... Dependiendo del dispositivo de almacenamiento en concreto, el controlador al que está conectado es de un tipo u otro. Por ejemplificar, un disco duro SATA puede estar conectado a un controlador AHCI, un ATA a un IDE, un M.2 a un NVMe, o un pendrive a xHCI. Los controladores pueden ser o no retrocompatibles: AHCI puede emular IDE de así configurarlo en la BIOS, pero xHCI (para USB 3.x, 2.0 y 1.x), EHCI (USB 2.0), OHCI (USB 1.1) y UHCI (USB 1.x) no lo son, con lo que no es extraño que se implementen todos.
+- Sobre el driver del controlador, no es inusual encontrar una abstracción que nombre los dispositivos de almacenamiento, como se mencionó en la Sección [[Drivers]].
 - Encima de esto último, puede encontrarse un programa que interprete el esquema de particiones.
 - Luego, la implementación del sistema de archivos a usar.
 - Y, finalmente, el VFS (/Virtual File System/), que abstrae todos los sistemas de archivos disponibles en el sistema para aportar una API uniforme e independiente de todo lo que está bajo la cima de la pila.
@@ -648,14 +733,14 @@ Si se desea acceder a archivos, es necesario una pila de almacenamiento (/storag
 Se profundizará en la avalancha de siglas en capítulos posteriores.
 
 ** Arquitectura x86-64
-En la Sección [[Portabilidad]] se comentó que x86-64 es el target del sistema operativo propuesto. Así, resulta natural ofrecer una contextualización de la arquitectura tan pronto como sea posible. Esta sección cumplirá ese objetivo. Se presentará la arquitectura, su forma de arranque y sus estructuras, como los descriptores que necesita y su forma de realizar paginación. Todo de forma breve y superficial, sin llegar a detalles de la implementación.
+En la Sección [[Portabilidad]] se comentó que x86-64 es el target del sistema operativo propuesto. Así, resulta natural ofrecer una contextualización de la arquitectura tan pronto como sea posible. Esta sección cumplirá ese objetivo. Se presentará la arquitectura, su forma de arranque y sus estructuras, como los descriptores que necesita y su forma de realizar paginación.
 
 *** Presentación
-El mundo de la informática tuvo un punto de inflexión en 1981 con la salida del /IBM Personal Computer/ en Estados Unidos \cite{ibmpc}. Su procesador, el Intel 8088, lanzado al mercado 5 años antes, fue la primera pieza de hardware en usar la arquitectura x86. Rápidamente empezó a ganar popularidad, y, por su alto precio, poco después de la salida al mercado, otras compañías productoras de hardware y software crearon las denominadas /compatibles/, computadores cuyo hardware permitía la ejecución del software diseñado para la máquina de IBM, de las cuales cabe destacar las de Compaq. La enorme presencia en mercado de las compatibles ha desencadenado en que, para finales de la década, x86 fuera la arquitectura más utilizada, y mantiene ese puesto a día de hoy.
+El mundo de la informática tuvo un punto de inflexión en 1981 con la salida del /IBM Personal Computer/ en Estados Unidos \cite{ibmpc}. Su procesador, el Intel 8088, lanzado al mercado 5 años antes, fue la primera pieza de hardware en usar la arquitectura x86. Rápidamente empezó a ganar popularidad, y, por su alto precio, poco después de la salida al mercado, otras compañías productoras de hardware y software crearon las denominadas /compatibles/, computadores cuyo hardware permitía la ejecución del software diseñado para la máquina de IBM, de las cuales cabe destacar las de Compaq. La enorme presencia en mercado de las compatibles ha desencadenado en que, para finales de la década, x86 fuera la arquitectura más utilizada.
 
-Como x86 data de tan atrás, muchas de las decisiones originales de diseño se han ido quedado obsoletas, y las subsiguientes generaciones de procesadores aportaron nuevos ISAs que han ido abandonando funcionalidades e introduciendo otras. Sin embargo, muchas de ellas, por el propio diseño de la arquitectura, siguen siendo necesarias hoy en día, y el programador del sistema debe implementarlas. Esto hace que desarrollar un kernel desde cero para x86 sea un proyecto bastante más complejo que el de una arquitectura moderna como puede ser ARM64.
+Como x86 data de tan atrás, muchas de las decisiones originales de diseño se han ido quedado obsoletas, y las subsiguientes generaciones de procesadores aportaron nuevos ISAs que han ido abandonando funcionalidades e introduciendo otras. Sin embargo, muchas de ellas, por el propio diseño de la arquitectura, siguen siendo necesarias hoy en día, y el programador del sistema debe implementarlas. Esto hace que desarrollar un kernel desde cero para x86 sea un proyecto bastante más complejo que el de una arquitectura moderna, como ARM64.
 
-La mayoría de computadores personales de hoy día usan la arquitectura x86, sobre el ISA (/Instruction Set Architecture/, conjunto de instrucciones) de 64 bits llamado x86-64 (también conocido como x64 o amd64). Existe un resurgimiento de la arquitectura ARM fuera de móviles por parte de los procesadores Apple Silicon publicados desde 2020, pero a día de hoy su presencia no consigue alcanzar la de los x86-64.
+La mayoría de computadores personales de hoy día usan la arquitectura x86, sobre el ISA (/Instruction Set Architecture/, conjunto de instrucciones) de 64 bits llamado x86-64 (también conocido como x64 o amd64). Existe un resurgimiento de la arquitectura ARM fuera de móviles por parte de los procesadores Apple Silicon publicados desde 2020, pero a día de hoy su presencia no consigue alcanzar la de los x86.
 
 *** Introducción al arranque x86
 Cuando un x86 arranca, se ejecuta un programa aportado por un chip ROM sobre la placa base. Se denomina BIOS (/Basic Input Output System/) en su versión original, aunque en la década pasada fue poco a poco reemplazado por UEFI (/Unified Extensible Firmware Interface/) hasta apoderarse del mercado. UEFI suele tener en la gran mayoría de ocasiones un modo /legacy/ para simular ser una BIOS y así mantener la retrocompatibilidad. Esta sección se referirá solo a BIOS con tal de acotar un cierto nivel de simplicidad.
@@ -664,7 +749,7 @@ La BIOS realiza tareas de preparación del hardware, como inicializar el control
 
 Tras montar este sistema de interrupciones, selecciona un disco de arranque, proceso que ha presenciado todo entusiasta de la informática a la hora de instalar un sistema operativo. De este disco, sea magnético, en estado sólido, unidad CD, o USB, BIOS lee el MBR (/Master Boot Record/), su primer /sector/ (conjunto pequeño de bytes, usualmente 512 en discos duros y 2048 en CDs). El MBR es copiado a una región de memoria que comienza en ~0x7C00~, por convenio de IBM, y BIOS hace el salto a esta dirección \cite{bios}. A partir de este punto, el programador del sistema está en control.
 
-Cuando la BIOS salta al punto de entrada, el procesador se encuentra en un estado conocido como /real mode/, o modo real. Este modo es plenamente compatible con un procesador 80186 de Intel, y su ISA es x86-16, es decir, tiene un tamaño de palabra de 16 bits. Para desbloquear el verdadero potencial de la CPU, el procesador debe de cambiar al /protected mode/ (modo protegido), capacidad que apareció por primera vez en el Intel 80386 (también llamado i386), que usa el conjunto de instrucciones IA-32, con una longitud de palabra de 32 bits. Eventualmente, también tendrá que pasar al /long mode/ (modo largo), con el ISA x86-64, que corresponde a lo usado hoy en día \cite{modos}.
+Cuando la BIOS salta al punto de entrada, el procesador se encuentra en un estado conocido como /real mode/, o modo real. Este modo es plenamente compatible con un procesador 80186 de Intel, y su ISA es x86-16; es decir, tiene un tamaño de palabra de 16 bits. Para desbloquear el verdadero potencial de la CPU, el procesador debe de cambiar al /protected mode/ (modo protegido), capacidad que apareció por primera vez en el Intel 80386 (también llamado i386), que usa el conjunto de instrucciones IA-32, con una longitud de palabra de 32 bits. Eventualmente, también tendrá que pasar al /long mode/ (modo largo), con el ISA x86-64, que corresponde a lo usado hoy en día \cite{modos}.
 
 Todo este proceso de cambio de modos es realizado por una pieza de software: el /bootloader/, o cargador de arranque. GRUB \cite{grub} es el que posee el nombre más conocido, pero existen multitud. Por ejemplo, las versiones modernas de Windows usan BOOTMGR \cite{bootmgr}. El bootloader utiliza las interrupciones BIOS para reconocer los discos conectados y poder acceder a ellos posteriormente. Tras hacer el cambio de modos, reconoce los esquemas de particiones, así como las particiones en sí, y carga los archivos necesarios del kernel, para después darle el control, ofreciéndole en el proceso información vital para la posterior preparación del sistema (por ejemplo, el mapa de memoria mencionado en la Sección [[Comunicación con el hardware]]).
 
@@ -675,7 +760,7 @@ En segmentación, una dirección lógica es un par ~selector:desplazamiento~. Un
 
 IA-32 incluye nuevas instrucciones con microcódigo que afecta a los registros de segmentación. De ellas, /far jump/ e /IRET/ son las más usadas. La primera se suele utilizar en los bootloaders para realizar el cambio de segmento en ~CS~ junto a un salto de forma atómica (hacerlo por separado dispararía una excepción), y la segunda se solía usar en los kernels para realizar cambios de contexto, pues además de cambiar ~CS~ realiza el cambio de ~EFLAGS~, el registro que tiene las flags del sistema \cite{iret}.
 
-La segmentación en x86 se define por dos estructuras: en mayor medida, la GDT (/Global Descriptor Table/), y en menor, la LDT (/Local Descriptor Table/). Se comentará solo la GDT por ser relevante a día de hoy, pero la LDT es similar.
+La segmentación en x86 se define por dos estructuras: en mayor medida, la GDT (/Global Descriptor Table/), y, en menor, la LDT (/Local Descriptor Table/). Se comentará solo la GDT por ser relevante a día de hoy, pero la LDT es similar.
 
 El registro GDTR contiene un puntero a la GDT, y se carga por medio de la instrucción LGDT. La GDT es un array de entradas, /GDT entries/, cuyo índice forma parte del selector del segmento. El primero siempre es nulo, y el resto contienen descriptores de segmentos, que están formados por una dirección base del segmento, su tamaño, y algunas flags. Esta estructura es un claro indicativo del paso del tiempo en x86: extensiones en IA-32 y x86-64 han dejado bits de la base y el tamaño (límite) desperdigados en los 64 bits que la componen, véase la Figura [[fig:gdt]] \cite{gdt}.
 
@@ -688,7 +773,7 @@ Con la GDT aparece el modo usuario en x86. El campo ~DPL~ que se aprecia en la F
 
 Si bien segmentación está obsoleta, un kernel de x86-64 debe aportar una GDT válida, con, como mínimo, dos entradas: código y datos del kernel. Si espera implementar tareas en modo usuario (userspace), entonces necesita otras dos: código y datos de usuario.
 
-El modo protegido del i386 trae a x86 el ISA IA-32. Entre las nuevas funcionalidades, se encuentran otra forma de manejo de memoria: la paginación. IA-32 tiene direcciones de 32 bits, con lo que se tienen 4 GBs de memoria virtual direccionables, que se distribuyen generalmente en páginas de 4 KBs (también existen las páginas /huge/ de 4MB). Como hacer un array en memoria de cada página virtual con su física equivalente resulta inasequible, se usa paginación multinivel. Se define una tabla de páginas como una página con un array de 1024 entradas, cada una de la cuales corresponde a una página virtual, y en cada una se encuentra su correspondiente memoria física. Sobre esto, se crea el directorio de páginas, otra página con un array de 1024 punteros (físicos) a tablas de páginas. En la Figura [[fig:paging2]] se encuentra una representación. La dirección de esta última página se la conoce usualmente como el /puntero a la tabla de páginas/, aunque realmente apunte al directorio. Para utilizar estas estructuras, los procesadores x86 tienen el registro ~cr3~ donde se sitúa el puntero.
+El modo protegido del i386 trae a x86 el ISA IA-32. Entre las nuevas funcionalidades, se encuentran otra forma de manejo de memoria: la paginación. IA-32 tiene direcciones de 32 bits, con lo que se tienen 4 GBs de memoria virtual direccionables, que se distribuyen en páginas de 4 KBs (también existen las páginas /huge/ de 4MB). Como hacer un array en memoria de cada página virtual con su física equivalente resulta inasequible, se usa paginación multinivel. Se define una tabla de páginas como una página con un array de 1024 entradas, cada una de la cuales corresponde a una página virtual, y en cada una se encuentra su correspondiente memoria física. Sobre esto, se crea el directorio de páginas, otra página con un array de 1024 punteros (físicos) a tablas de páginas. En la Figura [[fig:paging2]] se encuentra una representación. La dirección de esta última página se la conoce usualmente como el /puntero a la tabla de páginas/, aunque realmente apunte al directorio. Para utilizar estas estructuras, los procesadores x86 tienen el registro ~cr3~ donde se sitúa el puntero.
 
 #+NAME: fig:paging2
 #+CAPTION: Paginación para direcciones de 32 bits \cite{paging2}
@@ -697,7 +782,7 @@ El modo protegido del i386 trae a x86 el ISA IA-32. Entre las nuevas funcionalid
 
 Con el tiempo, se veía venir la obsolescencia inminente de IA-32. Para alargar su vida, apareció la tecnología PAE (/Physical Address Extension/), presente en todo x86 moderno de 32 bits (y todos los de 64), mediante la cual se permite un acceso a una memoria física de más de 4GB por medio de paginación a 3 niveles.
 
-Después de PAE, con x86-64 el espacio de direccionamiento se vuelve de 64 bits, y se tiene una cantidad de direcciones virtuales cuatro mil millones de veces mayor a la de IA-32. Por esto, son necesarios más niveles. Los procesadores generalmente no soportan direcciones de 64 bits, sino de al menos 48; el resto de bits se producen por expansión de signo, y las direcciones de este tipo se denominan direcciones canónicas. Las direcciones de 48 bits se representan por paginación a 4 niveles. Ahora, una tabla de páginas tiene 512 entradas, y un directorio de páginas 512 punteros. Aparecen sobre los directorios de páginas los PDPs (/Page Descriptor Pointer/), y sobre estos últimos los PML4 (/Page Map Level 4/). En la Figura [[fig:paging4]] se encuentra una representación. Algunos procesadores permiten paginación a 5 niveles para acceder a más memoria virtual aún (57 bits), y estos usan los PML5. Suponiendo ahora una paginación a 4 niveles, el registro ~cr3~ contiene el puntero que apunta a la página con el PML4.
+Después de PAE, con x86-64 el espacio de direccionamiento se vuelve de 64 bits, y se tiene una cantidad de direcciones virtuales cuatro mil millones de veces mayor a la de IA-32. Por esto, son necesarios más niveles. Los procesadores no soportan direcciones de 64 bits, sino de al menos 48; el resto de bits se producen por expansión de signo, y las direcciones de este tipo se denominan direcciones canónicas. Las direcciones de 48 bits se representan por paginación a 4 niveles. Ahora, una tabla de páginas tiene 512 entradas, y un directorio de páginas 512 punteros. Aparecen sobre los directorios de páginas los PDPs (/Page Descriptor Pointer/), y sobre estos últimos los PML4 (/Page Map Level 4/). En la Figura [[fig:paging4]] se encuentra una representación. Algunos procesadores permiten paginación a 5 niveles para acceder a más memoria virtual aún (57 bits), y estos usan los PML5. Suponiendo ahora una paginación a 4 niveles, el registro ~cr3~ contiene el puntero que apunta a la página con el PML4.
 
 #+NAME: fig:paging4
 #+CAPTION: Paginación para direcciones de 48 bits \cite{paging4}
@@ -716,7 +801,21 @@ Existen más, algunos de ellos enfocados a protecciones modernas de memoria, y s
 *** Interrupciones y syscalls
 Se conoce x86 como una arquitectura guiada por interrupciones, y su correcto manejo es una parte crítica del kernel.
 
-Lo más fundamental: las interrupciones en x86 están numeradas con un identificador del 0 al 255, llamado vector de interrupción \cite{intvec}. Originalmente, llegaban a un x86 mediante pines propios en la CPU, desde un chip encargado de manejar las interrupciones. Se trata de la PIC 8259 (/Programmable Interrupt Controller/), usado por el IBM PC, y hoy en día, como es esperable, está dentro de la CPU. El hardware envía IRQs a la PIC. Esta hace la transformación a su identificador de x86, comprueba si está enmascarada, y, de no estarlo, la manda al procesador. En el próximo ciclo de reloj, el ciclo fetch/execute comprobará si hay interrupciones pendientes. Como la hay, guardará en la pila el estado (flags y registros fundamentales), hará el cambio de contexto, y saltará al ISR.
+Lo más fundamental: las interrupciones en x86 están numeradas con un identificador del 0 al 255, llamado vector de interrupción \cite{intvec}. Originalmente, llegaban a un x86 mediante pines propios en la CPU, desde un chip encargado de manejar las interrupciones. Se trata de la PIC 8259 (/Programmable Interrupt Controller/), usado por el IBM PC, y hoy en día, como es esperable, está dentro de la CPU. El hardware envía IRQs a la PIC. Esta hace la transformación a su identificador de x86, comprueba si está enmascarada, y, de no estarlo, la manda al procesador. En la Figura \ref{fig:pic} se encuentra este camino. En el próximo ciclo de reloj, el ciclo fetch/execute comprobará si hay interrupciones pendientes. Como la hay, guardará en la pila el estado (flags y registros fundamentales), hará el cambio de contexto, y saltará al ISR.
+
+#+begin_export latex
+\begin{figure}[h!]
+  \centering
+
+  \includesvg[
+    inkscapelatex=false,
+    width=100mm
+  ]{./imgs/pic}
+
+  \caption{Camino de IRQ por PIC}
+  \label{fig:pic}
+\end{figure}
+#+end_export
 
 ¿Cómo sabe la CPU dónde está el ISR? La estructura que los maneja es la IDT (/Interrupt Descriptor Table/), y es muy similar a la GDT. IDTR es un registro, cargado con la instrucción LIDT, que apunta a la IDT. Es un array de entradas, /gate descriptors/, que indican, sobre todo, la dirección del ISR y un índice de la IST (/Interrupt Stack Table/), otra estructura manejada por la CPU que contiene un array de pilas disponibles para la CPU en caso de interrupción \cite{idt}.
 
@@ -728,7 +827,21 @@ Junto a la PIC, apareció la PIT 8253/8254 (/Programmable Interval Timer/), un o
 
 Con el surgimiento de los multiprocesadores x86, la PIC se ha quedado atrás. Ha de mantenerse retrocompatible, y no se puede extender para soportar varios procesadores. En su lugar, se ve obligada a emitir la interrupción hardware a todos los cores, y los cambios de contexto innecesarios ralentizan todo el SO. Por esto, se diseñó una sucesora, la APIC (/Advanced PIC/).
 
-En este nuevo sistema SMP (/Symmetric Multiprocessing/) que es x86, donde cada core tiene acceso a toda la memoria, el procesador es una combinación de pares ~<core, LAPIC>~. Esto es, todo núcleo tiene un chip asociado, una LAPIC (/Local APIC/), y todos los cores comparten un único IOAPIC (/Input/Output APIC/). Cuando una IRQ llega al procesador, la maneja la IOAPIC. Esta se comporta como la PIC, en el sentido de que la traduce a su identificador y comprueba si está enmascarada, con la gran diferencia de que, en caso de no estarlo, redirige la interrupción a una de las LAPIC. Se puede configurar de dos formas: destino fijo, en el cual se especifica uno de los cores como receptor, o por prioridad, en el que la CPU intenta averiguar qué núcleo tiene menos trabajo (por tiempo en HALT) y se la envía. Además, la APIC permite las denominadas IPIs (/Inter-processor Interrupts/), una forma de generar interrupciones software entre distintos cores para sincronizarlos \cite{apic}. Además, incluye un reloj que emite interrupciones en un intervalo configurable, sucesor de la PIT, el /LAPIC timer/.
+En este nuevo sistema SMP (/Symmetric Multiprocessing/) que es x86, donde cada core tiene acceso a toda la memoria, el procesador es una combinación de pares ~<core, LAPIC>~. Esto es, todo núcleo tiene un chip asociado, una LAPIC (/Local APIC/), y todos los cores comparten un único IOAPIC (/Input/Output APIC/). Cuando una IRQ llega al procesador, la maneja la IOAPIC. Esta se comporta como la PIC, en el sentido de que la traduce a su identificador y comprueba si está enmascarada, con la gran diferencia de que, en caso de no estarlo, redirige la interrupción a una de las LAPIC. En la Figura \ref{fig:apic} se encuentra este camino. Se puede configurar de dos formas: destino fijo, en el cual se especifica uno de los cores como receptor, o por prioridad, en el que la CPU intenta averiguar qué núcleo tiene menos trabajo (por tiempo en HALT) y se la envía. Además, la APIC permite las denominadas IPIs (/Inter-processor Interrupts/), una forma de generar interrupciones software entre distintos cores para sincronizarlos \cite{apic}. Incluye también un reloj que emite interrupciones en un intervalo configurable, sucesor de la PIT, el /LAPIC timer/.
+
+#+begin_export latex
+\begin{figure}[h!]
+  \centering
+
+  \includesvg[
+    inkscapelatex=false,
+    height=75mm
+  ]{./imgs/apic}
+
+  \caption{Camino de IRQ por APIC}
+  \label{fig:apic}
+\end{figure}
+#+end_export
 
 Con x86-64 aparecen dos nuevas instrucciones muy relevantes: /syscall/ y /sysret/ \cite{syscall}.
 /Syscall/ realiza el cambio de modo, desde usuario a supervisor, y en el proceso establece RCX=RIP (se guarda el contador de programa) y R11=RFLAGS (se guardan las flags).
@@ -740,7 +853,7 @@ Cuando está habilitado, en otros MSRs (STAR y LSTAR) se le hace saber a la CPU 
 Nótese cómo estas instrucciones no escriben nada en la pila, ni siquiera cambian RSP (puntero de pila) ni la tabla de páginas. Por esto, se realiza un cambio de contexto limitado; el kernel considerará posteriormente si es oportuno cambiar estos valores. Esta nueva forma de realizar llamadas al sistema supone un incremento de velocidad con respecto al que existía anteriormente en x86, y resulta una herramienta muy útil para el programador del sistema.
 
 * Estado del Arte
-En este capítulo se estudiarán y analizarán algunos sistemas operativos existentes, más antiguos o más modernos, con tal de ofrecer al lector una visión general del abanico de elecciones posibles a la hora de diseñar un sistema operativo. El capítulo se centra en los sistemas operativos que, de alguna u otra forma, sirven de referencia a la propuesta de sistema operativo, y su desarrollo, que se llevará a cabo en los siguientes capítulos.
+En este capítulo se estudiarán y analizarán algunos sistemas operativos existentes, más antiguos o más modernos, con tal de ofrecer al lector una visión general del abanico de elecciones posibles a la hora de diseñar un sistema operativo. El capítulo se centra en los sistemas operativos que, de alguna u otra forma, sirven de referencia a la propuesta de sistema operativo y su desarrollo, que se llevará a cabo en los siguientes capítulos.
 
 ** UNIX
 En 1925, Western Electric crea Bell Telephone Laboratories, conocido usualmente como /Bell Labs/ \cite{belllabs}. Doce años después, se produce el primer premio Nobel del lugar por el descubrimiento de la difracción de electrones \cite{belllabs2}. Los laboratorios Bell no han sido otra cosa a lo largo de su historia que una gran fábrica de premios Nobel y grandes descubrimientos que han hecho avanzar la humanidad, como el transistor, el láser, y la célula fotovoltaica. Entre todos estos logros, existe uno cercano a este trabajo: UNIX.
@@ -754,21 +867,35 @@ Existen cuatro mecanismos fundamentales de IPC en UNIX:
 - /Pipes/, o tuberías, ya mencionados en la Sección [[Kernel]]. Los programas se comunican mediante flujos de bytes. Por un extremo, uno de los procesos escribe, y por el otro, se lee. Los bytes no tienen formato, con lo que, de ser usado el mismo pipe para varios propósitos, es necesario un mecanismo de marshalling (cambio de forma). Los pipes pueden estar asociados a un archivo (denominados /named pipes/), o ser independientes, asociados a un descriptor de archivo.
 - Señales. Son notificaciones asíncronas de un evento que puede manejar un programa. Se podrían interpretar como /vectores de interrupción de los procesos/. En UNIX System V Release 4, se definen 32 de ellas \cite{sysv}.
 - Memoria compartida, distribución de páginas físicas para la copia de grandes secciones de bytes de forma rápida.
-- Sockets. Funcionan de forma idéntica a los sockets de red, y cuentan con las mismas operaciones sobre ellos. Se diferencian en que están asociados a un archivo, generalmente con la extensión ~.socket~ para diferenciarlos. Son usados, por ejemplo, por el servicio de Docker.
+- Sockets. Funcionan de forma idéntica a los sockets de red, y cuentan con las mismas operaciones sobre ellos. Se diferencian en que están asociados a un archivo, generalmente con la extensión ~.socket~ para diferenciarlos.
 
 *** Sistema de archivos
 El sistema de archivos de UNIX, sin nombre, simplemente /File System/ hasta UNIX V5 (después renombrado a /s5fs/), tiene especial interés para este proyecto. Se define el término de /inodo/, una estructura que representa a un objeto del sistema de archivos. Este objeto puede ser un archivo regular, un directorio, o un /named pipe/, entre otros \cite{unix}.
 
-La memoria secundaria se divide en bloques de 512 bytes, que contienen los datos de los ficheros. Dentro del inodo, existe una representación multinivel para direccionar los inodos. Hay 8 índices de bloques, y una flag que toma valores /small/ o /large/. De ser el archivo /small/, los bloques son directos, con lo que son direccionables $8 \cdot 512 = 4096$ bytes. De ser /large/, los índices de bloques son indirectos: cada bloque contiene un array de otros 256 bloques, con lo que el archivo puede alcanzar $8 \cdot 256 \cdot 512 = 1\text{MB}$.
+La memoria secundaria se divide de la forma representada en la Figura \ref{fig:s5fs}, con bloques de 512 bytes, que contienen los datos de los ficheros. Dentro del inodo, existe una representación multinivel para direccionar los inodos. Hay 8 índices de bloques, y una flag que toma valores /small/ o /large/. De ser el archivo /small/, los bloques son directos, con lo que son direccionables $8 \cdot 512 = 4096$ bytes. De ser /large/, los índices de bloques son indirectos: cada bloque contiene un array de otros 256 bloques, con lo que el archivo puede alcanzar $8 \cdot 256 \cdot 512 = 1\text{MB}$.
 
-Los bloques se reservan por medio de una /free list/, una lista enlazada con los bloques libres en el sistema de archivos.
+#+begin_export latex
+\begin{figure}[h!]
+  \centering
 
-Existen algunos sistemas de archivos posteriores a s5fs que mejoran la idea original. De ellos cabe destacar Berkeley Fast File System (FFS), aumenta el tamaño mínimo de bloque a 4 KBs, lo que aumenta el tamaño máximo de archivo a 4GB. Con FFS también aparecen los enlaces simbólicos, el bloqueo de archivos, y las cuotas de usuario. Además, cambia la representación de free list por un bitmap de bloques libres \cite{ffs}.
+  \includesvg[
+    inkscapelatex=false,
+    width=100mm
+  ]{./imgs/s5fs}
 
-Muchos sistemas de archivos de hoy día son herederos de FSS. Entre ellos, /MINIX File System/, /ext2/, /zfs/, /btrfs/...
+  \caption{Distribución del sistema de archivos s5fs}
+  \label{fig:s5fs}
+\end{figure}
+#+end_export
+
+Los inodos y bloques se reservan y liberan por medio de listas enlazadas.
+
+Existen algunos sistemas de archivos posteriores a s5fs que mejoran la idea original. De ellos cabe destacar Berkeley Fast File System (FFS), aumenta el tamaño mínimo de bloque a 4 KBs, lo que aumenta el tamaño máximo de archivo a 4GB. Con FFS también aparecen los enlaces simbólicos, el bloqueo de archivos, y las cuotas de usuario. Además, cambia la representación de listas enlazadas por bitmaps \cite{ffs}.
+
+Muchos sistemas de archivos de hoy día son sucesores de FFS. Entre ellos, /MINIX File System/, /ext2/, /zfs/, /btrfs/...
 
 *** Modelo de protección
-El modelo de protección de UNIX está compuesto exclusivamente por el del sistema de archivos. Si un proceso puede acceder a la named pipe o al socket, puede comunicarse con el servicio en el otro extremo. El modelo de protección del sistema de archivos está compuesto por un sistema de propiedad: un archivo es de un usuario (identificado por su UID, /User IDentifier/), y de un grupo (GID, /Group IDentifier/). Sobre las vistas de usuario, de grupo, y de /otros/, se establecen tres permisos: lectura, escritura, y ejecución.
+El modelo de protección de UNIX está compuesto exclusivamente por el del sistema de archivos. Si un proceso puede acceder a la named pipe o al socket, puede comunicarse con el servicio en el otro extremo. El modelo de protección del sistema de archivos es un mecanismo de propiedad: un archivo es de un usuario (identificado por su UID, /User IDentifier/), y de un grupo (GID, /Group IDentifier/). Sobre las vistas de usuario, de grupo, y de /otros/, se establecen tres permisos: lectura, escritura, y ejecución.
 
 Como ejemplo práctico de esto, en GNU/Linux, heredero de UNIX, la comunicación con el servicio de Docker se realiza por medio de un socket, ~/var/run/docker.sock~, y sus propietarios son el usuario ~docker~ y el grupo homónimo. Para comunicarse con él, el usuario deberá pertenecer al grupo ~docker~, o ser superusuario.
 
@@ -777,7 +904,7 @@ UNIX tenía un kernel monolítico, pero no es el concepto de monolito que existe
 
 No sería así, al menos, hasta bien entrados los 70. Se suele considerar el primer microkernel el de /RC 4000 Multiprogramming System/, un SO para máquinas con un propósito muy específico (una planta fertilizadora) creado en 1969 \cite{rc4000}. Durante las décadas de los 70 y los 80, gran parte de la investigación de SSOO se enfocó en microkernels.
 
-El primer producto de este estilo en triunfar económicamente fue la Commodore Amiga, en 1986, con su sistema operativo AmigaOS y su microkernel Exec. Utilizaba un IPC basado en paso de mensajes. Este mensaje estaba preparado en el proceso A. Como no existía en aquel entonces el concepto de protección de memoria, solo existía un espacio de direccionamiento compartido por todas las tareas, así como el kernel. Por esto, el paso del mensaje al proceso B consistía en solo transmitir el puntero a estos datos, lo que implicaba cero copias de los bytes \cite{amigaos}.
+El primer producto de este estilo en triunfar económicamente fue la Commodore Amiga, en 1986, con su sistema operativo AmigaOS y su microkernel Exec. Utilizaba un IPC basado en paso de mensajes. Como no existía en aquel entonces el concepto de protección de memoria, solo existía un espacio de direccionamiento compartido por todas las tareas, así como el kernel. Por esto, el paso del mensaje del proceso A al proceso B consistía en solo transmitir el puntero a estos datos, lo que implicaba cero copias de los bytes \cite{amigaos}.
 
 AmigaOS supo utilizar el entorno a su favor para crear lo que es a día de hoy el microkernel más rápido que ha existido. Los SSOO basados en paso de mensajes generalmente requieren copias, como mínimo una si se diseña bien, lo que supone una gran diferencia con respecto al método de Exec.
 
@@ -804,7 +931,7 @@ Un concepto es aceptado dentro del microkernel solo si moverlo fuera prevendría
 
 Uno de los puntos claves de L4 es el modelo de IPC síncrono. En él, el paso de mensajes de A a B se realiza bloqueando el proceso A con la syscall de envío. A partir de este punto, el kernel puede copiar, de forma segura, el mensaje desde el espacio de direccionamiento de A a B. Además, toma algunos registros como /registros de mensaje/, y su valor no se altera durante el cambio de contexto, lo que implica que parte del mensaje puede ser pasado con cero copias.
 
-Han surgido numerosos sistemas operativos basados en microkernels derivados de este. Así, surge la familia de microkernels L4, similar (aunque mucho más pequeña) a la de UNIX. Una representación de este árbol genealógico se puede encontrar en la Figura [[fig:family]].
+Han surgido numerosos sistemas operativos basados en microkernels derivados de este. Así, aparece la familia de microkernels L4, similar (aunque mucho más pequeña) a la de UNIX. Una representación de este árbol genealógico se puede encontrar en la Figura [[fig:family]].
 
 #+NAME: fig:family
 #+CAPTION: Árbol genealógico de L4 hasta 2013 \cite{heiser}
@@ -846,7 +973,7 @@ Sin embargo, no se pueden ignorar los problemas de las metodologías tradicional
 Con todo esto en mente, no resulta posible encasillar la metodología utilizada en una conocida. La más próxima es la metodología incremental, pues los subsistemas se han ido desarrollando conforme los dependientes han requerido las funcionalidades. Por ejemplo, la funcionalidad de ACLs del VFS no se ha implementado hasta comenzar las utilidades relativas a ellos: en el momento, resultaba más prioritaria la creación de archivos y el listado de directorios.
 
 *** Tests
-Dada la naturaleza del proyecto, es imposible realizar vertificaciones informales, como podrían ser los tests unitarios, para comprobar que el funcionamiento del kernel es correcto. Sin embargo, sí es posible realizarlos en la capa de usuario. Para ello, se ha desarrollado una batería de tests unitarios, bajo el programa ~tests~, que se comunican con los servicios presentes en el sistema operativo y prueban sus interfaces públicas. En ocasiones, sin embargo, estos tests resultan redundantes: el solo hecho de poder ejecutarse el programa conlleva que la mayoría del sistema funciona. Se hace especial hincapié en los servicios que no forman parte de este grupo, incluyendo partes del código como pueden ser algunas estructuras de datos complejas.
+Dada la naturaleza del proyecto, es imposible realizar verificaciones informales, como podrían ser los tests unitarios, para comprobar que el funcionamiento del kernel es correcto. Sin embargo, sí es posible realizarlos en la capa de usuario. Para ello, se ha desarrollado una batería de tests unitarios, bajo el programa ~tests~, que se comunican con los servicios presentes en el sistema operativo y prueban sus interfaces públicas. En ocasiones, sin embargo, estos tests resultan redundantes: el solo hecho de poder ejecutarse el programa conlleva que la mayoría del sistema funciona. Se hace especial hincapié en los servicios que no forman parte de este grupo, incluyendo partes del código como pueden ser algunas estructuras de datos complejas.
 
 *** Licencia
 La implementación del proyecto en este capítulo descrito está bajo la licencia de /izquierdos de autor/ (/copyleft/) GNU General Public License 3.0 \cite{gpl3} o superior. No es /Open Source/, sino software libre. Atendiendo a la definción de la FSF, cumple con las cuatro libertades esenciales del software \cite{freesoftware}.
@@ -854,9 +981,9 @@ La implementación del proyecto en este capítulo descrito está bajo la licenci
 *** Herramientas utilizadas
 Como herramienta para gestionar el trabajo a realizar, se eligió desde un primer momento /git/, y su publicación está en el portal GitHub. En el caso de este proyecto, en lugar de un repositorio con directorios para cada proyecto, se ha creado [[https://github.com/the-strife-project][una organización]] \cite{orga}: un usuario virtual con su propio perfil y repositorios. De esta manera, todos los proyectos que componen el sistema operativo se encuentran separados.
 
-El proyecto se ha realizado en C++11, utilizando GNU Make como herramienta para orquestrar el proceso de construcción del ISO final. Existe un único Makefile que utilizan todos los subproyectos: se ha denominado /helper/, y cada repositorio contiene un Makefile que lo incluye y customiza por medio de variables de entorno. Durante todo el desarrollo, las pruebas se han llevado a cabo con /qemu/ como frontend para KVM, el hipervisor moderno de Linux.
+El proyecto se ha realizado en C++11 y ensamblador NASM, utilizando GNU Make como herramienta para orquestrar el proceso de construcción del ISO final. Existe un único Makefile que utilizan todos los subproyectos: se ha denominado /helper/, y cada repositorio contiene un Makefile que lo incluye y customiza por medio de variables de entorno. Durante todo el desarrollo, las pruebas se han llevado a cabo con /qemu/ \cite{qemu}.
 
-Una /toolchain/ (compilador, linker, ensamblador...) de C o C++, sea la de GCC o clang (frontend de LLVM), se compila para soportar un único target. La versión de ~g++~ incluida en las distribuciones GNU/Linux está fuertemente conectada con la GNU libstdc++ y con el entorno userspace y kernel existentes en este sistema operativo. Con tal de poder empezar a escribir un sistema operativo, es necesaria una toolchain propia, y se denomina /cross compiler/, pues el código generado se ejecuta en otra arquitectura o entorno. Se ha utilizado, así, una versión compilada de G++ con el target ~amd64-elf~, genérico, que se enfoca en producir binarios en formato ELF para x86-64. El repositorio /toolchain/ contiene scripts para compilar estas herramientas, y su uso se explica en el Apéndice [[Cómo Compilar]].
+Una /toolchain/ (compilador, linker, ensamblador...) de C o C++, sea la de GCC o clang (frontend de LLVM), se compila para soportar un único target. La versión de ~g++~ incluida en las distribuciones GNU/Linux está fuertemente conectada con la GNU libstdc++ y con el entorno userspace y kernel existentes en este sistema operativo. Con tal de poder empezar a escribir uno, es necesaria una toolchain propia, y se denomina /cross compiler/, pues el código generado se ejecuta en otra arquitectura o entorno. Se ha utilizado, así, una versión compilada de G++ con el target ~amd64-elf~, genérico, que se enfoca en producir binarios en formato ELF para x86-64. El repositorio /toolchain/ contiene scripts para compilar estas herramientas, y su uso se explica en el Apéndice [[Cómo Compilar]].
 
 Se ha usado CI/CD, en forma de GitHub Actions, en el repositorio principal del repositorio (explicado más adelante), así como para la toolchain. De esta forma, están públicamente disponibles archivos ISO para ser descargados.
 
@@ -866,7 +993,7 @@ El proyecto se denomina /The Strife Project/. Su nombre proviene de Empédocles,
 Un sistema operativo se comienza y se abandona, jamás se termina. No está dentro de mis intenciones abandonarlo en el futuro, sino seguir trabajando en él en los próximos años de ser posible. Por esto, esta memoria retrata el estado de Strife en su versión identificada con el tag ~TFG~.
 
 *** Forma del proyecto
-Strife se publica como una distribución. Como se dejó ver anteriormente, la organización de GitHub contiene un repositorio por proyecto. Existe uno especial, llamado /Strife/, que mediante tecnología de /git submodules/ combina todos los otros proyectos, en sus versiones concretas, utilizando un Makefile específico para ello. La última versión generada por liberación continua está disponible [[https://github.com/the-strife-project/Strife/releases/latest][aquí]].
+Strife se publica como una distribución. Como se dejó ver anteriormente, la organización de GitHub contiene un repositorio por proyecto. Existe uno especial, llamado /Strife/, que mediante tecnología de /git submodules/ combina todos los otros proyectos, en sus versiones concretas, utilizando un Makefile específico para ello. La versión entregada, generada por liberación continua, está disponible [[https://github.com/the-strife-project/Strife/releases/TFG][aquí]] \cite{strifetfg}, y la última, de leerse esto en el futuro, [[https://github.com/the-strife-project/Strife/releases/latest][aquí]] \cite{strifelatest}.
 
 *** ¿Por qué x86?
 Si el lector llega a este punto, es perfectamente consciente de cuál es la arquitectura objetivo de Strife: x86-64. Al final de la Sección [[Motivación e historia]] se explicó que comenzó con el target IA-32 y posteriormente se hizo el cambio. Por esto, en esta sección la pregunta a responder, más que por qué dicha ISA es el objetivo, por qué considerar x86. La respuesta es sencilla: es el por defecto. A fecha de hoy, y de las últimas décadas, cuando un individuo comienza su primer sistema operativo, lo hace en x86, pues le hace ilusión probarlo eventualmente en hardware real, y x86 es de lo que dispone. Este caso no es una excepción. Además, esta arquitectura tiene cierto valor histórico. De las que no están muertas (como podría ser el MOS 6502/6510), es la más antigua, y entre las líneas de los manuales de Intel y AMD, que aparecen multitud de veces en las referencias al final de la memoria, uno puede ver el pasado.
@@ -881,7 +1008,7 @@ Limine soporta varios protocolos de arranque. A fecha de hoy, son: /stivale/, /s
 
 *** Mecanismos generales de seguridad
 Es foco prioritario del proyecto la seguridad. Por esto, Strife toma todas sus decisiones con la seguridad en mente, en lugar de la velocidad. Estas son las medidas más generales:
-- Diseño del kernel resistente a ataques Meltdown y Spectre por KPTI (/Kernel page-table isolation/). Esta es la primera decisión comentada en la memoria que se ve reflejada como tal en el código. En un sistema operativo usual, el kernel se encuentra en el higher half ([[Memoria]]), y marca sus páginas como globales. De esta forma, las páginas del modo supervisor están presentes en toda tabla de páginas, con lo que no es necesario hacer un cambio de contexto completo cuando ocurre una syscall. En 2019, se publicaron dos artículos que definían ataques sobre los procesadores por bugs en el hardware. El primero, Meltdown, por culpa de la ejecución fuera de orden que utilizan las CPUs modernas \cite{meltdown}. El segundo, Spectre, por culpa de la predicción de saltos \cite{spectre}. KPTI mitiga estos ataques haciendo que el kernel tenga su propio contexto, su propia tabla de páginas. Esto ralentiza mucho la mayoría de syscalls, a cambio de conseguir mitigar las vulnerabilidades.
+- Diseño del kernel resistente a ataques Meltdown y Spectre por KPTI (/Kernel page-table isolation/). Esta es la primera decisión comentada en la memoria que se ve reflejada como tal en el código. En un sistema operativo usual, el kernel se encuentra en el higher half (como se dijo en la Sección [[Memoria]]), y marca sus páginas como globales. De esta forma, las páginas del modo supervisor están presentes en toda tabla de páginas, con lo que no es necesario hacer un cambio de contexto completo cuando ocurre una syscall. En 2019, se publicaron dos artículos que definían ataques sobre los procesadores por bugs en el hardware y permiten la lectura de páginas del kernel. El primero, Meltdown, por culpa de la ejecución fuera de orden que utilizan las CPUs modernas \cite{meltdown}. El segundo, Spectre, por culpa de la predicción de saltos \cite{spectre}. KPTI mitiga estos ataques haciendo que el kernel tenga su propio contexto, su propia tabla de páginas. Esto ralentiza mucho la mayoría de syscalls, a cambio de conseguir mitigar las vulnerabilidades.
 - ASLR (/Address Space Layout Randomization/) obligatorio. Por este mecanismo, el cargador de programas monta el ejecutable y sus bibliotecas en distintas regiones de memoria generadas aleatoriamente. ASLR está habilitado por defecto en todos los sistemas operativos. Sin embargo, en Linux es posible deshabilitarlo, y en Strife es obligatorio.
 - SMAP (/Supervisor Memory Access Protection/) y SMEP (/Supervisor Memory Execute Protection/). Se trata de dos mecanismos de seguridad hardware. SMAP aparece en Broadwell (quinta generación), aunque SMEP existía desde Ivy Bridge. Así, únicamente se activa de estar en una arquitectura reciente, de otro modo se ignora, no es mandatorio tener Broadwell para arrancar Strife. SMEP previene que el kernel, ejecutándose en ring 0, ejecute código que es accesible para el usuario. Esto nunca debe suceder, pues el código accesible para el usuario viene de un ejecutable arbitrario. SMAP, en cambio, previene cualquier tipo de acceso a memoria de usuario desde ring 0. En ocasiones sí es necesario realizar un acceso, y por tanto la prevención solo actúa cuando la flag AC (/Alignment Check/) de la CPU está a 0. Cuando el kernel desee acceder, alza la flag, lee o escribe en la memoria de usuario, para después bajarla de nuevo.
 - NX stack obligatorio. Similar a ASLR, es un mecanismo dado en la mayoría de SSOO por defecto, aunque es posible desactivarlo, mientras que en Strife es mandatorio. Consiste en marcar las páginas de la pila como no ejecutables, lo que mitiga varios ataques de /buffer overflow/.
@@ -892,7 +1019,7 @@ El apartado gráfico no entra dentro de los intereses del proyecto. Durante el a
 - Modo vídeo. Es el usado por todos los sistemas operativos modernos. Se selecciona una resolución gráfica (ancho x alto) entre las soportadas, y la BIOS asigna un área de la memoria para un /framebuffer/ de colores, según la profundidad de bits, aunque generalmente son 3 bytes por píxel.
 - Modo texto. Retrocompatible con el IBM PC original, son modos gráficos en los que el framebuffer está constituido por pares ~<caracter, color>~. Se selecciona por BIOS un modo según sus filas y columnas, y a partir de ahí se pueden escribir caracteres en pantalla.
 
-En modo vídeo, es necesario rasterizar el texto si se quiere trabajar con una terminal y no un entorno gráfico completo, pues todo lo que se tienen son píxeles. Sin embargo, en modo texto, el programador del sistema tan solo selecciona la fuente y los caracteres. De no seleccionar la fuente, se tomará una por defecto, que generalmente resulta ser la famosa /code page 437/, apreciable en la Figura [[fig:437]].
+En modo vídeo, es necesario rasterizar el texto si se quiere trabajar con una terminal y no un entorno gráfico completo, pues todo lo que se tienen son píxeles. Sin embargo, en modo texto, el programador del sistema tan solo selecciona la fuente y los caracteres. De no seleccionar la fuente, se tomará una por defecto, que resulta ser la famosa /code page 437/, apreciable en la Figura [[fig:437]].
 
 #+NAME: fig:437
 #+CAPTION: Página de códigos 437, IBM
@@ -901,9 +1028,9 @@ En modo vídeo, es necesario rasterizar el texto si se quiere trabajar con una t
 \FloatBarrier
 
 *** Loader en userspace
-Una de las partes más importantes del sistema operativo es el /loader/, o cargador de programas (no confundir con bootloader). Su función es la de, a partir de un ejecutable, comprender las estructuras que lo forman y llegar a tener una representación final en memoria principal, el proceso. En Strife, como en varios otros SSOO microkernel, el loader se encuentra en userspace, es decir, es un proceso independiente. Esto supone un mayor reto técnico a tenerlo dentro del kernel, pues complica el problema del bootstrapping (Sección [[Bootstrapping]]).
+Una de las partes más importantes del sistema operativo es el /loader/, o cargador de programas (no confundir con bootloader). Su función es la de, a partir de un ejecutable, comprender las estructuras que lo forman y llegar a tener una representación final en memoria principal, el proceso. En Strife, como en varios otros SSOO microkernel, el loader se encuentra en userspace, es decir, es un proceso independiente. Esto supone un mayor reto técnico a tenerlo dentro del kernel, pues complica el problema del bootstrapping (se explicará en la Sección [[Bootstrapping]]).
 
-Es muy positivo sacar el loader del kernel. El objetivo de un microkernel es que los fallos de un servicio no afecten a otro, y un loader es muy propenso a fallos. No solo es difícil de escribir (por relocation, sobre todo), sino que es, sobre todo, muy fácil hacerlo mal: hay muchos punteros a distintas secciones del ejecutable, y cada uno de ellos debe ser comprobado para no acceder a memoria indebida. En muchas ocasiones tienen offsets, con lo cual la suma ha de ser hecha comprobando si se ha producido acarreo, y lo mismo pasa con los índices, cuyas multiplicaciones han de computar de forma segura.
+Es muy positivo sacar el loader del kernel. El objetivo de un microkernel es que los fallos de un servicio no afecten a otro, y un loader es muy propenso a fallos. No solo es difícil de escribir (por relocation, sobre todo), sino que es, más que nada, muy fácil hacerlo mal: hay muchos punteros a distintas secciones del ejecutable, y cada uno de ellos debe ser comprobado para no acceder a memoria indebida. En muchas ocasiones tienen offsets, con lo cual la suma ha de ser hecha comprobando si se ha producido acarreo, y lo mismo pasa con los índices, cuyas multiplicaciones se han de computar de forma segura.
 
 Como se dejó entrever en la Sección [[Herramientas utilizadas]], el formato elegido para los ejecutables es ELF (/Executable and Linkable Format/), originario de UNIX V4, y que utilizan muchos UNIX-like, entre ellos GNU/Linux y los BSDs. ELF es un formato bien diseñado, pero sus fundamentos se dejan para el siguiente capítulo.
 
@@ -918,12 +1045,12 @@ Strife idealmente debe tener dos formas de IPC: memoria compartida, y RPC. Memor
 
 POSIX utiliza un mecanismo de memoria compartida /global/. No es complejo de entender: en POSIX, el proceso de compartir memoria entre procesos se lleva a cabo por medio de claves (/keys/), y estas están vinculadas a un fichero del sistema de archivos (en UNIX todo es un archivo, la traducción se hace mediante la función ~ftok~ \cite{ftok}). Así, A debe hacerle saber a B de forma indirecta que dicho archivo es el que tiene la clave vinculada a la región de memoria a compartir. Esto es un mecanismo global porque utiliza un contexto global del sistema operativo: el sistema de archivos. Teóricamente, cualquier proceso que tenga permisos de lectura sobre ese archivo, puede obtener la clave y montar la región en su espacio de direccionamiento, realizando /snooping/. Windows hace algo muy similar con las funciones de la API ~CreateFileMapping~ y ~MapViewOfFile~ \cite{createfilemapping}.
 
-En Strife se busca un mecanismo de memoria compartida local, en el que el proceso de compartir memoria se realiza sin claves asignadas a archivos, de forma que verdaderamente solo A y B conozcan que están compartiendo memoria, y no sea posible el /snooping/ desde fuera. Esto se hace por medio de syscalls específicas, y se explicarán en el siguiente capítulo.
+En Strife se busca un mecanismo de memoria compartida local, en el que el proceso de compartir memoria se realiza sin claves asignadas a archivos, de forma que verdaderamente solo A y B conozcan que están compartiendo memoria, y no sea posible el /snooping/ desde fuera. Así, se define el concepto de SMID (/Shared Memory Identifier/), un identificador de la región compartida que es relativo a los PCBs de A y B. La compartición se hace por medio de syscalls específicas, y se explicarán en el siguiente capítulo.
 
 *** RPC
-La decisión más importante de Strife radica en la elección de RPC como IPC base, algo inusual en los sistemas operativos. RPC se puede entender como un caso específico de paso de mensajes síncrono, en el cual los mensajes son muy cortos, y están dirigidos a una función en concreto (como pasaba con los IRQs y los ISRs).
+La decisión más importante de Strife radica en la elección de RPC como IPC base, algo inusual en los sistemas operativos. RPC se puede entender como un caso específico de paso de mensajes síncrono, en el cual los mensajes son muy cortos, y están dirigidos a una función en concreto.
 
-Durante la rutina de syscall que tiene el kernel, la absoluta primera cosa que se hace es comprobar si el identificador de syscall es el de RPC, en cuyo caso todo el flujo de la rutina cambia y se ejecuta otro, escrito puramente en ensamblador, y que asegura jamás pasar por el scheduler. De forma un poco abstracta y sin llegar al nivel de instrucción, será explicada en detalle, qué hace paso a paso, en el capítulo siguiente.
+Durante la rutina de syscall que tiene el kernel, la absoluta primera cosa que se hace es comprobar si el identificador de syscall es el de RPC, en cuyo caso todo el flujo de la rutina cambia y se ejecuta otro, escrito puramente en ensamblador, y que asegura jamás pasar por el scheduler. De forma un poco abstracta y sin llegar al nivel de instrucción, será explicada en detalle en el capítulo siguiente.
 
 *Implementación original de RPC*: en esta sección se define un mecanismo de RPC de diseño propio, la /ejecución dual/. Cuando el cliente realiza RPC, no queda bloqueado en el proceso. En su lugar, su flujo de ejecución /entra/ dentro de la tarea remota. Esto hace que sea un mecanismo de IPC muy veloz, puesto que el salto se produce con un cambio de contexto limitado (se mantienen todos los registros del cliente, aunque se guardan para restaurarse luego, idea tomada de L4) y cero copias. Este uso de registros deja al programador un total de 4 registros para argumentos del procedimiento remoto, lo que son 32 bytes de datos. La ejecución dual hace que en todo momento un proceso se esté ejecutando, o bien como sí mismo, o bien como otro: un proceso en ejecución es un par ~<PID original, PID efectivo>~. Así, al contrario de lo que suele ocurrir en muchas implementaciones de paso de mensajes, se libera al servidor de la carga de abrir distintos threads para escuchar, y solo tiene que manejar las secciones críticas mediante cerrojos, semáforos, o directamente mediante el uso de algoritmos /lock-free/. Como es el cliente el que se está ejecutando dentro del servidor, y no el servidor en sí, el scheduler considera que es precisamente el cliente el que está en ejecución, no el servidor, y por tanto es este el que sube y baja en las colas de prioridad retroalimentadas. Esto hace que comportamientos costosos en tiempo del cliente no pasen desapercibidos y se culpe de ellos al servidor. De esta forma, los drivers esenciales del sistema operativo no necesitan tener una prioridad alta: su orden de ejecución depende únicamente del remitente.
 
@@ -945,7 +1072,7 @@ Concretando para Strife, se utilizan los valores $n_v = n_b = 3$, $n_r = 10$. Po
 
 ** Diseño del sistema de archivos
 *** Filosofía
-Un sistema operativo soporta uno o más sistemas de archivos. En el caso de la mayoría de SSOO, estos SSAA están fundados en grandes ideas de décadas pasadas (como el SA de UNIX), a veces alteradas con conceptos modernos de almacenamiento (familia ext*). Los SSOO en los que trabajan miles de personas de forma diaria suelen desarrollar su propio sistema de archivos para plasmar correctamente la visión abstracta que tienen de un entorno asociado a la filosofía del sistema. Curiosamente, esto también pasa en los SSOO independientes, que son proyectos personales, puesto que su objetivo primario es aprender y experimentar. Todo el rango de sistemas operativos que hay en medio, especialmente aquellos dedicados a sistemas empotrados o que tienen una finalidad específica, utilizan ya existentes.
+Un sistema operativo soporta uno o más sistemas de archivos. En el caso de la mayoría de SSOO, estos SSAA están fundados en grandes ideas de décadas pasadas (como el SA de UNIX), a veces alteradas con conceptos modernos de almacenamiento (familia ext*). Los SSOO en los que trabajan miles de personas de forma diaria suelen desarrollar su propio sistema de archivos para plasmar correctamente la visión abstracta que tienen de un entorno asociado a la filosofía del sistema. Curiosamente, esto también pasa en los SSOO independientes, que son proyectos personales, puesto que su objetivo primario es aprender y experimentar. Todo el rango de sistemas operativos que hay en medio, especialmente aquellos dedicados a sistemas empotrados o que tienen una finalidad específica, utilizan alguno de los ya existentes.
 
 Strife aporta su granito de arena al mundo de los sistemas de archivos con StrifeFS (/Strife File System/), que toma ideas de ext2, pero también de NTFS, el de Windows. StrifeFS está diseñado para ser el sistema de archivos más simple que puede implementar los mecanismos aquí descritos, y a cambio se sacrifican características como la tolerancia a fallos de sectores. Por esto, no es un sistema de archivos que pueda competir con el resto, sino más bien una prueba de concepto. Un futuro StrifeFS2 podría tomar estas ideas y llevarlas a algo más robusto [[[MM3][MM3]]]. Por todo esto, StrifeFS no soporta journaling.
 
@@ -958,12 +1085,21 @@ El único mecanismo de protección existente en el sistema de archivos son los A
 Esta solución, aunque más lenta (pese a acelerable por cachés), simplica mucho la jerarquía de directorios de todo el sistema operativo. Como nota, NTFS, el sistema de archivos de Windows, sí implementa ACLs, pero carecen de herencia. Por defecto, un archivo hereda la herencia del padre, pero no puede realizar cambios sobre él que se sumen a los de los niveles superiores \cite{ntfs}.
 
 *** Estructuras
-StrifeFS divide la memoria secundaria en cinco secciones:
-- Sector de superbloque.
-- Bitmap de inodos.
-- Bitmap de bloques.
-- Región de inodos.
-- Región de bloques.
+StrifeFS divide la memoria secundaria en cinco secciones, representadas en la Figura \ref{fig:strifefs}.
+
+#+begin_export latex
+\begin{figure}[h!]
+  \centering
+
+  \includesvg[
+    inkscapelatex=false,
+    width=150mm
+  ]{./imgs/strifefs}
+
+  \caption{Distribución del sistema de archivos StrifeFS}
+  \label{fig:strifefs}
+\end{figure}
+#+end_export
 
 Se definen cuatro estructuras: el superbloque, el inodo, la entrada de directorio, y la entrada de ACL.
 
@@ -1018,7 +1154,26 @@ Nótese:
 ** El registro: un entorno innovador
 Habiendo resuelto el problema de la granularidad de permisos del sistema de archivos en la sección anterior, hay uno que no debe pasar desapercibido: los permisos en tiempo de ejecución.
 
-Strife *propone un nuevo sistema de MAC*: el /registro/. Siguiendo la línea del microkernel L3 de Liedtke, gestionar dentro del kernel los permisos de IPC es subóptimo y ralentiza todo el sistema, así que, en su lugar, se delega esta responsabilidad a los servicios individuales. Strife toma esta idea y aporta el registro como un mecanismo extranuclear que pueden usar los servicios, de así desearlo, para consultar de forma uniforme todos sus permisos. El identificador de procedimiento que recibe un servicio en cada IPC sería, así, comprobado en el registro al llegar, y cacheado en el servicio para minimizar los cambios de contexto.
+Strife *propone un nuevo sistema de MAC*: el /registro/. Siguiendo la línea del microkernel L3 de Liedtke, gestionar dentro del kernel los permisos de IPC es subóptimo y ralentiza todo el sistema, así que, en su lugar, se delega esta responsabilidad a los servicios individuales. Strife toma esta idea y aporta el registro como un mecanismo extranuclear que pueden usar los servicios, de así desearlo, para consultar de forma uniforme todos sus permisos. El identificador de procedimiento que recibe un servicio en cada IPC sería, así, comprobado en el registro al llegar, y cacheado en el servicio para minimizar los cambios de contexto. En la Figura \ref{fig:registro} se encuentra un posible escenario de uso del registro.
+
+#+begin_export latex
+\begin{figure}[h!]
+  \centering
+
+  \begin{sequencediagram}
+    \newthread{a}{Proceso A}
+    \newinst[5]{b}{Proceso B}
+    \newinst[5]{r}{Registro}
+
+    \begin{call} {a}{CREATE}{b} {OK}
+      \begin{call} {b}{has(USER(A), B\_CAN\_CREATE)}{r} {true} \end{call}
+    \end{call}
+  \end{sequencediagram}
+
+  \caption{Escenario de uso del registro}
+  \label{fig:registro}
+\end{figure}
+#+end_export
 
 El registro administra las capacidades de los usuarios, no de los programas. De esta forma, un usuario solo puede ejecutar un programa si los permisos que requiere (descubiertos en tiempo de ejecución) son un subconjunto de los que posee. Este mecanismo se denomina DAC (/Discretionary Access Control/), en el sentido de que los permisos del usuario pasan a los permisos del programa. Siguiendo esta línea, si el programa ejecutara otro, también se aplicaría una máscara. Así, un usuario jamás puede ejecutar un programa, directa o indirectamente, que requiera privilegios que no tiene: los privilegios solo pueden reducirse en el camino. Es diferente, sin embargo, el caso de RPC, donde se asume que el servidor implementa las protecciones apropiadas. Un usuario normal puede ejecutar un programa (~tests~, por ejemplo), que se comunique con ~VFS~, que es ejecutado por el usuario ~system~.
 
@@ -1027,7 +1182,22 @@ Un punto clave es que el registro se trata de una base de datos volátil, que ú
 Además de la gestión de permisos, el registro es responsable de mantener las políticas de escalación de privilegios. Para un usuario, contiene quién puede actuar como él (realizar el cambio de usuario), así como modificarlo. Un usuario puede aportar un permiso a otro solo si él cuenta con dicho permiso de antemano.
 
 ** Resumen de los proyectos
-Para tener una vista general del sistema operativo para las siguientes secciones, los proyectos específicos que forman la distribución oficial de Strife, en la versión indicada al principio del capítulo (entrega del TFG), se encuentran mencionados en esta sección.
+Para tener una vista general del sistema operativo para las siguientes secciones, los proyectos específicos que forman la distribución oficial de Strife, en la versión indicada al principio del capítulo (entrega del TFG), se encuentran mencionados en esta sección. En la Figura \ref{fig:arq} se encuentra un diagrama arquitectónico de los proyectos aquí descritos. Tras él, se mencionará el uso de cada uno.
+
+#+begin_export latex
+\begin{figure}[h!]
+  \centering
+
+  \includesvg[
+    inkscapelatex=false,
+    width=100mm
+  ]{./imgs/arq}
+
+  \caption{Diagrama arquitectónico}
+  \label{fig:arq}
+\end{figure}
+#+end_export
+
 *** Bibliotecas
 - ~stdlib~, la biblioteca estándar para comunicación con el kernel. Incluye una STL con estructuras de datos abstractas.
 *** Servicios
@@ -1058,7 +1228,7 @@ Conociendo todos los programas que forman parte de la distribución oficial, res
 #+begin_export latex
 \begin{figure}[h!]
   \centering
-  \digraph[scale=0.7]{colab}{
+  \digraph[scale=0.6]{colab}{
     PCI -> term;
     AHCI -> term;
     AHCI -> PCI;
@@ -1079,16 +1249,15 @@ Conociendo todos los programas que forman parte de la distribución oficial, res
   \label{fig:grafo}
 \end{figure}
 #+end_export
-\FloatBarrier
 
 ** Bootstrapping
-El bootstrapping es el proceso de emerger un entorno de la nada. Es un problema propio de los microkernels, porque, en el momento del arranque, el kernel no tiene capacidad para completar el inicio por sí solo. Cuando un kernel monolítico o híbrido arranca, cuenta con una pila de almacenamiento completa que le permite comenzar a cargar programas, y el primero que suelen cargar es ~init~. En un microkernel, es necesario cargar los servicios que componen la pila para ello: ¿Cómo cargar el programa que permite acceder a los programas?. El problema se vuelve más complejo aún cuando el loader se saca del kernel y se hace un programa independiente: ¿Cómo cargar el programa que carga los programas?
+El bootstrapping es el proceso de emerger un entorno de la nada. Es un problema propio de los microkernels porque, en el momento del arranque, el kernel no tiene capacidad para completar el inicio por sí solo. Cuando un kernel monolítico o híbrido arranca, cuenta con una pila de almacenamiento completa que le permite comenzar a cargar programas, y el primero que suelen cargar es ~init~. En un microkernel, es necesario cargar los servicios que componen la pila para ello: ¿Cómo cargar el programa que permite acceder a los programas? El problema se vuelve más complejo aún cuando el loader se saca del kernel y se hace un programa independiente: ¿Cómo cargar el programa que carga los programas?
 
 Existen varias soluciones a la primera pregunta:
 1. Repetir los drivers, usando solo las versiones del kernel durante el proceso de bootstrapping, y abandonándolas después. Esto es muy difícil de mantener, porque las dos versiones han de ser necesariamente distintas: el entorno del kernel es muy distinto al userspace. Se podrían abstraer las diferencias en la biblioteca estándar, pero se complicaría más de lo debido dicho proyecto.
 2. Propagar el problema hacia arriba. Se repiten los drivers, pero en el bootloader, donde necesariamente se encuentran ya repetidos. Muchos protocolos de arranque (entre ellos, stivale2) permiten enviar ficheros del sistema de archivos cargados durante el arranque al kernel, y, de esta forma, el kernel solo tiene que buscarlos.
 
-El kernl de Strife utiliza la segunda opción. Para responer a la segunda pregunta (carga del loader), tan solo hay una respuesta: tener un cargador de programas simplificado dentro del kernel. Con tal de simplificar el código, se suele restringir el tipo de binario a cargar para que sea enlazado estáticamente. En el caso de ELF, esto quita mucha de la complejidad del proceso de parsing.
+El kernel de Strife utiliza la segunda opción. Para responer a la segunda pregunta (carga del loader), tan solo hay una respuesta: tener un cargador de programas simplificado dentro del kernel. Con tal de simplificar el código, se suele restringir el tipo de binario a cargar para que sea enlazado estáticamente. En el caso de ELF, esto quita mucha de la complejidad del proceso de parsing.
 
 El proyecto Strife va un paso más allá y diseña un formato propio de ejecutable extremadamente simple para ser cargado con poco código. Se trata de SUS, y su estructura es la siguiente:
 - Número mágico para ser reconocido: ~7F555355~ (4 bytes).
@@ -1097,14 +1266,30 @@ El proyecto Strife va un paso más allá y diseña un formato propio de ejecutab
 
 En el repositorio del loader se aporta un programa, ~elf2sus.py~, que realiza la transformación de un formato a otro. Este programa es llamado en el Makefile del subproyecto, de forma que el fichero resultante del proceso de compilación es ~loader.sus~.
 
-*Aportación*: el tipo de archivo SUS es el más simple posible que contiene un cargador de programas para ser cargado como primer paso de bootstrapping de un microkernel. Si bien se podría hacer directamente un binario plano, requeriría que el punto de entrada estuviera en 0, y cargar una tarea con dirección base 0 resulta mala idea, puesto que la derreferencia del puntero nulo es válida.
+El tipo de archivo SUS es el más simple posible que contiene un cargador de programas para ser cargado como primer paso de bootstrapping de un microkernel. Si bien se podría hacer directamente un binario plano, requeriría que el punto de entrada estuviera en 0, y cargar una tarea con dirección base 0 resulta mala idea, puesto que la derreferencia del puntero nulo es válida.
+
+Para terminar el capítulo, en la Figura \ref{fig:boot} se encuentra el orden en el que se arrancan los distintos procesos. Su número corresponde, además, con su PID.
+
+#+begin_export latex
+\begin{figure}[h!]
+  \centering
+
+  \includesvg[
+    inkscapelatex=false,
+    width=150mm
+  ]{./imgs/boot}
+
+  \caption{Arranque de Strife}
+  \label{fig:boot}
+\end{figure}
+#+end_export
 
 * Diseño Detallado, Implementación, y Pruebas
 ** Kernel
 El kernel, siendo el proyecto más grande y complejo de todo el trabajo, toma muchas decisiones que son importantes de mencionar para entender cómo realiza las intenciones expresadas en el capítulo anterior. Se hará primero un repaso por lo más fundamental: los descriptores, tanto de segmentos como de interrupciones. Sin ellos, no existe sistema operativo. Tener una GDT válida permite la gestión de la memoria, y este será el siguiente tema a atacar. Después, comienza el userspace: syscalls, IPC, scheduler, y, para finalizar, cómo funciona el equivalente a ~main~ en el kernel.
 
 *** GDT
-En un x86, en todo momento debe de haber presente una GDT válida. Al arranque, BIOS proporciona una, que varía entre fabricantes, con lo que no se puede confiar en ella; en general, hay que desconfiar de las BIOS, la gran mayoría tienen bugs en unas partes u otras. Por esto, el bootloader, en su stage 1, hace el cambio a una GDT conocida, con segmentos especificados (generalmente muy simples), y, conforme va cambiando el modo del procesador, la va alterando. Cuando se llega al kernel, este debe establecer la suya propia, para ser independiente del bootloader.
+En un x86, en todo momento debe de haber presente una GDT válida. Al arranque, BIOS proporciona una, que varía entre fabricantes, con lo que no se puede confiar en ella; en general, hay que desconfiar de las BIOS, la gran mayoría tienen bugs en unas partes u otras. Por esto, el bootloader, en su stage 1, hace el cambio a una GDT conocida, con segmentos especificados (muy simples), y, conforme va cambiando el modo del procesador, la va alterando. Cuando se llega al kernel, este debe establecer la suya propia, para ser independiente del bootloader.
 
 Strife inicializa la segmentación con tan solo cuatro selectores generales:
 - Kernel code, para el registro CS (/Code Segment/). Ring 0.
@@ -1131,9 +1316,9 @@ Las funciones de reserva y liberación de memoria física están implementadas b
 *** VMM
 Siendo capaz el kernel de reservar memorias físicas, y después de haber habilitado la paginación, se necesita hacer lo mismo en el espacio de direccionamiento virtual. En el caso de Strife, para mitigar los ataques Meltdown y Spectre, el VMM se separa en dos distintos: uno privado, que gestiona las páginas privadas del contexto del kernel, que resulta ser el PMM, y otro público, que trabaja con páginas marcadas como globales en todo contexto.
 
-En la tabla de páginas del kernel, la mitad inferior de la memoria está /mapeada/ uno-a-uno; es decir, las direcciones son las mismas en memoria física y virtual. Por esto, no es necesario realizar ningún paso extra a la hora de reservar una página privada.
+En la tabla de páginas del kernel, la mitad inferior de la memoria está mapeada uno-a-uno; es decir, las direcciones son las mismas en memoria física y virtual. Por esto, no es necesario realizar ningún paso extra a la hora de reservar una página privada.
 
-El público es similar. Se hace la llama a la reserva del PMM, y después se /mapea/ la dirección física $F$ a la dirección virtual $V=F+\text{HIGHER\_HALF}$, marcándola en el proceso como global y no-ejecutable. Para este caso, se tienen las funciones ~PublicMM::alloc~, ~PublicMM::free~, y ~PublicMM::calloc~.
+El público es similar. Se hace la llama a la reserva del PMM, y después se mapea la dirección física $F$ a la dirección virtual $V=F+\text{HIGHER\_HALF}$, marcándola en el proceso como global y no-ejecutable. Para este caso, se tienen las funciones ~PublicMM::alloc~, ~PublicMM::free~, y ~PublicMM::calloc~.
 
 *** Syscalls
 Antes de continuar con las explicaciones sobre el kernel, ha llegado el momento de enumerar las syscalls. Existen 35 de ellas, y algunas requieren privilegios de ejecución que se comprueban en el kernel desde el registro [[[MM7][MM7]]]. En la Tabla [[tab:syscalls]] se encuentran las diferentes syscalls que existen en el microkernel de Strife con información sobre cada una.
@@ -1189,9 +1374,9 @@ Antes de continuar con las explicaciones sobre el kernel, ha llegado el momento 
 \FloatBarrier
 
 Se procede a explicar las que están marcadas como área general, hardware, y cerrojos; el resto se explicarán en sus correspondientes secciones.
-- ~EXIT~ es la syscall que permite que un proceso termine. Recibe un argumento, su valor de retorno. Al ocurrir, se libera la memoria del proceso, y su valor de retorno pasa al proceso padre.
+- ~EXIT~ es la syscall que permite que un proceso termine. Recibe un argumento, su valor de salida. Al ocurrir, se libera la memoria del proceso, y su valor de retorno pasa al proceso padre.
 - ~MORE_HEAP~ reserva más heap. Tiene un parámetro que indica el número de páginas adicionales a reservar. De ocurrir la reserva, devuelve el puntero a la primera página reservada. De fallar, devuelve /nullptr/ (0).
-- ~MMAP~ toma 2 parámetros, y hace una reserva de $a$ páginas en una dirección arbitraria dada por ASLR, asignando en el proceso los permisos ~b~, que son un mapa de flags:
+- ~MMAP~ toma 2 parámetros, y hace una reserva de $a$ páginas en una dirección arbitraria dada por ASLR, asignando en el proceso los permisos $b$, que son un mapa de flags:
   - ~MMAP_RW~ permite la escritura sobre las páginas.
   - ~MMAP_EXEC~ permite la ejecución.
   - ~MMAP_RWX = MMAP_RW | MMAP_EXEC~
@@ -1235,24 +1420,26 @@ Un RPC está compuesto por dos pasos: una ida y una vuelta. Un concepto fundamen
 
 A la vuelta, es necesario comprobar que la página en la que se encuentra este billete de vuelta es, efectivamente, del kernel, para evitar falsas vueltas de RPC que nunca han tenido una ida. Esta comprobación resultaría costosa en tiempo y difícil de programar: teniendo la página virtual, habría que recorrer los cuatro niveles de paginación para comprobar que efectivamente existe y además es propiedad del kernel. Además, en ensamblador, porque todo lo relativo a RPC está en dicho lenguaje. Existe una solución mucho más elegante: causar un page fault desde el servidor que indique la vuelta. Este page fault se disparará al intentar leer bytes de esta página, pues es propiedad del kernel, y el ISR comprobará, como se presagió en la Sección [[IDT e ISRs]], si efectivamente se cumplen las condiciones que identifican a un return ticket: ser una página en la mitad inferior de la memoria que a su vez es únicamente accesible por el kernel. De darse el caso, el kernel hará el salto a la rutina de vuelta de RPC, y se habrá evitado hacer la comprobación por software: la habrá hecho la MMU.
 
-Las bases de RPC han quedado, con esto, explicadas. El código que las realiza es difícil de entender y lleno de trucos de ensamblador que no se consideran de relevancia para explicar aquí. Las rutinas de ida y vuelta de RPC contienen el código más complejo que he escrito en mi vida, y estoy orgulloso de ellas. Por si el lector quisiera echarles un ojo, se encuentran [[https://github.com/the-strife-project/kernel/blob/main/src/syscalls/rpcSwitcher.asm][aquí]] \cite{rpcswitcher}.
+Las bases de RPC han quedado, con esto, explicadas. El código que las realiza es difícil de entender y lleno de trucos de ensamblador que no se consideran de relevancia para explicar aquí. Las rutinas de ida y vuelta de RPC contienen el código más complejo que he escrito en mi vida, y estoy orgulloso de ellas. Por si el lector quisiera echarles un ojo, se encuentran [[https://github.com/the-strife-project/kernel/blob/c6be30bff6c9748da499ad92e2a577058665da57/src/syscalls/rpcSwitcher.asm][aquí]] \cite{rpcswitcher}.
 
 *** Memoria compartida en detalle
-El procedimiento de compartir memoria se hace parcialmente en el kernel, parcialmente fuera. El PCB tiene un campo con un puntero a una página específica para memoria compartida. En ella, se almacenan cuartetos ~<SMID, kptr, tptr, allowed>~; es decir, la página virtual en el espacio de direccionamiento del proceso que la pidió, así como el proceso con el que quiere compartirla. Por esto, solo es posible compartir una página con un proceso, y una tarea solo puede compartir 128 páginas simultáneamente (son los cuartetos que caben en una página, 4*8 bytes sobre 4096) [[[MM12][MM12]]].
+El procedimiento de compartir memoria se hace parcialmente en el kernel, parcialmente fuera. El PCB tiene un campo con un puntero a una página específica para memoria compartida. En ella, se almacenan cuartetos ~<SMID, kptr, tptr, allowed>~; es decir, el identificador, la primera página física, la primera virtual en el espacio de direccionamiento del proceso que la pidió, y el proceso con el que quiere compartirla. Una tarea solo puede compartir 128 páginas simultáneamente (son los cuartetos que caben en una página, 4*8 bytes sobre 4096) [[[MM12][MM12]]].
 
 Se definen seis syscalls:
-- ~SM_MAKE~ crea una nueva región de memoria compartida. No recibe argumentos, y devuelve un SMID (/Shared Memory Identifier/) de 64 bits generado aleatoriamente. Se espera que la ejecute el cliente.
-- ~SM_ALLOW~ recibe como argumentos el SMID y un nuevo valor para el campo ~allowed~ al PID dado.
-- ~SM_REQUEST~ es ejecutada por el servidor, y tiene como argumentos el PID del cliente y el el SMID. Esta syscall copia el cuarteto de memoria compartida del cliente al PCB del servidor, permitiendo su acceso.
+- ~SM_MAKE~ crea una nueva región de memoria compartida. Recibe un argumento: la cantidad de páginas. Devuelve un SMID (/Shared Memory Identifier/) de 64 bits generado aleatoriamente. Se espera que la ejecute el cliente.
+- ~SM_ALLOW~ recibe como argumentos el SMID y un nuevo valor para el campo ~allowed~, con el PID del servidor.
+- ~SM_REQUEST~ es ejecutada por el servidor, y tiene como argumentos el PID del cliente y el el SMID. Esta syscall copia el cuarteto de memoria compartida del cliente al PCB del servidor, si así lo dicta ~allowed~.
 - ~SM_GETSIZE~ es para el servidor, y su único argumento es el SMID. Devuelve el número de páginas por el que está compuesta la región. Esto permite al servicio hacer comprobaciones sobre el espacio disponible para las estructuras requeridas.
 - ~SM_MAP~, ejecutada tanto por el cliente como el servidor, toma el SMID y, finalmente, monta la región compartida al espacio de direccionamiento virtual del proceso que efectúa la syscall, dada la base por ASLR.
-- ~SM_DROP~ /suelta/ el SMID del PCB de la tarea que lo ejecuta para permitir que entren otros. Nótese que no libera, simplemente elimina la estructura; la liberación se lleva a cabo por ~MUNMAP~.
+- ~SM_DROP~ /suelta/ el SMID del PCB de la tarea que lo ejecuta para permitir que entren otros. Nótese que no libera, simplemente elimina la estructura; la liberación se lleva a cabo por ~MUNMAP~, y debe realizarse primero.
 
 El mecanismo de ~SM_REQUEST~ está hecho para que el servidor pida expresamente que quiere ese SMID en su lista (recordemos, finita) de regiones de memoria compartida, y evitar un posible inundamiento malicioso de SMIDs. En estas syscalls, el lector se habrá dado cuenta de que en ningún momento el servidor conoce el SMID del cliente. Esta información ha de ser pasada de forma externa, y se recomienda el uso de un RPC para ello. Algunos servicios aportados en la distribución oficial contienen un procedimiento público (con su RPID asociado) denominado ~connect~ que sirve para esto mismo. En otros, el SMID se toma como parámetro en cada llamada, y así montar una región nueva, del tamaño necesario, cada vez [[[MM13][MM13]]].
 
-Habiendo explicado todo esto, el mecanismo para establecer una región de memoria compartida es el siguiente:
+Habiendo explicado todo esto, el mecanismo para establecer una región de memoria compartida se puede encontrar en la Figura \ref{fig:sm}.
 #+begin_export latex
-\begin{center}
+\begin{figure}[h!]
+  \centering
+
   \begin{sequencediagram}
     \newthread{a}{Proceso A}
     \newinst[4]{k}{Kernel}
@@ -1268,7 +1455,10 @@ Habiendo explicado todo esto, el mecanismo para establecer una región de memori
 
     \begin{call} {a}{SM\_MAP(SMID)}{k} {$\text{ptr}_A$} \end{call}
   \end{sequencediagram}
-\end{center}
+
+  \caption{Mecanismo de memoria compartida}
+  \label{fig:sm}
+\end{figure}
 #+end_export
 
 Esto rellena los campos poco a poco. Después de ~SM_MAKE~ (que reserva una única página), uno de los índices aparece con su campo SMID distinto de cero, y ~kptr~ (puntero del kernel, se podría entender como el físico), se reserva. Tras ~SM_ALLOW~, se rellena ~allowed~, y solo tras ~SM_MAP~ se establece el valor de ~tptr~ (task pointer). Unificar ~SM_MAKE~ y ~SM_MAP~ haría que el campo ~kptr~ dejara de ser necesario, pues siempre habría un ~tptr~ cuya página física es computable. Sin embargo, tendría la desventaja de que la reserva de memoria virtual solo se podría llevar a cabo antes de saber si ha habido un error en la comunicación por RPC, y los servicios perderían esta libertad.
@@ -1288,7 +1478,7 @@ Como se viene diciendo desde el principio de este trabajo, la estructura que rep
 - PID de la tarea dentro de la cual se encuentra el flujo de ejecución (valor de ~runningAs~, ver más adelante).
 - Un booleano sobre si la tarea ha llamado a ~LOCK~ y está pendiente de un ~WAKE~.
 - Número de páginas usadas.
-- ~prog~, ~heap~, y ~stack~ son las bases ASLR para estas regiones de memoria. ~prog~ es el lugar de la primera página del programa, ~heap~ es la primera página de la heap (esté reservada o no), y ~stack~ es la primera página después de la pila que no forma parte de ella; esto es, el valor inicial de RSP (recordemos que un PUSH en x86 primero decrementa RSP y después escribe).
+- ~prog~, ~heap~, y ~stack~ son las bases ASLR para estas regiones de memoria. ~prog~ es el lugar de la primera página del programa, ~heap~ es la primera página de la heap (esté reservada o no), y ~stack~ es la primera página después de la pila que no forma parte de ella; esto es, el valor inicial de RSP.
 - ~maxHeapBottom~ y ~maxStackTop~ precomputan cuáles son las páginas máxima y mínima de la heap y el stack respectivamente, con tal de hacer la comparación rápidamente en caso de page fault.
 - Una instancia de ~ASLR~ que contiene las regiones libres de memoria virtual consecutiva para poder hacer reservas aleatorias.
 - Un puntero a la página de SMIDs, inicializado a ~nullptr~ y asignado en caso de ser necesario.
@@ -1338,7 +1528,7 @@ Existe un mecanismo especial utilizado en RPC para obtener el puntero al PCB des
 
 El scheduler no tiene mucha complicación práctica. Su justificación teórica se aportó en la Sección [[Scheduler]], y, en realidad, lo único que el lector debe conocer es que existe una función, ~schedule()~, que obtiene la próxima tarea que debe ejecutarse y llama al dispatcher.
 
-Resulta de interés en esta sección discutir este último punto; en realidad, existen dos dispatchers: ~dispatch~ y ~dispatchSaving~, ambas funciones de la clase Task. El primero está contenido dentro del segundo por medio de /fallthrough/ de instrucciones. ~dispatch~ es el intuitivo: realiza el cambio de contexto a la tarea, restaurando los registros y cambiando la tabla de páginas y selectores en el proceso. ~dispatchSaving~, además, primero guarda el flujo de ejecución del kernel en variables globales para ser restaurado luego. Este mecanismo se usa en el proceso de bootstrapping, cuando el microkernel tiene una serie de programas que ejecutar secuencialmente. También se usa cuando se comprueban algunos permisos en el registro, pero eso se explicará en la Sección [[Registro]].
+Resulta de interés en esta sección discutir este último punto; en realidad, existen dos dispatchers: ~dispatch~ y ~dispatchSaving~, ambos métodos de la clase Task. El primero está contenido dentro del segundo por medio de /fallthrough/ de instrucciones. ~dispatch~ es el intuitivo: realiza el cambio de contexto a la tarea, restaurando los registros y cambiando la tabla de páginas y selectores en el proceso. ~dispatchSaving~, además, primero guarda el flujo de ejecución del kernel en variables globales para ser restaurado luego. Este mecanismo se usa en el proceso de bootstrapping, cuando el microkernel tiene una serie de programas que ejecutar secuencialmente. También se usa cuando se comprueban algunos permisos en el registro, pero eso se explicará en la Sección [[Registro]].
 
 Para la ejecución dual, existen dos vectores en memoria que mantienen los procesos en ejecución en un instante dado: ~origRunning~ y ~runningAs~, ambos de longitud igual al número de cores de la CPU. Suponga el caso en que un proceso A se encuentra, por RPC, dentro de otro proceso B. En ese instante, el core tiene su ~origRunning~ en A, y su ~runningAs~ en B. ~runningAs~ es el usado en la mayoría de syscalls, pues es el proceso a quien debe modificarse. ~origRunning~ se usa, sobre todo, para el scheduler. De esta manera, cuando un servicio hace ~HALT~, no vuelve a entrar en el scheduler. Todo código que se ejecute será por medio de RPCs, y lo estarán ejecutando otros procesos. Esto es una gran diferencia con respecto a paso de mensajes, donde el servidor queda a la escucha y maneja las peticiones.
 
@@ -1373,19 +1563,18 @@ Esta sección puede satisfacer la curiosidad del lector: /¿Cómo será el ~main
 4. Se inicializa el PMM usando el mapa de memoria.
 5. Se inicializa la tabla de páginas del kernel, también usando el mapa de memoria.
 6. En este punto, se parsean las tablas ACPI.
-7. Se inicializa la LAPIC del BSP y la IOAPIC.
-8. Se inicializan los allocators del kernel para tener una granularidad más fina de reservas de memoria dinámica.
-9. Se preparan las pilas que usarán el resto de cores del sistema.
-10. Se crean y cargan las estructuras TSS, una para cada core.
-11. Se inicializan la LAPIC y la IOAPIC.
-12. Se calibra el LAPIC timer.
-13. Se inicializa el scheduler.
-14. Se habilitan las syscalls.
-15. Se habilitan los mecanismos de seguridad SMEP y SMAP, de estar soportados.
-16. Se obtiene la entropía para inicializar el CSPRNG.
-17. Comienza el bootstrapping del loader, con la carga del binario SUS.
-18. Comienza todo el bootstrapping del userspace, empezando por ~PSNS~ y terminando con ~VFS~.
-19. Se desbloquean el resto de cores [[[MM15][MM15]]], y todos llaman a ~schedule()~.
+7. Se inicializan los allocators del kernel para tener una granularidad más fina de reservas de memoria dinámica.
+8. Se preparan las pilas que usarán el resto de cores del sistema.
+9. Se crean y cargan las estructuras TSS, una para cada core.
+10. Se inicializan la LAPIC y la IOAPIC.
+11. Se calibra el LAPIC timer.
+12. Se inicializa el scheduler.
+13. Se habilitan las syscalls.
+14. Se habilitan los mecanismos de seguridad SMEP y SMAP, de estar soportados.
+15. Se obtiene la entropía para inicializar el CSPRNG.
+16. Comienza el bootstrapping del loader, con la carga del binario SUS.
+17. Comienza todo el bootstrapping del userspace, empezando por ~PSNS~ y terminando con ~VFS~.
+18. Se desbloquean el resto de cores [[[MM15][MM15]]], y todos llaman a ~schedule()~.
 ** Flujo PSNS
 El Public Service Namespace es un mecanismo muy simple para asignar nombres a procesos concretos, como se dijo en la Sección [[PSNS]]. Utiliza tan solo una syscall, ~FIND_PSNS~, que obtiene del kernel el PID del servicio para comunicarse con él por RPC y realizar las siguientes resoluciones de nombres.
 
@@ -1393,7 +1582,7 @@ Existen dos procedimientos públicamente disponibles para comunicarse con el ser
 - ~PUBLISH~ publica el nombre, pasado por parámetro, del proceso que realiza la llamada. De existir ya el nombre, simplemente devuelve /false/. Sería una terrible idea sobrescribir el PID, pues esto permitiría que un proceso malicioso actuara como /Man in the Middle/ entre los clientes y el servidor, dándole, además, la libertad de crashear el cliente, que podría ser un servicio imprescindible.
 - ~RESOLVE~ resuelve el nombre, también pasado por parámetro. De no existir, devuelve 0, que es un PID que se garantiza que jamás será asignado.
 
-Se comentó en la Sección [[RPC]] que los parámetros de un RPC son a lo sumo 4 enteros de tamaño de registro (~size_t~, 64 bits). Para poder enviar el nombre, se limitan los nombres públicos a 8 caracteres, y el nombre pasa por un proceso de marshalling para transformarlo en un entero. Si el nombre es de menos de 8 caracteres, los restantes se dejan a cero. Esta funcionalidad está encapsulada en la biblioteca estándar, con lo que el programador no tiene que preocuparse de esto.
+Se comentó en la Sección [[RPC]] que los parámetros de un RPC son a lo sumo 4 enteros de tamaño de registro (~size_t~, 64 bits). Para poder enviar el nombre, se limitan los nombres públicos a 8 caracteres, y el nombre pasa por un proceso de marshalling para transformarlo en un entero. Si el nombre es de menos de 8 caracteres, los restantes se dejan a cero. Esta funcionalidad está encapsulada en la biblioteca estándar, con lo que el programador no tiene que preocuparse de ello.
 
 El PSNS, dejando de lado su importancia en todo el entorno del sistema operativo, es un programa muy sencillo. La traducción de nombre a PID se realiza por medio de una tabla hash, cuya implementación está en la STL de la biblioteca estándar (explicado al final de este capítulo).
 
@@ -1427,7 +1616,7 @@ Las secciones dividen el ejecutable de forma que se entienda qué contiene cada 
 
 Existe una sección, ~.dynamic~, que contiene la lista de bibliotecas dinámicas necesarias para el ejecutable, identificadas por nombre (por ejemplo, ~libstd.so~), que el sistema operativo debe cargar de forma independiente y posar sobre el espacio de direccionamiento.
 
-Generalmente, las bibliotecas no se copian, porque sería un gasto innecesario de memoria física, sino que se referencian. Esta trampa se denomina CoW (/Copy on Write/), donde las páginas se marcan como solo lectura, y solo se copian si ocurre un page fault de escritura sobre ellas [[[MM16][MM16]]].
+Las bibliotecas no se copian, porque sería un gasto innecesario de memoria física, sino que se referencian. Esta trampa se denomina CoW (/Copy on Write/), donde las páginas se marcan como solo lectura, y solo se copian si ocurre un page fault de escritura sobre ellas [[[MM16][MM16]]].
 
 Las relocations en un ELF, o sea, el enlazamiento dinámico de funciones requeridas en tiempo de ejecución, tienen varios tipos que el procesador elige dependiendo del contexto. No varían muchos entre ellos, y algunos son muy poco comunes, con lo que Strife únicamente implementa aquellos que han aparecido empíricamente. Ejemplos pueden ser ~R_X86_64_JUMP_SLOT~ o ~R_X86_64_GLOB_DAT~.
 
@@ -1443,7 +1632,7 @@ Tras esto, el loader queda en estado bloqueado hasta que el kernel quiera cargar
 
 Para efectuar la carga, el loader necesita comunicarse con el kernel, y esto lo hace mediante tres syscalls:
 - ~MAKE_PROCESS~, que crea un PCB vacío (con una tabla de páginas que solo contiene las referencias al kernel y ~generalTask~), pero con un PID reservado.
-- ~ASLR_GET~, que se comunica con el objeto ASLR del PCB. Esto se hace por medio de regiones, identificadas numéricamente, que representan cada región. La syscall reibe el PID del proceso a consultar, el identificador de la región, y el número de páginas a reservar, en caso de que la región no exista anteriormente. Devuelve la dirección en el espacio virtual del nuevo proceso.
+- ~ASLR_GET~, que se comunica con el objeto ASLR del PCB. Esto se hace por medio de regiones identificadas numéricamente. La syscall reibe el PID del proceso a consultar, el identificador de la región, y el número de páginas a reservar, en caso de que la región no exista anteriormente. Devuelve la dirección en el espacio virtual del nuevo proceso.
 - ~MAP_IN~, que toma una página de la memoria del loader y la sitúa en un punto concreto de la memoria del nuevo proceso.
 
 #+NAME: tab:loader
@@ -1465,9 +1654,37 @@ Para efectuar la carga, el loader necesita comunicarse con el kernel, y esto lo 
 |     12 | ~FAILED_RELOCATION~      | No existe la función referenciada dinámicamente     |
 \FloatBarrier
 
-Una tarea puede iniciar este mecanismo mediante la syscall ~EXEC~, pasándole al kernel un puntero donde está cargado el ejecutable, así como su tamaño. No se permite la comunicación directa con el loader, pues no debe requerir permisos, y el cliente podría llegar a congelar el cargador de programas (o saturar su memoria virtual) mediante el envío de páginas vacías.
+Una tarea puede iniciar este mecanismo mediante la syscall ~EXEC~, pasándole al kernel un puntero donde está cargado el ejecutable, así como su tamaño. En la Figura \ref{fig:loader} se encuentra un diagrama que expresa el proceso descrito. No se permite la comunicación directa con el loader, pues no debe requerir permisos, y el cliente podría llegar a congelar el cargador de programas (o saturar su memoria virtual) mediante el envío de páginas vacías.
 
 Conociendo ahora que ~EXEC~ toma una secuencia de páginas de cualquier proceso, es como se explica que el kernel en ningún momento conozca la ruta del ejecutable cargado (podría, incluso, haberse generado en RAM). Por esto, en Strife, no tiene sentido una flag del ACL para el permiso de ejecución.
+
+#+begin_export latex
+\begin{figure}[h!]
+  \makebox[\textwidth][c] {
+    \begin{sequencediagram}
+      \newthread{a}{Proceso A}
+      \newinst[2]{k}{Kernel}
+      \newinst[4.7]{l}{Loader}
+      \newinst[2]{b}{Proceso B}
+
+      \begin{call} {a}{EXEC}{k} {B}
+        \begin{call} {k}{(Vuelta de BACK\_FROM\_LOADER)}{l} {BACK\_FROM\_LOADER(B, err, ep)}
+          \begin{call} {l}{MAKE\_PROCESS}{k} {B}
+            \begin{call} {k}{(Crea)}{b} {} \end{call}
+          \end{call}
+          \begin{call} {l}{ASLR\_GET(B, ...)}{k} {addr} \end{call}
+          \begin{call} {l}{MAP\_IN(B, addr+off, ...)}{k} {OK}
+            \begin{call} {k}{(Mapea)}{b} {} \end{call}
+          \end{call}
+        \end{call}
+      \end{call}
+    \end{sequencediagram}
+  }
+
+  \caption{Flujo de ejecución del loader}
+  \label{fig:loader}
+\end{figure}
+#+end_export
 
 ** Registro
 *** Jerarquía
@@ -1555,14 +1772,7 @@ En la segunda, la CPU tan solo manda las órdenes de copia, y el dispositivo tom
 
 Estas órdenes que se envían al HBA se forman como FIS (/Frame Information Structure/), una estructura propia de AHCI. Estas órdenes se reparten entre otras estructuras más, como el /Command Header/ y la /Command Table/, pero el objetivo de todas es uno: enviar órdenes.
 
-En el caso concreto de ATAPI, las órdenes que se envían son comandos SCSI (/Small Computer System Interface/) encapsulados en órdenes ATA, haciendo una gran mezcla de estándares y chips en el proceso, sobre la cual no se va a entrar en detalle.
-
-Existen tres formas de referirse a una localización en memoria secundaria:
-- Como una dirección lineal, de la misma forma que si fuera memoria primaria.
-- Como un LBA (/Logical Block Addressing/), el número de sector.
-- Muy antiguamente, con CHS (/Cylinder-Head-Sector/), una terna ~<cabeza, cilindro, sector>~.
-
-ATAPI define los sectores como bloques de 2KBs.
+En el caso concreto de ATAPI, las órdenes que se envían son comandos SCSI (/Small Computer System Interface/) encapsulados en órdenes ATA, haciendo una gran mezcla de estándares y chips en el proceso, sobre la cual no se va a entrar en detalle. Utiliza sectores de 2KBs.
 
 Lo que sí es preciso comentar son los procedimientos públicos, y están en la Tabla [[tab:ahci]].
 
@@ -1630,10 +1840,10 @@ Solo con estas dos estructuras se puede recorrer la jerarquía de directorios de
 
 El directorio raíz tiene nombre de longitud uno, y es solo un byte nulo. El resto de directorios tienen dos entradas como mínimo: la que representa al directorio actual (equivalente a ~.~), y la que representa al padre (equivalente a ~..~).
 
-Existen dos extensiones a ISO9660 que se suelen usar, /Rock Ridge/ y /Joliet/, que permiten cosas como nombres de archivos /case-sensitive/ y más profundidad en los directorios. Este driver únicamente Joliet, relativo al conjunto de caracteres usado en los nombres de los archivos, pero no Rock Ridge, que consiste en añadir los permisos UNIX.
+Existen dos extensiones a ISO9660 que se suelen usar, /Rock Ridge/ y /Joliet/, que permiten cosas como nombres de archivos /case-sensitive/ y más profundidad en los directorios. Este driver soporta Joliet, relativo al conjunto de caracteres usado en los nombres de los archivos, pero no Rock Ridge, que consiste en añadir los permisos POSIX.
 
-Este servicio abstrae los LBAs en forma de inodos, que realmente son la dirección lineal (lba * 2048 + offset). Además, define una estructura abstracta de fichero, cuyos campos son:
-- Inodo.
+Este servicio abstrae los LBAs en forma de números de inodo, que realmente son la dirección lineal (lba * 2048 + offset). Además, define una estructura abstracta de fichero, cuyos campos son:
+- Número de inodo.
 - Fecha de creación.
 - Tamaño del archivo en bytes.
 - Flags, solo se usa una: si es o no un directorio.
@@ -1702,7 +1912,7 @@ Tras esto, el VFS intenta identificar a qué punto de montaje corresponde la rut
 
 La ruta ~/cd/boot~ coincide en su primer caracter con el primer punto de montaje, y en sus cuatro primeros con el segundo. El que más caracteres coincida, terminando en ~/~, determina cuál es el punto de montaje. A partir de ese punto, se elimina la ruta de montaje de la ruta simplificada, y resulta en la ruta relativa, que es la que se envía al servicio correspondiente.
 
-ISO9660 se encapsula de forma que el ACL de todos los archivos hace que únicamente el usuario ~system~ (UID 1) pueda leer.
+ISO9660 se encapsula de forma que el ACL de todos los archivos esté vacío.
 
 Los procedimientos públicos se encuentran en la Tabla [[tab:vfs]]. Nótese cómo no aparecen permisos: todo proceso puede comunicarse con el VFS, es él el que se encarga de comprobar los permisos a posteriori según las entradas ACL.
 #+NAME: tab:vfs
@@ -1735,7 +1945,7 @@ Los procedimientos públicos se encuentran en la Tabla [[tab:vfs]]. Nótese cóm
 - ~ADD_ACL~ añade una entrada de ACL dada por parámetro, junto a su UID, al archivo seleccionado.
 - ~GET_ACL_SIZE~ funciona de forma similar a ~LIST_SIZE~, pero con entradas del ACL.
 - ~GET_ACL~ de la manera intuitiva.
-- ~GET_EACL_SIZE~, exactamente igual a ~GET_ACL_SIZE~, pero correspondiente a las entradas efectivas de ACL.
+- ~GET_EACL_SIZE~, exactamente igual a ~GET_ACL_SIZE~, pero correspondiente a las entradas efectivas de ACL (/sumadas/ hasta la raíz).
 - ~GET_EACL~, de la forma usual.
 
 ** Usuarios y switcher
@@ -1789,7 +1999,7 @@ La comunicación con ~term~ está abstraída dentro de la biblioteca estándar, 
 
 *** init
 ~init~ es el último programa que ejecuta el kernel, tras VFS. Con él, se termina el bootstrapping, y comienza el arranque del sistema teniendo un entorno desde el cual se pueden leer archivos (y, por tanto, cargar programas). Implementado en tan solo un archivo de 80 líneas, realiza las siguientes tareas de forma ordenada y síncrona:
-- Lanza el programa ~splash~ para mostrar el texto ~S  T  R  I  F  E~ centrado en la pantalla. No solo tiene un propósito estético: es el primer programa cargado, y es lo suficientemente simple como para poder diferenciar si un fallo del arranque se debe a la pila de almacenamiento o no.
+- Lanza el programa ~splash~ para mostrar el texto ~S  T  R  I  F  E~ centrado en la pantalla. No solo tiene un propósito estético: es el primer programa cargado sin ayuda del bootloader, y es lo suficientemente simple como para poder diferenciar si un fallo del arranque se debe a la pila de almacenamiento o no.
 - Ejecuta ~users~, y espera hasta que se publique en el PSNS.
 - Ejecuta ~registry~, y también espera hasta que aparezca allí.
 - Lo mismo hace con ~switcher~.
@@ -1823,9 +2033,7 @@ Teniendo el programa, se comprueba si es un /builtin/; esto es, un comando propi
 - ~cd~, para cambiar el directorio actual (/Change Directory/).
 - ~lev~, /Last Exit Value/, muestra el valor de salida de la última orden (equivalente a ~$?~ en una shell POSIX).
 
-Si ha resultado ser uno de los builtins, se ejecuta su rutina, y se vuelve al prompt. Sino, continúan las comprobaciones.
-
-En este punto, ha de tratarse de la ejecución de un programa. Si en algún punto contiene el caracter ~/~, entonces se trata de una ruta. [[[MM32][MM32]]]
+Si ha resultado ser uno de los builtins, se ejecuta su rutina, y se vuelve al prompt. Sino, en este punto, ha de tratarse de la ejecución de un programa. Si en algún punto contiene el caracter ~/~, entonces se trata de una ruta. [[[MM32][MM32]]]
 
 Si no lo contiene, se asume que se trata de una ruta relativa a ~PATH~, la variable de entorno que contiene las rutas en las que se encuentran los binarios globales a la shell. Por defecto, ~PATH=/cd/bin~. El separador de ~PATH~ es el mismo que UNIX y Windows, ~:~. Se itera por todas las rutas, y se comprueba si la concatenación de la ruta con el programa recibido en la línea existe. En cuyo caso, se ejecuta.
 
@@ -1867,7 +2075,7 @@ Si ninguna de las rutas de ~PATH~ con el programa existía, se muestra un mensaj
 Existen varios puntos de interés a comentar sobre la biblioteca estándar: la STL, el allocator, y las abstracciones aportadas sobre el sistema y servicios. Se explicarán en esta sección.
 
 *** La STL
-Una muy gran parte de la biblioteca estándar es la STL (/Standard Template Library/), un conjunto de clases que implementan estructuras de datos abstractas para ser usadas por el resto de programas de forma transparente. Ejemplos incluyen ~std::string~ o contenedores como ~std::set~ o ~std::unordered_map~. Son muy similares a las de otros sistemas operativos, pero no compatibles, pues no se adhieren necesariamente a la ABI de C++. Aquí se encuentra una lista de las estructuras abstractas de alto nivel implementadas:
+Una muy gran parte de la biblioteca estándar es la STL (/Standard Template Library/), un conjunto de clases que implementan estructuras de datos abstractas para ser usadas por el resto de programas de forma transparente. Ejemplos incluyen contenedores como ~std::set~ o ~std::unordered_map~, pero también ~std::string~. Son muy similares a las de otros sistemas operativos, pero no compatibles, pues no se adhieren necesariamente a la ABI de C++. Aquí se encuentra una lista de las estructuras abstractas de alto nivel implementadas:
 
 - ~bitmap~, un mapa de bits sobre una región de memoria dada. Es equivalente a un vector de booleanos, pero mucho más eficiente en memoria.
 - ~vector~, contenedor de datos consecutivos en memoria, rápidamente iterables. Implementado como un array.
@@ -1953,8 +2161,8 @@ Por otro, se aporta ~bool std::has(std::PID pid, const std::string& perm)~, que,
 
 *** Cabecera tasks
 ~<tasks>~ abstrae el funcionamiento de dos mecanismos:
-- la ejecución de tareas, para la cual se implementa ~std::PID std::run(const std::string&, const std::Args&, const std::Env&)~,
-- y la recepción de argumentos y variables de entornos, para lo que se ofrecen la clase ~std::Runtime~ y la estructura ~std::RuntimeV~. Todo programa en Strife recibe como parte de su ~main~ (realmente, ~_start~), un argumento: un objeto ~Runtime~. De su método ~parse()~ se puede obtener ~RuntimeV~, un par de ~Args~ y ~Env~.
+- La ejecución de tareas, para la cual se implementa ~std::PID std::run(const std::string&, const std::Args&, const std::Env&)~.
+- La recepción de argumentos y variables de entorno, para lo que se ofrecen la clase ~std::Runtime~ y la estructura ~std::RuntimeV~. Todo programa en Strife recibe como parte de su ~main~ (realmente, ~_start~), un argumento: un objeto ~Runtime~. De su método ~parse()~ se puede obtener ~RuntimeV~, un par de ~Args~ y ~Env~.
 
 *** Cabecera users
 ~<users>~ abstrae el servicio ~users~ de una forma muy simple:
@@ -1963,12 +2171,12 @@ Por otro, se aporta ~bool std::has(std::PID pid, const std::string& perm)~, que,
 - ~size_t std::howManyUsers()~ enumera los usuarios.
 - ~size_t std::newUser(std::string&)~ crea uno nuevo.
 
-Además, se aporta el one-liner ~size_t std::PIDtoUID(std::PID)~ para la traducción automática de PID a UID por medio de la syscall ~INFO~, con tal de reducir el boilerplate de los procedimientos públicos.
+Además, se aporta el /one-liner/ ~size_t std::PIDtoUID(std::PID)~ para la traducción automática de PID a UID por medio de la syscall ~INFO~, con tal de reducir el boilerplate de los procedimientos públicos.
 
 *** Cabecera mutex
 ~<mutex>~ aporta diversas semánticas de exclusión mutua. La más simple, ~std::Spinlock~ es el mismo ~test, test and set~ usado en el kernel.
 
-Usando ~std::Spinlock~ se crea ~std::Semaphore~. Además, se aporta ~std::Smokers~ para resolver el problema de los fumadores, necesario para el driver de teclado como se explicó en la Sección [[keyboard]], y generalizado a la stdlib por si hiciera falta en otro servicio.
+Usando ~std::Spinlock~ se crea ~std::Semaphore~. ~std::mutex~ se define como un semáforo de capacidad 1. Además, se aporta ~std::Smokers~ para resolver el problema de los fumadores, necesario para el driver de teclado como se explicó en la Sección [[keyboard]], y generalizado a la stdlib por si hiciera falta en otro servicio.
 
 *** Enumerados
 Existe un directorio de cabeceras, ~<userspace/*.hpp>~, que contiene enumerados de cada RPID para cada servicio, con tal de poder referenciarlo sin números mágicos.
@@ -1982,9 +2190,7 @@ Según todo lo explicado, existen tres generaciones de procesadores que funciona
 - Si la generación es *Ivy Bridge* o superior, entonces soporta la instrucción ~RDRAND~, que se usa para inicializar la pool de entropía, y, además, se tiene SMEP, que se habilita.
 - Si la generación es *Broadwell*, soporta SMAP, que se habilita.
 
-De esta forma, se han hecho opcionales todas las extensiones a la arquitectura original x86-64, con lo que Strife funcionará en cualquier microprocesador que soporte la ISA x86-64.
-
-Es importante notar que las máquinas a probar deben usar AHCI en lugar de IDE como interfaz para el almacenamiento secundario, con lo que, aunque Intel Core 2 sea la generación mínima, es posible que ningún computador que lo use tenga a su vez una placa base que soporte AHCI.
+De esta forma, se han hecho opcionales todas las extensiones a la arquitectura original, con lo que Strife funcionará en cualquier microprocesador que soporte el ISA x86-64.
 
 *** Proyectos
 Se ha terminado con 29 repositorios en la organización, de los cuales 24 se usan para el proyecto nuevo. Todos juntos, dan la cantidad de líneas de código que aparece en la Tabla [[tab:loc]]. Desglosadas por proyecto, se obtiene la Tabla [[tab:loc2]].
@@ -2181,7 +2387,9 @@ Para empezar, se procede a enumerar los objetivos descritos en la Sección [[Obj
 Seguidamente, los secundarios:
 1. El driver de teclado y la shell se han llevado a cabo, y su implementación está explicada en detalle en las secciones [[keyboard]] y [[shell]].
 2. Se llevó a cabo la realización de herramientas núcleo y su enumeración y breve explicación aparecen en la Sección [[coreutils]].
+3. Se implementaron los tests unitarios, cuya ejecución se encuentra en la Sección [[Puesta a prueba]].
 
+\newpage
 Se resumen las tres aportaciones del proyecto Strife al estado del arte de los sistemas operativos:
 - Se ha llevado a cabo el desarrollo de un microkernel con RPC local, bajo la misma máquina; un mecanismo de comunicación entre procesos que ha pasado desapercibido en el diseño de los sistemas operativos. Se ha aportado el novedoso mecanismo de ejecución dual, mediante el cual todo proceso se ejecuta en todo momento, o bien como sí mismo, o bien como otro. Esto ha conllevado la desaparición de los servicios del scheduler, y, por lo tanto, no existe disparidad de prioridades entre una tarea y el recurso al que quiere acceder. Si una tarea se encuentra en una de las colas VSRT, todas las peticiones que realice, a cualquier servicio, se efectuarán con prioridad máxima.
 - Sobre las implementaciones existentes y conocidas de ACLs, se ha aportado la idea de ACLs jerárquicos. De esta manera, las entradas de control de acceso de un directorio aplican sobre las existentes en su padre, y no son independientes. Esto reduce el gasto de memoria de la implementación del sistema de archivos, aumenta la velocidad, y facilita el mantenimiento: como toda entrada es jerárquica, no hay necesidad de realizar alteraciones recursivas sobre los archivos para cambiar sus permisos, y las excepciones sobre archivos o subdirectorios concretos pueden ser llevadas a cabo sin mayor problema.
@@ -2196,13 +2404,13 @@ A parte, existen aspectos más amplios de desarrollo que deberían de ser llevad
 - *SMP*. *Corto plazo*. Si bien corresponde a [[MM15][MM15]], es lo suficientemente amplio, y requeriría tanto tiempo para tener un estado funcional, que se incluye aquí. Todo el kernel y los servicios están desarrollados teniendo SMP en mente, se hace extensivo uso de mecanismos de exclusión mutua para asegurar la consistencia de las estructuras, pero, muy probablemente, existan interbloqueos que a día de hoy no son perceptibles en el sistema operativo por utilizar únicamente un núcleo. La mayoría del tiempo iría a arreglarlos, y se estima que conllevaría unas *50 horas*.
 - Un *editor de texto*. *Medio plazo*. Nada complejo, más bien un proyecto similar a GNU nano \cite{nano}, con atajos de teclado para moverse entre las líneas y poder redactar un documento sencillo en texto plano. Se estima que conllevaría *100 horas*.
 - Una *pila de red*. *Medio plazo*. Desde 2019 he estado deseando poder hacerle /ping/ a una máquina virtual ejecutando mi sistema operativo. Esto requiere implementar una pila de servicios; para ping, se requiere un driver de Ethernet (posiblemente para el chip RTL8139), un servicio de ARP, otro de IP, una utilidad de DHCP, y un servicio de ICMP. Para llevarlo más allá, por ejemplo, para servir una página web, serían necesarios servicios de UDP y TCP (implementación posiblemente /Reno/), así como un servicio de DNS. Para tener un servicio ICMP funcional, llevaría unas *50 horas*. Sin embargo, de querer una implementación de TCP funcional, posiblemente ello solo requerirá *otras 50 horas*.
-- Un *gestor de paquetes*. *Medio plazo*. Teniendo una pila de red funcional, el paso inmediatamente siguiente sería construir un gestor de paquetes que sea capaz de descargar programas de un repositorio de internet e instalarlos. La mayor dificultad estaría en el diseño de las cabeceras de paquete, la estructura que respondería a preguntas como /¿Qué dependencias tiene este programa?/ o /¿Requiere un usuario específico, y qué permisos?/. Se estima que conllevaría unas *80 horas*.
+- Un *gestor de paquetes*. *Medio plazo*. Teniendo una pila de red funcional, el paso inmediatamente siguiente sería construir un gestor de paquetes que sea capaz de descargar programas de un repositorio de internet e instalarlos. La mayor dificultad estaría en el diseño de las cabeceras de paquete, la estructura que respondería a preguntas como /¿Qué dependencias tiene este programa?/ o /¿Requiere un usuario específico, y qué permisos?/ Se estima que conllevaría unas *80 horas*.
 - Un *compilador de C++*. *Muy largo plazo*. En algún punto, y de no abandonar el proyecto antes, será necesario que el sistema operativo pueda compilarse a sí mismo. Para escribir el compilador, primero realizaría mi propia implementación de /lex/ (tarea que llevé a cabo en la práctica 2 de la asignatura /Modelos de Computación/), un generador de autómatas finitos deterministas con su base en el algoritmo de Thompson. Seguidamente, mi propia implementación de /yacc/, mediante la generación de tablas LALR, tal y como se explicaron en la asignatura /Procesadores de Lenguajes/[fn:1]. Requeriría una cantidad inmensurable de tiempo; pero, por proponer una estimación, diría *1000 horas*.
 
 [fn:1] Este proceso lo llevé parcialmente a cabo en el pasado, en mi proyecto /PL-LR/ \cite{pllr}.
 
 ** Valoración personal
-El trabajo aquí descrito se trata del proyecto de mi vida. En lo relativo al mundo del software, existen proyectos más difíciles, como cualquier tesis doctoral, así como más grandes, como un editor de vídeo; sin embargo, el proyecto abordado ha resultado también complejo porque involucra una gran cantidad de partes y subsistemas. Por esto, considero que The Strife Project es mi límite, lo más alto que puedo alcanzar. Es, como todo, muy mejorable, y los diseños y, sobre todo, las implementaciones, tienen un amplio margen de mejora y optimización, pero ello no quita que haya tenido la asertividad de comenzar el proyecto y la voluntad de acabarlo.
+El trabajo aquí descrito se trata del proyecto de mi vida. En lo relativo al mundo del software, existen proyectos más difíciles, como cualquier tesis doctoral, así como más grandes, como un editor de vídeo; sin embargo, el proyecto abordado ha resultado complejo porque involucra una gran cantidad de partes y subsistemas. Por esto, considero que The Strife Project es mi límite, lo más alto que puedo alcanzar. Es, como todo, muy mejorable, y los diseños y, sobre todo, las implementaciones, tienen un amplio margen de mejora y optimización, pero ello no quita que haya tenido la asertividad de comenzar el proyecto y la voluntad de acabarlo.
 
 Me alegro de haber tenido la oportunidad de presentar este trabajo como mi final de grado, y les agradezco a mis tutores, José Luis Garrido Bullejos, y Carlos Rodríguez Domínguez, haber confiado en mis capacidades para llevar a cabo una tarea de esta magnitud y complejidad.
 
@@ -2221,19 +2429,19 @@ En este primer apéndice se incluye una lista con aquellos detalles que han qued
 4. <<MM4>>Extensión de la pila pendiente de implementar. No se ha encontrado un caso en el que fuera necesario, pero en algún momento deberá de hacerse. Por esto, la prioridad es *baja*.
 5. <<MM5>>Guardar el índice del primer bit libre de un bitmap es una optimización muy usual cuando se trata con bitmaps, con lo que sería una buena idea implementarla. Por conllevar poco esfuerzo y posiblemente ofrecer un /speedup/ significativo, la prioridad es *alta*.
 6. <<MM6>>Será necesario implementar un mecanismo de liberación forzada de memoria para hacer el kernel más robusto. Por ejemplo, se podría matar al proceso que más memoria esté consumiendo en ese momento. Por tratarse de una solución que aporta robustez y no incrementa la velocidad del sistema, y puede aportar confusión mientras el proyecto está en un estado inmaduro, es mejor realizarla más adelante y su prioridad es *baja*.
-7. <<MM7>>Esta comprobación (syscalls relativas al hardware) no está implementada. En su lugar, se comprueba si el proceso que la efectúa es ~system~ o no. Aún así, se referencian los permisos que se usarían para estos propósitos. La prioridad se fija a *media* por ser un requisito importante en el mecanismo de MAC, aunque no crítico: no es un problema de seguridad, sino más bien una restricción.
+7. <<MM7>>La comprobación de syscalls relativas al hardware no está implementada. En su lugar, se comprueba si el proceso que la efectúa es ~system~ o no. Aún así, se referencian los permisos que se usarían para estos propósitos. La prioridad se fija a *media* por ser un requisito importante en el mecanismo de MAC, aunque no crítico: no es un problema de seguridad, sino más bien una restricción.
 8. <<MM8>>xoshiro256** no es un CSPRNG. Cambiarlo en el futuro por SHA-256 debería de ser suficiente, aunque se podrían considerar hashes más rápidos como Skein o Blake. Por tener actualmente un hash funcional y solo aumentar la seguridad, se califica la prioridad de esta tarea como *media*.
 9. <<MM9>>Utilizar ~RDRAND~ puede levantar la ceja de más de un experto en criptografía. En principio debería ser correcto, siempre y cuando se cumpliera [[[MM10][MM10]]].
 10. <<MM10>>Mezclar frecuentemente entropía obtenida de la latencia de distintas operaciones de comunicación con el hardware en la pool del kernel. Sería necesario una syscall para ello. Se podría, además, inicializar con valores dados por relojes de menor frecuencia que la CPU, como la PIT. La prioridad es *media* puesto que no supone una mejora inmediata al funcionamiento del sistema operativo.
-11. <<MM11>>Este procedimiento (ninguna pila disponible al hacer RPC) no se realiza; en su lugar, se mata al proceso. Es complejo de programar porque el proceso está en un estado intermedio de ~runningAs~, con lo que se deja para el futuro, y se establece su prioridad a *baja*.
-12. <<MM12>>Es fácil evitar esta restricción (cantidad máxima de SMID en el PCB). Se tomaría la última cuadrupalabra montando una lista enlazada en la memoria privada del kernel. Si bien las búsquedas conllevarían fallos de caché, es la solución más simple a este problema. Cualquier otra requeriría estructuras de datos más complejas que es mejor dejar fuera del microkernel. Es poco probable llegar actualmente a ese límite, con lo que sería apropiado dejarlo para cuando el problema esté cerca de manifestarse. Su prioridad es *baja*.
-13. <<MM13>>Este mecanismo (creación y destrucción de regiones compartidas en cada RPC) es subóptimo. Alterar la tabla de páginas cada vez que se requiera hacer un paso de información ralentiza el sistema. Sin embargo, esta ralentización se oculta con una ralentización mucho mayor: la gran secuencia de RPCs del storage stack. Aunque se trata de una cuestión de diseño y su solución es compleja, es posiblemente el mayor /bottleneck/ de todo el sistema operativo, con lo que su prioridad no puede ser otra sino *alta*.
-14. <<MM14>>Este mecanismo (cierre del stacktrace RPC) no está implementado. En su lugar, actualmente se mata a B, y A se deja suelto. Es prioritario, en el futuro, escribir la rutina que realice este procedimiento, pero, como el problema es difícil que se manifieste en el estado actual del proyecto, su prioridad se deja en *media*.
+11. <<MM11>>El procedimiento de espera cuando no hay ninguna pila disponible al hacer RPC no se realiza; en su lugar, se mata al proceso. Es complejo de programar porque el proceso está en un estado intermedio de ~runningAs~, con lo que se deja para el futuro, y se establece su prioridad a *baja*.
+12. <<MM12>>Es fácil evitar la restricción de cantidad máxima de SMIDs en el PCB. Se tomaría la última cuadrupalabra montando una lista enlazada en la memoria privada del kernel. Si bien las búsquedas conllevarían fallos de caché, es la solución más simple a este problema. Cualquier otra requeriría estructuras de datos más complejas que es mejor dejar fuera del microkernel. Es poco probable llegar actualmente a ese límite, con lo que sería apropiado dejarlo para cuando el problema esté cerca de manifestarse. Su prioridad es *baja*.
+13. <<MM13>>El mecanismo de creación y destrucción de regiones compartidas en cada RPC es subóptimo. Alterar la tabla de páginas cada vez que se requiera hacer un paso de información ralentiza el sistema. Sin embargo, esta ralentización se oculta con una ralentización mucho mayor: la gran secuencia de RPCs del storage stack. Aunque se trata de una cuestión de diseño y su solución es compleja, es posiblemente el mayor /bottleneck/ de todo el sistema operativo, con lo que su prioridad no puede ser otra sino *alta*.
+14. <<MM14>>El mecanismo de cierre del stacktrace RPC no está implementado. En su lugar, actualmente se mata a B, y A se deja suelto. Es prioritario, en el futuro, escribir la rutina que realice este procedimiento, pero, como el problema es difícil que se manifieste en el estado actual del proyecto, su prioridad se deja en *media*.
 15. <<MM15>>SMP no está implementado en la versión de Strife de la entrega. Tras realizar otras tareas más prioritarias, estructurales del sistema operativo, mencionadas en este mismo apéndice, tendrá que llevarse a cabo. Su prioridad es *baja*.
 16. <<MM16>>CoW no está implementado actualmente en el loader de Strife. Aunque conllevaría un ahorro de memoria importante, no es una característica necesaria para el correcto funcionamiento del sistema, y por esto su prioridad es *media*.
 17. <<MM17>>El registro no implementa grupos, tan solo usuarios. Se deberá de hacer en el futuro, pero no resulta fundamental, así que su prioridad es *baja*.
-18. <<MM18>>Esta funcionalidad (~SUPER~ en el registro) no está implementada. De forma similar a [[MM7][MM7]], la comprobación temporal para la modificación es si el UID es 1 (~system~). Y, de la misma forma, su prioridad es *media*.
-19. <<MM19>>Sería interesante considerar si esto (lectura global del registro) compromete de alguna manera al sistema. En el primer vistazo podría parecer obvio que sí, pero conllevaría complicar todo el userspace mantener un subdirectorio de permisión de lectura. Se podría hacer por grupos, de tal forma que todos los servicios críticos estén en un grupo de lectura que se añada por defecto a todos los usuarios. Su prioridad es *baja*.
+18. <<MM18>>La funcionalidad de ~SUPER~ en el registro no está implementada. De forma similar a [[MM7][MM7]], la comprobación temporal para la modificación es si el UID es 1 (~system~). Y, de la misma forma, su prioridad es *media*.
+19. <<MM19>>Sería interesante considerar si la lectura global del registro compromete de alguna manera al sistema. En el primer vistazo podría parecer obvio que sí, pero conllevaría complicar todo el userspace mantener un subdirectorio de permisión de lectura. Se podría hacer por grupos, de tal forma que todos los servicios críticos estén en un grupo de lectura que se añada por defecto a todos los usuarios. Su prioridad es *baja*.
 20. <<MM20>>Implementar IDE, aunque sea un driver PIO o Ultra-DMA polling, es mandatorio y deberá hacerse en el futuro. Esto permitirá ejecutar Strife en una máquina virtual sin tener que hacer configuraciones previas, puesto que IDE es la interfaz por defecto en la mayoría de hipervisores, aunque hoy en día sea poco común en computadores modernos. Por ofrecer una mejoría claramente visible durante la puesta a prueba del sistema operativo, su prioridad es *alta*.
 21. <<MM21>>En el futuro (lejano), se implementará un subdriver de SATA para poder instalar Strife en un disco duro y arrancar de él. Su prioridad es *baja* puesto que, de ser necesario un servicio crítico más, todas las instalaciones quedarían obsoletas. Esto trae consigo varias dificultades. La mayor es que sería necesaria una abstracción sobre las particiones, así como un driver del sistema de archivos FAT32 para que el bootloader pueda cargar el kernel; porque, naturalmente, el bootloader no tiene driver de StrifeFS, ni merecería la pena implementarlo aunque la desarrolladora del proyecto estuviera de acuerdo.
 22. <<MM22>>Será importante, en el futuro, implementar DMA guiado por IRQs con tal de no bloquear la CPU durante la lectura de sectores de disco. Esto puede tratarse de un /bottleneck/, y, así, su prioridad es *alta*.
