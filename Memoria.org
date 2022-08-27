@@ -819,7 +819,7 @@ Lo más fundamental: las interrupciones en x86 están numeradas con un identific
 
 ¿Cómo sabe la CPU dónde está el ISR? La estructura que los maneja es la IDT (/Interrupt Descriptor Table/), y es muy similar a la GDT. IDTR es un registro, cargado con la instrucción LIDT, que apunta a la IDT. Es un array de entradas, /gate descriptors/, que indican, sobre todo, la dirección del ISR y un índice de la IST (/Interrupt Stack Table/), otra estructura manejada por la CPU que contiene un array de pilas disponibles para la CPU en caso de interrupción \cite{idt}.
 
-En x86-64, la IST se encuentra dentro de otra estructura de IA-32 que quedó obsoleta, la TSS (/Task State Segment/), cuyo objetivo original era el cambio de contexto por hardware, idea que ha quedado en desfase por implicaciones de velocidad y control del kernel. Sabiendo su contexto no resultará extraño lo siguiente: cada TSS necesita una entrada en la GDT. Tras este cambio, la TSS tiene 6 entradas de IST (del 1 al 7) para interrupciones específicas, así como otras 3 que se usan en caso de que el índice de IST sea cero \cite{tss}.
+En x86-64, la IST se encuentra dentro de otra estructura de IA-32 que quedó obsoleta, la TSS (/Task State Segment/), cuyo objetivo original era el cambio de contexto por hardware, idea que ha quedado en desfase por implicaciones de velocidad y control del kernel. Sabiendo su contexto no resultará extraño lo siguiente: cada TSS necesita una entrada en la GDT. Tras este cambio, la TSS tiene 7 entradas de IST (del 1 al 7) para interrupciones específicas, así como otras 3 que se usan en caso de que el índice de IST sea cero \cite{tss}.
 
 Un rango de vectores de interrupción está dedicado a las excepciones, del 0 al 30. Por ejemplo, #PF es 14, y #GP es 13 \cite{pfgp}. Las demás, las interrupciones hardware, son traducidas por la PIC desde su valor de interrupción hardware, IRQ $n$, a su vector de interrupción x86. El kernel se encarga de establecer esta tabla de traducción al arranque.
 
@@ -1309,7 +1309,7 @@ La mayoría de excepciones implementadas concluyen en que debe terminarse el pro
 *** PMM
 El PMM (/Physical Memory Manager/) de un sistema operativo es la sección del kernel que se dedica a reservar y liberar la memoria física. Existen distintas formas de implementarlo. Se suele usar un buddy allocator \cite{buddy}, pero tiene problemas de fragmentación interna, especialmente cuando las regiones de memoria libres están divididas. Por esto, la elección es bitmap: por cada región de memoria libre, dada por el bootloader según la especificación de Stivale2, se crea un mapa de bits, en el que cada entrada representa una página. Esto permite la reserva de memoria contigua en $\mathcal{O}(n)$ [[[MM5][MM5]]], y un /coalescing/ (unión de bloques contiguos) gratuito.
 
-Si la reserva devuelve /ERROR/, entonces no hay memoria física disponible. En este caso, si es posible, se vuelve error. De no ser posible, por necesitar memoria en el kernel, debe existir un mecanismo de liberación forzada [[[MM6][MM6]]].
+Si la reserva devuelve /ERROR/, entonces no hay memoria física disponible. En este caso, si es posible, se devuelve error. De no ser posible, por necesitar memoria en el kernel, debe existir un mecanismo de liberación forzada [[[MM6][MM6]]].
 
 Las funciones de reserva y liberación de memoria física están implementadas bajo los nombres de ~PhysMM::alloc~ y ~PhysMM::free~. También existe ~PhysMM::calloc~, que rellena la página física con ceros antes de devolverla, para evitar posibles filtraciones de datos.
 
@@ -1970,7 +1970,7 @@ Presenta cuatro procedimientos públicos, que se encuentran en la Tabla [[tab:us
 - ~NEW_USER~ realiza la creación de un usuario. Recibe un SMID, su nombre, y se le asigna el UID dado por el contador monotónico. El nombre tiene que seguir la expresión regular ~[A-Za-z_][A-Za-z0-9_]*~ [[[MM28][MM28]]].
 
 *** switcher
-El servicio ~switcher~ se encarga de modificar el UID del proceso que realiza la llamada al pasado por parámetro. Un proceso ejecutado por el usuario A puede pasar a ser ejecutado como B solo si existe la ruta ~/u/B/SUPER/A~ en el registro (trabajando con UIDs, por supuesto). Esta restricción no se aplica si A es ~system~.
+El servicio ~switcher~ se encarga de modificar el UID del proceso que realiza la llamada. Un proceso ejecutado por el usuario A puede pasar a ser ejecutado como B solo si existe la ruta ~/u/B/SUPER/A~ en el registro (trabajando con UIDs, por supuesto). Esta restricción no se aplica si A es ~system~.
 
 Tiene un único procedimiento público, ~SWITCH~, y recibe el UID de B. Devuelve ~true~ si el cambio fue exitoso, ~false~ en otro caso. El cambio se realiza por medio de la syscall ~SWITCH_USER~, que requiere el permiso ~SWITCH_ALLOWED~. Idealmente, únicamente este servicio haría uso de dicho permiso, con tal de mantener los cambios de usuario centralizados para permitir guardar logs en un futuro.
 
@@ -2106,7 +2106,7 @@ Se aportan abstracciones sobre RPC en la cabecera ~<rpc>~.
 
 Desde el lado del cliente, hay una fina abstracción sobre la syscall de RPC en la biblioteca estándar. En lugar de tener una única función para hacerla, existen cinco, dependiendo del número de parámetros (de 0 a 4). Esto permite al compilador organizar mejor los registros para conseguir el mínimo movimiento posible.
 
-Desde el lado del servidor, la abstracción es mayor. Se aporta un punto de entrada RPC por defecto, que se usa cuando ~std::enableRPC~ se llama sin el puntero a la función. Esta tiene su entrada en ensamblador y organiza los RPIDs mediante en un vector. Se aporta una función para modificar este array y añadir procedimientos públicos, ~std::exportProcedure~, que recibe un puntero a función casteado a ~void*~ y el número de argumentos que espera recibir. Es importante comentar que el vector está implementado /lock-less/, sin exclusión mutua, para acelerar la entrada, con lo cual todas las llamadas a ~exportProcedure~ deben realizarse antes de la llamada a ~enableRPC()~, para que no existan condiciones de carrera.
+Desde el lado del servidor, la abstracción es mayor. Se aporta un punto de entrada RPC por defecto, que se usa cuando ~std::enableRPC~ se llama sin el puntero a la función. Esta tiene su entrada en ensamblador y organiza los RPIDs mediante un vector. Se aporta una función para modificar este array y añadir procedimientos públicos, ~std::exportProcedure~, que recibe un puntero a función casteado a ~void*~ y el número de argumentos que espera recibir. Es importante comentar que el vector está implementado /lock-less/, sin exclusión mutua, para acelerar la entrada, con lo cual todas las llamadas a ~exportProcedure~ deben realizarse antes de la llamada a ~enableRPC()~, para que no existan condiciones de carrera.
 
 Un ejemplo, que se puede ver a lo largo de todos los servicios, sería de este estilo:
 #+begin_src c++
@@ -2251,7 +2251,7 @@ Como nota personal, estoy orgulloso de haber conseguido alcanzar un tamaño tan 
 \end{center}
 #+end_export
 
-[fn:soporte] Sé que el lector de PDFs de Chrome no lo soporta. Evince y el de Firefox, sin embargo, sí. Acrobat requiere click derecho.
+[fn:soporte] Sé que el lector de PDFs de Chrome no lo soporta. Evince, sin embargo, sí. El de Firefox requiere doble click. Acrobat requiere click derecho.
 
 *** Algunos problemas resueltos
 Se considera de interés analizar en retrospectiva algunos de los problemas encontrados. Se mencionarán cuatro de los más importantes que ha sufrido el proyecto durante su desarrollo.
