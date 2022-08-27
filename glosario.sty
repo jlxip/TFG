@@ -160,7 +160,7 @@
 \defineme{Esquema de particiones}{Forma de organizar particiones sobre un medio de almacenamiento}
 
 % Fundamentos de x86
-\newdualentry{BIOS}{Basic Input/Output System}{Firmware dedicado a inicializar el hardware básico del x86}
+\newdualentry{BIOS}{Basic Input/Output System}{Firmware dedicado a inicializar el hardware básico del x86, aporta una API básica para usar en el bootloader}
 \newdualentry{UEFI}{Unified Extensible Firmware Interface}{Sucesor de BIOS}
 \newdualentry{PCI}{Peripheral Component Interconnect}{Bus estándar de computadores para conectar periféricos a la placa base}
 \newdualentry{MBR}{Master Boot Record}{Primer sector de un dispositivo de almacenamiento, usado por BIOS}
@@ -192,7 +192,7 @@
 \newdualentry{APIC}{Advanced PIC}{Chip encargado de manejar las interrupciones en un x86 multiprocesador}
 \newdualentry{SMP}{Symmetric Multiprocessing}{Método de multiprocesador en el cual todos los cores acceden a toda la memoria}
 \newdualentry{LAPIC}{Local APIC}{Chip adjunto a un core que aporta funcionalidad APIC}
-\newdualentry{IOAPIC}{Input/Output APIC}{Chip compartido por todos los cores que redirige interrupciones}
+\newdualentry{IOAPIC}{Input/Output APIC}{Chip compartido por todos los cores que redirige interrupciones de un dispositivo a una LAPIC}
 \defineme{Anillo de protección}{Sistema de x86 por el cual existen 4 niveles de privilegios en el procesador}
 \defineme{Ring 0}{x86 en modo supervisor, en referencia al anillo de protección con identificador 0}
 \defineme{Ring 3}{x86 en modo usuario, en referencia al anillo de protección con identificador 3}
@@ -233,7 +233,7 @@
 
 % --- Diseños detallados ---
 \newdualentry{IPI}{Inter-processor Interrupt}{Mecanismo de la APIC para sincronizar cores por medio de interrupciones}
-\newdualentry{ACPI}{Advanced Configuration and Power Interface}{Estándar que aporta tablas con información de la BIOS}
+\newdualentry{ACPI}{Advanced Configuration and Power Interface}{Estándar que aporta tablas con información de la BIOS y capacidades del sistema y dispositivos}
 \newdualentry{BSP}{Bootstrap Processor}{Primer core de un sistema SMP iniciado por la BIOS}
 \newdualentry{RSDP}{Root System Description Pointer}{Tabla ACPI con puntero a RSDT o XSDT}
 \newdualentry{AP}{Application Processor}{Cualquier core distinto al BSP}
@@ -247,7 +247,7 @@
 \newdualentry{MSI}{Message Signaled Interrupts}{Modo de configurar las interrupciones en dispositivos PCI}
 \defineme{MSI-X}{Similar a MSI, pero permite hasta 2048 interrupciones}
 \newdualentry{HBA}{Host Bus Adapter}{Controlador AHCI}
-\newdualentry{ABAR}{AHCI Base Memory Register}{Base en memoria de un HBA}
+\newdualentry{ABAR}{AHCI Base Memory Register}{Dirección de memoria base para los registros generales de un HBA}
 \newdualentry{FIS}{Frame Information Structure}{Estructura de AHCI para el envío de órdenes de copia al HBA}
 \newdualentry{SCSI}{Small Computer System Interface}{Interfaz genérica de comunicación para transferencia de datos}
 \newdualentry{LBA}{Logical Block Addressing}{Forma de identificar una dirección en memoria secundaria mediante su número de sector lineal}

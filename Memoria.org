@@ -1037,7 +1037,7 @@ Como se dejó entrever en la Sección [[Herramientas utilizadas]], el formato el
 *** Libre de POSIX
 POSIX (/Portable Operating System Interface/) es un estándar del IEEE que define una interfaz y entorno de sistema operativo, así como una shell y un conjunto de utilidades, que sigue la línea de UNIX. Un sistema operativo es POSIX si cumple con el estándar, y entre ellos se podrían encontrar GNU/Linux, OpenBSD, FreeBSD, NetBSD, y macOS.
 
-Muchos SSOO independientes se adhieren a POSIX, porque gran parte de las decisiones de diseño están ya tomadas. Strife no acepta POSIX, y rediseñan grandes partes de la API, shell, y entorno. Toma ideas, por supuesto, como la existencia de una shell similar y algunas de las funciones estándar (~memcpy~, ~memset~...), la sintaxis de rutas, la idea de puntos de montaje, y un ~printf~ equivalente, por poner algunos ejemplos.
+Muchos SSOO independientes se adhieren a POSIX, porque gran parte de las decisiones de diseño están ya tomadas. Strife no acepta POSIX, y rediseñan grandes partes de la API y el entorno. Toma ideas, por supuesto, como la existencia de una shell similar, la sintaxis de rutas, y la idea de puntos de montaje. También implementa algunas de las funciones del estándar de C (~memcpy~, ~memset~...), y un ~printf~ equivalente, por poner algunos ejemplos.
 
 ** IPC
 *** Memoria compartida
