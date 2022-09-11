@@ -3,9 +3,9 @@
 \begin{tabular}{|c|l|l|}
 \hline
 \textbf{Componente}                     & \multicolumn{1}{c|}{\textbf{Parte}}             & \multicolumn{1}{c|}{\textbf{Horas dedicadas}} \\ \hline
-Contribución al bootloader              &                                                 & \textbf{20}                                   \\ \hline
-\multirow{11}{*}{Kernel}                & Protocolo de arranque                           & 4                                             \\ \cline{2-3} 
-                                        & Descriptores                                    & 8                                             \\ \cline{2-3} 
+Contribución al bootloader              &                                                 & $\textbf{20}^*$                                  \\ \hline
+\multirow{11}{*}{Kernel}                & Protocolo de arranque                           & $4^*$                                            \\ \cline{2-3} 
+                                        & Descriptores                                    & $8^*$                                            \\ \cline{2-3} 
                                         & Manejo de memoria del kernel                    & 22                                            \\ \cline{2-3} 
                                         & PCB y scheduler                                 & 35                                            \\ \cline{2-3} 
                                         & Syscalls                                        & 50                                            \\ \cline{2-3} 
@@ -14,7 +14,7 @@ Contribución al bootloader              &                                      
                                         & Memoria compartida                              & 24                                            \\ \cline{2-3} 
                                         & Reentrancia (incluyendo drivers de ACPI y APIC) & 16                                            \\ \cline{2-3} 
                                         & Otros (kernel panic, CSPRNG...)                 & 10                                            \\ \cline{2-3} 
-                                        & \textbf{Suma}                                   & \textbf{245}                                  \\ \hline
+                                        & \textbf{Suma}                                   & \textbf{233}                                  \\ \hline
 Loader                                  &                                                 & \textbf{150}                                  \\ \hline
 \multirow{3}{*}{Biblioteca estándar}    & STL                                             & 100                                           \\ \cline{2-3} 
                                         & Abstracciones y wrappers                        & 15                                            \\ \cline{2-3} 
@@ -37,7 +37,7 @@ Loader                                  &                                       
                                         & Tests unitarios                                 & 6                                             \\ \cline{2-3} 
                                         & Metaprogramas (helper, CI/CD...)                & 30                                            \\ \cline{2-3} 
                                         & \textbf{Suma}                                   & \textbf{100}                                  \\ \hline
-\textbf{Todo el diseño y desarrollo}    & \textbf{Suma total}                             & \textbf{880}                                  \\ \hline
+\textbf{Todo el diseño y desarrollo}    & \textbf{Suma total}                             & \textbf{848}                                  \\ \hline
 \multirow{7}{*}{Memoria}                & Introducción y Objetivos                        & 35                                            \\ \cline{2-3} 
                                         & Fundamentos                                     & 75                                            \\ \cline{2-3} 
                                         & Estado del Arte                                 & 20                                            \\ \cline{2-3} 
@@ -45,8 +45,11 @@ Loader                                  &                                       
                                         & Diseño Detallado, Implementación, y Pruebas     & 70                                            \\ \cline{2-3} 
                                         & Conclusiones y Trabajo Futuro                   & 6                                             \\ \cline{2-3} 
                                         & \textbf{Suma}                                   & \textbf{256}                                  \\ \hline
-\textbf{Todo el proyecto}               & \textbf{Suma total}                             & \textbf{1136}                                 \\ \hline
+\textbf{Todo el proyecto}               & \textbf{Suma total}                             & \textbf{1104}                                 \\ \hline
 \end{tabular}
+
+\vspace{0.2cm}
+\center{${}^*$ Tiempo anterior a la decisión de TFG, no suma.}
 
 \caption{Aproximación de las horas dedicadas al proyecto}
 \label{horas}

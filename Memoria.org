@@ -75,15 +75,15 @@
 
 \noindent{\textbf{Resumen}} \\
 
-Los sistemas operativos son la base invisible de la era de la información, y su estudio no dejará de ser relevante mientras existan computadores. Este proyecto lleva a cabo la tarea de desarrollo, por tanto incluyendo también estudio, propuesta, diseño, implementación, y pruebas de un sistema operativo con arquitectura microkernel desde cero.
+Los sistemas operativos son la base invisible de la era de la información, y su estudio no dejará de ser relevante mientras existan computadores. Este proyecto lleva a cabo la tarea de desarrollo desde cero de un sistema operativo con arquitectura microkernel, por tanto incluyendo su estudio, propuesta, diseño, implementación, y pruebas.
 
-Se ha desarrollado un microkernel reentrante con la capacidad de orquestar tareas y asignarles los recursos que necesitan, teniendo RPC como método de comunicación entre procesos, sobre el cual se presenta el mecanismo de ejecución dual, que mantiene a los servicios fuera del scheduler y los libera de la responsabilidad de gestionar threads para la recepción de los mensajes, evitando en el proceso problemas de discordancia de prioridades.
+Se ha desarrollado un microkernel reentrante con la capacidad de orquestar tareas y asignarles los recursos que necesitan, teniendo RPC como método de comunicación entre procesos, sobre el cual se presenta el mecanismo de \textit{ejecución dual}, mediante el cual un proceso siempre se ejecuta \textit{como otro}, lo que consigue mantener a los servicios fuera del scheduler y los libera de la responsabilidad de gestionar threads para la recepción de los mensajes, evitando en el proceso problemas de discordancia de prioridades.
 
-Se aporta un espacio de usuario amplio con un cargador de programas extranuclear, una pila de memoria secundaria con controladores para PCI y AHCI, así como implementaciones del sistema de archivos ISO9660 y uno propio, StrifeFS, con una gestión novedosa de permisos mediante ACLs jerárquicos, además de un sistema de archivos virtual que abstrae el funcionamiento del resto.
+Se aporta un espacio de usuario amplio con un cargador de programas extranuclear, una pila de memoria secundaria con controladores para PCI y AHCI, así como implementaciones del sistema de archivos ISO9660 y uno propio, StrifeFS, con una gestión novedosa de permisos mediante ACLs jerárquicos, además de un sistema de archivos virtual que abstrae el funcionamiento de ambos.
 
-Se aporta una biblioteca estándar que encapsula los aspectos de más bajo nivel, tanto de comunicación con el núcleo como con los servicios del sistema, y que contiene una STL propia que implementa estructuras de datos abstractas como los árboles AVL y las tablas hash Robin Hood. Sobre ella, se ha construido un servicio de gestión de usuarios y un controlador de teclado, que abren paso a una shell funcional, para la cual se disponen de 13 programas distintos que permiten al usuario la gestión del sistema de forma interactiva.
+Se aporta una biblioteca estándar del sistema como API que encapsula los aspectos de más bajo nivel, tanto de comunicación con el núcleo como con los servicios del sistema, y que contiene una STL (\textit{Standard Template Library}) propia que implementa estructuras de datos abstractas como los árboles AVL y las tablas hash Robin Hood. Sobre ella, se ha construido un servicio de gestión de usuarios y un controlador de teclado, que abren paso a una shell funcional, para la cual se disponen de 13 programas distintos que permiten al usuario la gestión del sistema de forma interactiva.
 
-Todos estos subsistemas están sometidos a un modelo de protección que limita sus acciones, el registro, que pueden utilizar los servicios para gestionar los permisos de sus clientes de forma independiente y sin límite de granularidad, lo que hace que el sistema operativo propuesto siga una mentalidad de seguridad por defecto.
+Todos estos subsistemas implementan y hacen uso de un modelo de protección diseñado que limita sus acciones, el registro, que pueden utilizar los servicios para gestionar los permisos de sus clientes de forma independiente y sin límite de granularidad, lo que hace que el sistema operativo propuesto siga una mentalidad de seguridad por defecto.
 
 \clearpage
 #+end_export
@@ -101,13 +101,13 @@ Todos estos subsistemas están sometidos a un modelo de protección que limita s
 
 \noindent{\textbf{Abstract}} \\
 
-Operating systems are the invisible foundations of the information age, and its study will be relevant whilst computers exist. This project carries through the task of developing, hence including the study, approach, design, implementation, and tests of an operating system based on a microkernel architecture from scratch.
+Operating systems are the invisible foundations of the information age, and its study will be relevant whilst computers exist. This project carries through the task of developing an operating system based on a microkernel architecture from scratch, hence including its study, approach, design, implementation, and tests.
 
-A preemptable microkernel has been developed with the ability to orchestrate tasks and assign them the resources they need, having RPC as the inter-process communication method, for which the dual execution mechanism is introduced, that is able to keep services out of the scheduler and frees them from the responsability of managing threads for message reception, avoiding priority mismatch issues in the process.
+A preemptable microkernel has been developed with the ability to orchestrate tasks and assign them the resources they need, having RPC as the inter-process communication method, for which the \textit{dual execution} mechanism is introduced, with which a process is always running \textit{as other}; this keeps the services out of the scheduler and frees them from the responsability of managing threads for message reception, avoiding priority mismatch issues in the process.
 
-A wide userspace is provided with a program loader outside of the kernel, a storage stack with PCI and AHCI drivers, and implementations for the ISO9660 file system as well as one of its own, StrifeFS, with a novel permission management via hierarchical ACLs. In order to abstract the functionality of these, a virtual file system has been developed.
+A wide userspace is provided with a program loader outside of the kernel, a storage stack with PCI and AHCI drivers, and implementations for the ISO9660 file system as well as one of its own, StrifeFS, with a novel permission management via hierarchical ACLs. In order to abstract the functionality of both, a virtual file system has been developed.
 
-A standard library is given which encapsulates the low-level aspects of both communication with the kernel as well as with the system services; it contains its own STL that implements abstract data structures such as AVL trees and Robin Hood hash tables. A user management service and a keyboard driver have been built on top of it; these open the way to a functional shell, for which 13 different programs are given that allow the user to manage the system in an interactive way.
+A system standard library is given as an API that encapsulates the low-level aspects of both communication with the kernel as well as with the system services; it contains its own STL (\textit{Standard Template Library}) that implements abstract data structures such as AVL trees and Robin Hood hash tables. A user management service and a keyboard driver have been built on top of it; these open the way to a functional shell, for which 13 different programs are given that allow the user to manage the system in an interactive way.
 
 All these subsystems are subject to a protection model that limits their actions, the registry, which can be used by the services to manage their clients' permissions independently with no granularity limit. This makes the proposed operating system follow a secure-by-default principle.
 
@@ -276,7 +276,7 @@ De esta forma, un sistema operativo es aquel conjunto de capas de abstracción q
 #+end_export
 
 *** Propósito
-Se propone abordar el proyecto de desarrollar un sistema operativo desde cero (salvo en lo relativo al componente que se describirá en la Sección [[Allocator]]), partiendo únicamente de un bootloader existente, y llegando a tener una serie de utilidades que ejecutar sobre una shell. Se ejecutará como un Live CD, sin posibilidad de instalarse, puesto que extender los drivers de almacenamiento para soportar discos duros es una tarea compleja, y tiene poco interés en comparación con el desafío de desarrollar el propio sistema.
+Se propone abordar el proyecto de desarrollar un sistema operativo desde cero (salvo en lo relativo al componente que se describirá en la Sección [[Allocator]]), partiendo únicamente de un bootloader existente, y llegando a tener una serie de utilidades que ejecutar sobre una shell. Se ejecutará como un Live CD, sin posibilidad de instalarse, puesto que extender los drivers de almacenamiento para soportar discos duros es una tarea compleja que requiere tiempo, y tiene poco interés en comparación con el desafío de desarrollar el propio sistema.
 
 Los puntos de interés son:
 - Seguir un diseño basado en una arquitectura microkernel para maximizar la modularización del trabajo, así como la seguridad.
@@ -302,9 +302,9 @@ Este proyecto llegó a tener una complejidad elevada: implementaba una pila de a
 
 No se abrume con los conceptos referenciados: serán explicados más adelante. Estos cambios resultaban tan sustanciales que, en enero de 2021, consideré que valía la pena hacer /borrón y cuenta nueva/. Por aquel entonces, el SO era un único repositorio, con lo que, el 1 de febrero de 2021, se cambió la rama principal, y se renombró la anterior a /old/. [[https://github.com/the-strife-project/Strife/tree/old][Allí sigue a día de hoy]] \cite{old}.
 
-Teniendo el 1 de febrero un repositorio vacío, comenzó el desarrollo. Primero, un ~printf~, luego una klibc simple (/Kernel Standard Library/, con estructuras de datos básicas), y poco a poco se fueron construyendo capas sobre capas de abstracción. Pocos meses después, en mayo de 2021, tras debatirme durante unas semanas, decidí que quería que este proyecto fuera mi trabajo de fin de grado, en lugar de dejarlo para más tarde (tesis doctoral, si la terminara haciendo), principalmente porque, aunque este trabajo tiene sus pinceladas de investigación, casa más con un proyecto de ingeniería.
+Teniendo el 1 de febrero un repositorio vacío, comenzó el desarrollo. Primero, un ~printf~, luego una klibc simple (/Kernel Standard Library/, con estructuras de datos básicas), y poco a poco se fueron construyendo capas sobre capas de abstracción. Pocos meses después, en mayo de 2021, tras debatirme durante unas semanas, decidí que quería que esta idea de proyecto, aún /en pañales/, fuera mi trabajo de fin de grado, en lugar de dejarlo para más tarde (tesis doctoral, si la terminara haciendo), principalmente porque, aunque este trabajo tiene sus pinceladas de investigación, casa más con un proyecto de ingeniería.
 
-En el plazo desde febrero a mayo no me dió tiempo de hacer mucho, tenía una funcionalidad muy básica del kernel, que no llegaba ni de cerca a tener la capacidad de cargar programas. Muchas decisiones no estaban siquiera aún tomadas.
+En el plazo desde febrero a mayo de 2021 no me dió tiempo de hacer mucho, tenía una funcionalidad muy básica del kernel, que no llegaba ni de cerca a tener la capacidad de cargar programas. Muchas decisiones no estaban siquiera aún tomadas.
 
 El trabajo aquí expuesto es el fruto de una vida de aprendizaje.
 
@@ -326,7 +326,7 @@ Teniendo como objetivo general de este proyecto consolidar, aprender, y poner en
 2. <<OP2>>Diseñar un *modelo de protección* sobre la comunicación entre procesos con granularidad fina.
 3. <<OP3>>Diseñar y desarrollar un *microkernel* con RPC como mecanismo de comunicación.
 4. <<OP4>>Crear un *cargador de programas* funcional fuera del kernel.
-5. <<OP5>>Desarrollar una *biblioteca estándar* para facilitar la comunicación de los procesos con el kernel, así como entre ellos, e implementaciones de diversas estructuras de datos abstractas.
+5. <<OP5>>Desarrollar una *biblioteca estándar* del sistema para facilitar la comunicación de los procesos con el kernel, así como entre ellos, e implementaciones de diversas estructuras de datos abstractas.
 6. <<OP6>>Desarrollar *servicios misceláneos* para el funcionamiento del sistema, como el driver de terminal.
 7. <<OP7>>Desarrollar una *pila de almacenamiento* completa, incluyendo el diseño de un *sistema de archivos propio*.
 
@@ -377,7 +377,7 @@ En esta sección:
 2. Se estima el número de horas dedicadas a cada uno.
 3. Se muestra cómo se han distribuido dichas horas a lo largo del tiempo.
 
-Grosso modo, el proyecto llevado a cabo se puede dividir en ocho grandes componentes:
+El proyecto llevado a cabo se puede dividir en ocho grandes componentes:
 1. Contribución al bootloader. Ajena al proyecto en sí, esto es, al código entregado, pero necesaria para la realización del mismo. Corresponde al objetivo [[[OP1][OP1]]].
 2. Kernel. Núcleo del sistema operativo, el mayor subproyecto, que contiene sobre un 33% de las líneas escritas (cálculo que proviene de la Sección [[Proyectos]]), y contiene la mayor parte del trabajo de diseño. Corresponde a los objetivos [[[OP2][OP2]]] y [[[OP3][OP3]]].
 3. Cargador de programas (/loader/). Ha requerido una gran cantidad de tiempo y, por ello, es pertinente separarlo del resto según los criterios de esta sección. Este componente corresponde al objetivo [[[OP4][OP4]]].
@@ -388,15 +388,13 @@ Grosso modo, el proyecto llevado a cabo se puede dividir en ocho grandes compone
 8. Memoria. La escritura de este mismo documento se incluye en la planificación.
 
 Se ha realizado una estimación de las horas dedicadas a cada subproyecto, a partir de sus partes, que se encuentra en la Tabla \ref{horas}. Nótesen tres puntos:
-1. No se ha hecho una medición durante el desarrollo, se trata de una estimación /a posteriori/. Esta estimación proviene de dos fuentes:
-   1. Mensajes de una bitácora personal escrita en tiempo real durante el proyecto, que incluyen una marca de tiempo. Se han consultado los más de 6.000 mensajes escritos, y se ha hecho el esfuerzo de aproximar el tiempo dedicado.
-   2. Una consideración subjetiva de, con los conocimientos adquiridos, cuántas horas serían necesarias para repetir el proyecto.
+1. No se ha hecho una medición durante el desarrollo, se trata de una estimación /a posteriori/. Esta estimación proviene de la relectura de mensajes de una bitácora personal escrita en tiempo real durante el proyecto, que incluyen una marca de tiempo. Se han consultado los más de 6.000 mensajes escritos, y se ha hecho el esfuerzo de aproximar el tiempo dedicado.
 2. No se consideran las horas dedicadas al interés previo en el área; es decir, no se incluye el trabajo de aprendizaje del sistema operativo /de prueba/ descrito en la Sección [[Motivación e historia]], en parte por tratarse de un proyecto distinto, en parte porque sus horas son inestimables.
 3. Sí se anota, sin embargo, todo el trabajo de investigación, como la lectura de estándares o artículos, en las partes correspondientes al proyecto descrito en este trabajo. Esto incluye, por ejemplo, el tiempo dedicado a diseño frente a mi pizarra en blanco, o la búsqueda de referencias de la memoria en cada uno de sus capítulos.
 
 #+LATEX: \input{horas.tex}
 
-Para finalizar la sección, se incluyen tres diagramas de Gantt que representan cómo se ha repartido el esfuerzo a lo largo de los años de trabajo: la Figura \ref{gantt2020}, para 2020, la Figura \ref{gantt2021}, para 2021, y la Figura \ref{gantt2022}, para 2022. Para poder ilustrar el diagrama en la página, la unidad mínima de trabajo representado es de medio mes.
+Para finalizar la sección, se incluyen tres diagramas de Gantt que representan cómo se ha repartido el esfuerzo a lo largo de los años de trabajo: la Figura \ref{gantt2020}, para 2020, la Figura \ref{gantt2021}, para 2021, y la Figura \ref{gantt2022}, para 2022. Para poder ilustrar el diagrama en la página, la unidad mínima de trabajo representado es de medio mes. Si bien lo habitual en los diagramas de Gantt es organizarlos por fases (estudio, análisis, diseño, e implementación), aquí se encuentran organizados en base al desarrollo de cada componente, puesto que en sistemas operativos es difícil distinguir entre diseño e implementación: son fases muy cercanas y dependientes que se llevan a cabo a la vez.
 
 #+LATEX: \input{gantt.tex}
 
@@ -421,9 +419,9 @@ Estos productos están descatalogados, con lo que se presentan dos opciones:
 
 Se acota, de esta manera, el coste máximo a 199€ + 3 $\cdot$ 100€ = 499€. En el caso concreto de este proyecto, se cuenta con un /Ivy Bridge/ presente, con lo que los costes de verificación bajarían a 399€.
 
-Teniendo todo esto, falta el coste del personal. Es difícil estimar el salario por hora de un trabajo de este tipo, pues se trata de un proyecto que a penas se lleva a cabo, y no existe ninguna posición de diseño o desarrollo de sistemas operativos actualmente en el mercado, tampoco acotando a desarrollo de núcleos. La mejor estimación es la siguiente: considerando tal como ha ocurrido durante el desarrollo del proyecto, la contratación de un ingeniero informático con amplia experiencia técnica pero con falta de experiencia profesional, y la dificultad de la tarea a realizar, el salario bruto podría corresponder a 35€/hora. De esta manera, si se han trabajado 1136 horas como se expone al final de la Tabla \ref{horas}, el coste salarial ascendería a 39.760€.
+Teniendo todo esto, falta el coste del personal. Es difícil estimar el salario por hora de un trabajo de este tipo, pues se trata de un proyecto que a penas se lleva a cabo, y no existe ninguna posición de diseño o desarrollo de sistemas operativos actualmente en el mercado, tampoco acotando a desarrollo de núcleos. La mejor estimación es la siguiente: considerando tal como ha ocurrido durante el desarrollo del proyecto, la contratación de un ingeniero informático con amplia experiencia técnica pero con falta de experiencia profesional, y la dificultad de la tarea a realizar, el salario bruto podría corresponder a 35€/hora. De esta manera, si se han trabajado 1104 horas como se expone al final de la Tabla \ref{horas}, el coste salarial ascendería a 38.640€.
 
-Sumando los costes de verificación, los costes totales aproximados en un escenario real serían de 40.159€.
+Sumando los costes de verificación, los costes totales aproximados en un escenario real serían de 39.039€.
 
 ** Estructura de la memoria
 Este documento se organiza en un total de seis capítulos:
@@ -431,11 +429,11 @@ Este documento se organiza en un total de seis capítulos:
 - El Capítulo [[Fundamentos]], *Fundamentos*, describe los fundamentos necesarios para comprender los diferentes aspectos relacionados con el desarrollo de sistemas operativos, proporcionando una aproximación sobre la magnitud y complejidad del problema y lógica detrás de las soluciones.
 - El Capítulo [[Estado del Arte]], *Estado del Arte*, analiza el estado del arte de los proyectos próximos a este, para averiguar qué soluciones se han dado a los problemas aquí descritos en el pasado.
 - El Capítulo [[Propuesta de Sistema Operativo]], *Propuesta de Sistema Operativo*, con el estudio e investigación llevados a cabo, describe la solución para resolver el problema a abordar, incluyendo la definición de las ideas originales.
-- El Capítulo [[Diseño Detallado, Implementación, y Pruebas]], *Diseño Detallado, Implementación, y Pruebas*, describe, a partir de la propuesta presentada en el capítulo anterior, los detalles relacionados con el desarrollo del sistema operativo. Contiene capturas del uso del funcionamiento y operación del proyecto.
+- El Capítulo [[Diseño, Implementación, y Pruebas]], *Diseño, Implementación, y Pruebas*, describe, a partir de la propuesta presentada en el capítulo anterior, los detalles relacionados con el desarrollo del sistema operativo. Contiene capturas del uso del funcionamiento y operación del proyecto.
 - Para terminar, en el Capítulo [[Conclusiones y Trabajo Futuro]], *Conclusiones y Trabajo Futuro*, se hace una retrospectiva del trabajo realizado, y se menciona el trabajo futuro que podría dar continuidad al realizado en este proyecto.
 
 Este documento incluye adicionalmente dos apéndices que se describen brevemente a continuación:
-- El Apéndice [[Margen de Mejora]], *Margen de Mejora*, contiene una lista con aquellos detalles que han quedado en el tintero por disponer /tan solo/ de una cantidad finita de tiempo. Sus entradas son ampliamente referenciadas a lo largo de los capítulos [[Propuesta de Sistema Operativo]] y [[Diseño Detallado, Implementación, y Pruebas]].
+- El Apéndice [[Margen de Mejora]], *Margen de Mejora*, contiene una lista con aquellos detalles que han quedado en el tintero por disponer /tan solo/ de una cantidad finita de tiempo. Sus entradas son ampliamente referenciadas a lo largo de los capítulos [[Propuesta de Sistema Operativo]] y [[Diseño, Implementación, y Pruebas]].
 - El Apéndice [[Cómo Compilar]], *Cómo Compilar*, explica cómo llevar a cabo el proceso de generación de un ISO a partir del código fuente.
 
 * Fundamentos
@@ -513,7 +511,7 @@ En la Figura \ref{fig:tiposkernel} se encuentran tres diagramas arquitectónicos
 
   \includesvg[
     inkscapelatex=false,
-    width=150mm
+    width=125mm
   ]{./imgs/tiposkernel}
 
   \caption{Tipos de kernels}
@@ -786,7 +784,7 @@ Después de PAE, con x86-64 el espacio de direccionamiento se vuelve de 64 bits,
 
 #+NAME: fig:paging4
 #+CAPTION: Paginación para direcciones de 48 bits \cite{paging4}
-#+attr_latex: :height 150px
+#+attr_latex: :height 200px
 [[./imgs/paging4.jpg]]
 
 A día de hoy, la paginación a cuatro niveles de x86-64 pone a disposición del programador del sistema algunas flags. Estas son las más relevantes:
@@ -996,7 +994,7 @@ Un sistema operativo se comienza y se abandona, jamás se termina. No está dent
 Strife se publica como una distribución. Como se dejó ver anteriormente, la organización de GitHub contiene un repositorio por proyecto. Existe uno especial, llamado /Strife/, que mediante tecnología de /git submodules/ combina todos los otros proyectos, en sus versiones concretas, utilizando un Makefile específico para ello. La versión entregada, generada por liberación continua, está disponible [[https://github.com/the-strife-project/Strife/releases/TFG][aquí]] \cite{strifetfg}, y la última, de leerse esto en el futuro, [[https://github.com/the-strife-project/Strife/releases/latest][aquí]] \cite{strifelatest}.
 
 *** ¿Por qué x86?
-Si el lector llega a este punto, es perfectamente consciente de cuál es la arquitectura objetivo de Strife: x86-64. Al final de la Sección [[Motivación e historia]] se explicó que comenzó con el target IA-32 y posteriormente se hizo el cambio. Por esto, en esta sección la pregunta a responder, más que por qué dicha ISA es el objetivo, por qué considerar x86. La respuesta es sencilla: es el por defecto. A fecha de hoy, y de las últimas décadas, cuando un individuo comienza su primer sistema operativo, lo hace en x86, pues le hace ilusión probarlo eventualmente en hardware real, y x86 es de lo que dispone. Este caso no es una excepción. Además, esta arquitectura tiene cierto valor histórico. De las que no están muertas (como podría ser el MOS 6502/6510), es la más antigua, y entre las líneas de los manuales de Intel y AMD, que aparecen multitud de veces en las referencias al final de la memoria, uno puede ver el pasado.
+La arquitectura objetivo de Strife es x86-64. Al final de la Sección [[Motivación e historia]] se explicó que comenzó con el target IA-32 y posteriormente se hizo el cambio. Por esto, en esta sección la pregunta a responder, más que por qué dicha ISA es el objetivo, por qué considerar x86. La respuesta es sencilla: es el por defecto. A fecha de hoy, y de las últimas décadas, cuando un individuo comienza su primer sistema operativo, lo hace en x86, pues le hace ilusión probarlo eventualmente en hardware real, y x86 es de lo que dispone. Este caso no es una excepción. Además, esta arquitectura tiene cierto valor histórico. De las que no están muertas (como podría ser el MOS 6502/6510), es la más antigua, y entre las líneas de los manuales de Intel y AMD, que aparecen multitud de veces en las referencias al final de la memoria, uno puede ver el pasado.
 
 *** Elección del bootloader y protocolo de arranque
 En la Sección [[Motivación e historia]] se expresó la intención de abandonar JBoot como bootloader. Su sustituto es Limine en su versión 3, un proyecto de bootloader liderado por una de las personas que conozco del mundo de /hobby osdev/ \cite{limine}.
@@ -1070,7 +1068,7 @@ El pan de arriba es un scheduler VSRT (/Very Soft Real Time/); esto es, un sched
 
 Concretando para Strife, se utilizan los valores $n_v = n_b = 3$, $n_r = 10$. Por ahora, la implementación se mantiene simple y no busca ser óptima: un mismo valor de quantum para todas las colas, 10ms [[[MM1][MM1]]]; dentro del MLFQ, se promocionan y democionan colas usando únicamente si, en la última ráfaga, se bloqueó o se terminó el quantum completo, respectivamente. Estos valores se suelen tomar por experimentación y no existe una aproximación teórica universal para obtenerlos, aunque existen modelos que intentan aproximarlo \cite{scheds}.
 
-** Diseño del sistema de archivos
+** Diseño de StrifeFS
 *** Filosofía
 Un sistema operativo soporta uno o más sistemas de archivos. En el caso de la mayoría de SSOO, estos SSAA están fundados en grandes ideas de décadas pasadas (como el SA de UNIX), a veces alteradas con conceptos modernos de almacenamiento (familia ext*). Los SSOO en los que trabajan miles de personas de forma diaria suelen desarrollar su propio sistema de archivos para plasmar correctamente la visión abstracta que tienen de un entorno asociado a la filosofía del sistema. Curiosamente, esto también pasa en los SSOO independientes, que son proyectos personales, puesto que su objetivo primario es aprender y experimentar. Todo el rango de sistemas operativos que hay en medio, especialmente aquellos dedicados a sistemas empotrados o que tienen una finalidad específica, utilizan alguno de los ya existentes.
 
@@ -1193,7 +1191,7 @@ Para tener una vista general del sistema operativo para las siguientes secciones
     width=100mm
   ]{./imgs/arq}
 
-  \caption{Diagrama arquitectónico}
+  \caption{Diagrama arquitectónico de los subproyectos}
   \label{fig:arq}
 \end{figure}
 #+end_export
@@ -1213,7 +1211,7 @@ Para tener una vista general del sistema operativo para las siguientes secciones
 - ~ramblock~, servicio que implementa un dispositivo de bloques en RAM, simula ser un disco duro.
 - ~block~, servicio que abstrae los dispositivos de bloques (~AHCI~ y ~ramblock~), y los nombra por UUIDs.
 - ~ISO9660~, servicio que implementa el sistema de archivos ISO9660, usado universalmente por los CDs.
-- ~StrifeFS~, servicio que implementa el sistema de archivos explicado en la Sección [[Diseño del sistema de archivos]].
+- ~StrifeFS~, servicio que implementa el sistema de archivos explicado en la Sección [[Diseño de StrifeFS]].
 - ~VFS~, servicio que abstrae todos los sistemas de archivos por medio de puntos de montaje sobre una misma raíz.
 *** Programas
 - ~init~, el último programa que ejecuta el kernel para completar el arranque. Se encarga de iniciar el resto.
@@ -1284,7 +1282,7 @@ Para terminar el capítulo, en la Figura \ref{fig:boot} se encuentra el orden en
 \end{figure}
 #+end_export
 
-* Diseño Detallado, Implementación, y Pruebas
+* Diseño, Implementación, y Pruebas
 ** Kernel
 El kernel, siendo el proyecto más grande y complejo de todo el trabajo, toma muchas decisiones que son importantes de mencionar para entender cómo realiza las intenciones expresadas en el capítulo anterior. Se hará primero un repaso por lo más fundamental: los descriptores, tanto de segmentos como de interrupciones. Sin ellos, no existe sistema operativo. Tener una GDT válida permite la gestión de la memoria, y este será el siguiente tema a atacar. Después, comienza el userspace: syscalls, IPC, scheduler, y, para finalizar, cómo funciona el equivalente a ~main~ en el kernel.
 
@@ -1870,7 +1868,7 @@ Funcionan de la siguiente manera:
 - ~READ~ recibe el SMID, el inodo, la página a leer, y la cantidad de páginas. Lee el archivo, así, de forma paginada, devolviendo en cada paso cuántos bytes se han escrito en la página compartida. Las páginas son las del sistema, de 4096 bytes. Se implementa de esta manera, en lugar de mediante direcciones lineales, para conseguir realizar una lectura desde ~block~ con cero copias.
 
 *** StrifeFS
-Las ideas de StrifeFS fueron explicadas en la Sección [[Diseño del sistema de archivos]]. Aquí se definirá su implementación. Para empezar, si se está montando sobre un disco RAM, entonces se formatea el espacio. Como la implementación no pretende ser final, se fijan 4096 inodos y 4096 bloques [[[MM24][MM24]]].
+Las ideas de StrifeFS fueron explicadas en la Sección [[Diseño de StrifeFS]]. Aquí se definirá su implementación. Para empezar, si se está montando sobre un disco RAM, entonces se formatea el espacio. Como la implementación no pretende ser final, se fijan 4096 inodos y 4096 bloques [[[MM24][MM24]]].
 
 Los procedimientos públicos implementados se encuentran en la Tabla [[tab:strifefs]].
 #+NAME: tab:strifefs
@@ -2233,7 +2231,7 @@ Se ha terminado con 29 repositorios en la organización, de los cuales 24 se usa
 | splash    |        2 |             26 |
 \FloatBarrier
 
-*** El ISO
+*** ISO
 El tamaño final del ISO ha resultado ser 1.33MB. Sin embargo, este formato de archivo es propenso a rellenar sectores con ceros, con lo que, de tener muchos archivos pequeños, resulta de fácil compresión. En la /release/ de GitHub, se ofrece un binario comprimido con XZ que baja el tamaño a tan solo 249KB.
 
 Como nota personal, estoy orgulloso de haber conseguido alcanzar un tamaño tan bajo, y, por ello, he incrustado la versión comprimida en este mismo PDF. Si su visor de PDF lo soporta[fn:soporte], puede extraerla:
@@ -2365,7 +2363,7 @@ Como solución, ~system~ crea la ruta ~/home~, y da permisos de escritura a ~jlx
 [[./imgs/cap11.jpg]]
 \FloatBarrier
 
-Haciendo el cambio de usuario de vuelta a ~jlxip~, se puede ver cómo es posible crear el archivo bajo ~/home~ y escribir en él para luego leerlo, habiendo completado el proceso con éxito.
+Haciendo el cambio de usuario de vuelta a ~jlxip~, se puede observar cómo es posible crear el archivo bajo ~/home~ y escribir en él para luego leerlo, habiendo completado el proceso con éxito.
 
 #+NAME: fig:cap12
 #+CAPTION: Demostración: creación de /home/notes.txt por jlxip
@@ -2395,12 +2393,10 @@ Se resumen las tres aportaciones del proyecto Strife al estado del arte de los s
 - Sobre las implementaciones existentes y conocidas de ACLs, se ha aportado la idea de ACLs jerárquicos. De esta manera, las entradas de control de acceso de un directorio aplican sobre las existentes en su padre, y no son independientes. Esto reduce el gasto de memoria de la implementación del sistema de archivos, aumenta la velocidad, y facilita el mantenimiento: como toda entrada es jerárquica, no hay necesidad de realizar alteraciones recursivas sobre los archivos para cambiar sus permisos, y las excepciones sobre archivos o subdirectorios concretos pueden ser llevadas a cabo sin mayor problema.
 - Por último, se ha diseñado el registro como mecanismo extranuclear de gestión de MAC y DAC en los servicios del sistema, ofreciendo un modelo de protección robusto y extensible. En el registro, un usuario contiene una serie de permisos, que solo pueden ser dados por otro usuario que los posea de antemano. Los servicios, de así desearlo, consultan el registro y comprueban la existencia del permiso correspondiente del usuario cuya tarea realizó la llamada. El registro es efímero, lo que fuerza al administrador del sistema a tomar una postura /secure by default/ en la que todo permiso debe ser concedido durante el arranque: por defecto, nadie puede hacer nada salvo ~system~.
 
-En este trabajo se han expuesto los fundamentos del diseño y desarrollo de sistemas operativos, desde su punto de vista teórico hasta su lado más práctico. Se ha hecho un análisis del estado del arte de los proyectos existentes relacionados, y se ha propuesto el proyecto Strife como un sistema operativo basado en arquitectura microkernel con un modelo de protección que es capaz de limitar las acciones de los procesos según sus permisos de control de acceso. Sobre dichas ideas, se han definido sus diseños y sus aspectos más prácticos: desde la gestión de memoria física, que es la base más fundamental del kernel, hasta el funcionamiento de la shell, pasando por la función ~std::run~ de la biblioteca estándar, cuyo funcionamiento abstrae más de 10.000 líneas de código de forma directa. Finalmente, se han incluido capturas de pantalla que muestran la ejecución del sistema operativo terminado sobre un caso de uso específico.
+En este trabajo se han expuesto los fundamentos del diseño y desarrollo de sistemas operativos, desde su punto de vista teórico hasta su lado más práctico. Se ha hecho un análisis del estado del arte de los proyectos existentes relacionados, y se ha propuesto el proyecto Strife como un sistema operativo basado en arquitectura microkernel con un modelo de protección que es capaz de limitar las acciones de los procesos según sus permisos de control de acceso. Sobre dichas ideas, se han descrito las decisiones de diseño y sus aspectos más prácticos: desde la gestión de memoria física, que es la base más fundamental del kernel, hasta el funcionamiento de la shell, pasando por la función ~std::run~ de la biblioteca estándar, cuyo funcionamiento abstrae más de 10.000 líneas de código de forma directa. Finalmente, se han incluido capturas de pantalla que muestran la ejecución del sistema operativo terminado sobre un caso de uso específico.
 
 ** Trabajo futuro
-Existen ciertos detalles que se han quedado en el tintero por disponer de un tiempo límite para la entrega. Algunos son más urgentes, y otros menos. Estos se encuentran en el Apéndice [[Margen de Mejora]].
-
-A parte, existen aspectos más amplios de desarrollo que deberían de ser llevados a cabo en el futuro. El sistema operativo requiere aún muchos años de pulido. Se procede a comentar los más relevantes:
+Existen ciertas mejoras y aspectos que pueden dar continuidad al proyecto de forma directa y rápida, se encuentran en el Apéndice [[Margen de Mejora]]. Por otro lado, existen otros aspectos más amplios de desarrollo que deberían de ser llevados a cabo en el futuro. El sistema operativo requiere aún muchos años de pulido. Se procede a comentar los más relevantes:
 - *SMP*. *Corto plazo*. Si bien corresponde a [[MM15][MM15]], es lo suficientemente amplio, y requeriría tanto tiempo para tener un estado funcional, que se incluye aquí. Todo el kernel y los servicios están desarrollados teniendo SMP en mente, se hace extensivo uso de mecanismos de exclusión mutua para asegurar la consistencia de las estructuras, pero, muy probablemente, existan interbloqueos que a día de hoy no son perceptibles en el sistema operativo por utilizar únicamente un núcleo. La mayoría del tiempo iría a arreglarlos, y se estima que conllevaría unas *50 horas*.
 - Un *editor de texto*. *Medio plazo*. Nada complejo, más bien un proyecto similar a GNU nano \cite{nano}, con atajos de teclado para moverse entre las líneas y poder redactar un documento sencillo en texto plano. Se estima que conllevaría *100 horas*.
 - Una *pila de red*. *Medio plazo*. Desde 2019 he estado deseando poder hacerle /ping/ a una máquina virtual ejecutando mi sistema operativo. Esto requiere implementar una pila de servicios; para ping, se requiere un driver de Ethernet (posiblemente para el chip RTL8139), un servicio de ARP, otro de IP, una utilidad de DHCP, y un servicio de ICMP. Para llevarlo más allá, por ejemplo, para servir una página web, serían necesarios servicios de UDP y TCP (implementación posiblemente /Reno/), así como un servicio de DNS. Para tener un servicio ICMP funcional, llevaría unas *50 horas*. Sin embargo, de querer una implementación de TCP funcional, posiblemente ello solo requerirá *otras 50 horas*.
@@ -2410,7 +2406,7 @@ A parte, existen aspectos más amplios de desarrollo que deberían de ser llevad
 [fn:1] Este proceso lo llevé parcialmente a cabo en el pasado, en mi proyecto /PL-LR/ \cite{pllr}.
 
 ** Valoración personal
-El trabajo aquí descrito se trata del proyecto de mi vida. En lo relativo al mundo del software, existen proyectos más difíciles, como cualquier tesis doctoral, así como más grandes, como un editor de vídeo; sin embargo, el proyecto abordado ha resultado complejo porque involucra una gran cantidad de partes y subsistemas. Por esto, considero que The Strife Project es mi límite, lo más alto que puedo alcanzar. Es, como todo, muy mejorable, y los diseños y, sobre todo, las implementaciones, tienen un amplio margen de mejora y optimización, pero ello no quita que haya tenido la asertividad de comenzar el proyecto y la voluntad de acabarlo.
+El trabajo aquí descrito se trata del proyecto de mi vida. En lo relativo al mundo del software, existen proyectos más difíciles, como cualquier tesis doctoral, así como más grandes, como podría ser un editor de vídeo; sin embargo, el proyecto abordado ha resultado complejo porque involucra conocimiento específico y avanzado sobre una gran cantidad de partes y subsistemas. Por esto, considero que The Strife Project es mi límite, lo más alto que puedo alcanzar. Es, como todo, muy mejorable, y los diseños y, sobre todo, las implementaciones, tienen un amplio margen de mejora y optimización, pero ello no quita que haya tenido la asertividad de comenzar el proyecto y la voluntad de acabarlo.
 
 Me alegro de haber tenido la oportunidad de presentar este trabajo como mi final de grado, y les agradezco a mis tutores, José Luis Garrido Bullejos, y Carlos Rodríguez Domínguez, haber confiado en mis capacidades para llevar a cabo una tarea de esta magnitud y complejidad.
 
@@ -2461,7 +2457,7 @@ En este primer apéndice se incluye una lista con aquellos detalles que han qued
 36. <<MM36>>Los tests no suponen una cobertura del 100% de los servicios. Si bien es porque muchas pruebas serían redundantes, se podrían extender para cubrir un mayor área. La prioridad es *baja*.
 
 * Cómo Compilar
-*Precaución*: compilar Strife no es trivial, y posiblemente encontrará problemas en el camino y requiera varios intentos. Considere primero en su lugar utilizar la ISO que debería de haber recibido junto a este documento, o la incrustada en este mismo PDF, que se encuentra referenciada en la Sección [[El ISO]].
+*Precaución*: compilar Strife no es trivial, y posiblemente encontrará problemas en el camino y requiera varios intentos. Considere primero en su lugar utilizar la ISO que debería de haber recibido junto a este documento, o la incrustada en este mismo PDF, que se encuentra referenciada en la Sección [[ISO]].
 
 Si el lector quisiera compilar por sí mismo el proyecto, el primer paso es disponer de una toolchain freestanding que sea capaz de generar código independiente del sistema operativo. Puede para esto utilizar la versión previamente compilada en [[https://github.com/the-strife-project/toolchain/releases/tag/2.38-12.1.0][el repositorio /toolchain/]] \cite{toolchainrelease}, que incluye ~binutils~ 2.38 y ~GCC~ 12.1.0, usando GNU/Linux amd64 como host.
 
@@ -2474,7 +2470,7 @@ Después, clone la distribución oficial en su tag ~TFG~, teniendo cuidado de cl
 git clone --recurse git@github.com:the-strife-project/Strife -b TFG
 #+end_src
 
-Para compilar Strife, simplemente ejecute ~make~. El proceso de compilación utilizará automáticamente todos los cores disponibles en su sistema, así que no pase un argumento ~-j~.
+Para compilar Strife, simplemente ejecute ~make~. El proceso de compilación utilizará automáticamente todos los cores disponibles en su sistema, así que no pase un argumento ~-j~. Si tiene ~qemu~ instalado, puede ejecutar ~make run~ y, de esta forma, arrancar Strife de manera rápida y simple. Sino, puede utilizar cualquier otro hipervisor, como VirtualBox o VMWare, teniendo en cuenta que deberá utilizar AHCI como controlador de CD.
 
 * Referencias :ignore:
 #+begin_export latex
